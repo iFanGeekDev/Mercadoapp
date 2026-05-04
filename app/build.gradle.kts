@@ -109,7 +109,6 @@ dependencies {
 
     // ── Coil ──────────────────────────────────────────────────────────────────
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("io.coil-kt:coil-network-okhttp:2.7.0")
 
     // ── Security (EncryptedSharedPreferences fallback) ─────────────────────────
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
