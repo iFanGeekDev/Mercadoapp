@@ -66,16 +66,15 @@ class CheckoutViewModel @Inject constructor(
 
     // ── Navigation between steps ───────────────────────────────────────────────
     fun proceedToPayment() {
-        val s = _state.value
-        if (s.fullName.isBlank() || s.address.isBlank() || s.city.isBlank() || s.phone.isBlank()) {
-            update { copy(error = "Completá todos los campos de envío") }
-            return
-        }
         update { copy(step = CheckoutStep.Payment, error = null) }
     }
 
     fun confirmOrder() {
         val s = _state.value
+        if (s.fullName.isBlank() || s.address.isBlank() || s.city.isBlank() || s.phone.isBlank()) {
+            update { copy(error = "Completá todos los campos de envío") }
+            return
+        }
         if (s.cardNumber.length < 16 || s.cardExpiry.length < 5 || s.cardCvc.length < 3) {
             update { copy(error = "Datos de tarjeta inválidos") }
             return
