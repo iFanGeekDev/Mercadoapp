@@ -59,13 +59,7 @@ class CartRepositoryImpl @Inject constructor(
         if (newQuantity <= 0) {
             cartDao.removeById(itemId)
         } else {
-            // Fetch, copy, update
-            cartDao.observeCart().collect { items ->
-                items.find { it.id == itemId }?.let {
-                    cartDao.updateItem(it.copy(quantity = newQuantity))
-                }
-                return@collect
-            }
+            cartDao.updateQuantity(itemId, newQuantity)
         }
     }
 
