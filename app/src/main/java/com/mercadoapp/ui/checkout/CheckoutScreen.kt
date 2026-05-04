@@ -26,11 +26,12 @@ import com.mercadoapp.ui.theme.*
 fun CheckoutRoute(
     onBack: () -> Unit,
     onPaymentSuccess: () -> Unit,
+    onChangeAddress: () -> Unit,
     viewModel: CheckoutViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(state.isSuccess) { if (state.isSuccess) onPaymentSuccess() }
-    CheckoutScreen(state = state, onBack = onBack, onConfirm = viewModel::confirmOrder)
+    CheckoutScreen(state = state, onBack = onBack, onConfirm = viewModel::confirmOrder, onChangeAddress = onChangeAddress)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +39,8 @@ fun CheckoutRoute(
 private fun CheckoutScreen(
     state: CheckoutUiState,
     onBack: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    onChangeAddress: () -> Unit
 ) {
     Scaffold(
         containerColor = Dark900,
@@ -91,6 +93,28 @@ private fun CheckoutScreen(
                 StepIndicator(step = 2, title = "Payment", isCompleted = false, isActive = true)
                 HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), color = Dark700)
                 StepIndicator(step = 3, title = "Confirm", isCompleted = false)
+            }
+
+            // Shipping Address
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text("Shipping Address", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                TextButton(onClick = onChangeAddress) { Text("Change", color = Brand400) }
+            }
+            if (state.selectedAddress != null) {
+                val addr = state.selectedAddress
+                Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Dark800)) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Icon(Icons.Default.LocationOn, null, tint = Brand500)
+                        Column {
+                            Text(addr.alias, color = Color.White, fontWeight = FontWeight.Bold)
+                            Text("${addr.street}, ${addr.city}, ${addr.state}", color = TextSecondary, style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                }
+            } else {
+                OutlinedButton(onClick = onChangeAddress, modifier = Modifier.fillMaxWidth()) {
+                    Text("Select or Add an Address", color = Color.White)
+                }
             }
 
             Text("Payment Method", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)

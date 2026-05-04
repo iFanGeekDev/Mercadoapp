@@ -38,4 +38,8 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindCartRepository(impl: CartRepositoryImpl): CartRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAddressRepository(impl: com.mercadoapp.data.repository.FakeAddressRepository): com.mercadoapp.domain.repository.AddressRepository
 }

@@ -30,15 +30,16 @@ import com.mercadoapp.ui.theme.*
 @Composable
 fun ProfileRoute(
     onLogout: () -> Unit,
+    onAddressesClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProfileScreen(state = state, onLogout = { viewModel.logout(); onLogout() })
+    ProfileScreen(state = state, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit) {
+private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit, onAddressesClick: () -> Unit) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -133,9 +134,10 @@ private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit) {
                     modifier = Modifier.padding(start = 4.dp))
 
                 // Settings rows
-                SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones")
-                SettingsRow(icon = Icons.Default.Security, label = "Seguridad")
-                SettingsRow(icon = Icons.Default.HelpOutline, label = "Ayuda y soporte")
+                SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
+                SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones", onClick = {})
+                SettingsRow(icon = Icons.Default.Security, label = "Seguridad", onClick = {})
+                SettingsRow(icon = Icons.Default.HelpOutline, label = "Ayuda y soporte", onClick = {})
 
                 Spacer(Modifier.height(16.dp))
 
@@ -184,8 +186,8 @@ private fun ProfileTile(icon: ImageVector, label: String, value: String) {
 }
 
 @Composable
-private fun SettingsRow(icon: ImageVector, label: String) {
-    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+private fun SettingsRow(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Card(onClick = onClick, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(
             1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.12f))) {
