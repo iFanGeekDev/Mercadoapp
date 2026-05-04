@@ -12,9 +12,12 @@ import androidx.navigation.navArgument
 import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.repository.AuthRepository
 import com.mercadoapp.ui.auth.LoginRoute
+import com.mercadoapp.ui.auth.RegisterRoute
 import com.mercadoapp.ui.cart.CartRoute
+import com.mercadoapp.ui.checkout.CheckoutRoute
 import com.mercadoapp.ui.detail.ProductDetailRoute
 import com.mercadoapp.ui.home.HomeRoute
+import com.mercadoapp.ui.profile.ProfileRoute
 import com.mercadoapp.ui.theme.MercadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,7 +43,7 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
     val navController = rememberNavController()
     val authState by authRepository.authState.collectAsState(initial = AuthState.Loading)
 
-    // Redirect to login/home depending on auth state
+    // Reactive auth guard
     LaunchedEffect(authState) {
         when (authState) {
             is AuthState.Unauthenticated -> {
@@ -49,13 +52,15 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
                 }
             }
             is AuthState.Authenticated -> {
-                if (navController.currentDestination?.route == "login") {
+                if (navController.currentDestination?.route == "login" ||
+                    navController.currentDestination?.route == "register"
+                ) {
                     navController.navigate("home") {
-                        popUpTo("login") { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                     }
                 }
             }
-            else -> { /* Loading — do nothing */ }
+            else -> { /* Loading */ }
         }
     }
 
@@ -63,18 +68,29 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
         navController = navController,
         startDestination = if (authState is AuthState.Authenticated) "home" else "login"
     ) {
+        // ── Auth ──────────────────────────────────────────────────────────────
         composable("login") {
-            LoginRoute(onLoginSuccess = {
-                navController.navigate("home") {
-                    popUpTo("login") { inclusive = true }
+            LoginRoute(
+                onLoginSuccess = {
+                    navController.navigate("home") { popUpTo("login") { inclusive = true } }
                 }
-            })
+            )
+        }
+        composable("register") {
+            RegisterRoute(
+                onRegisterSuccess = {
+                    navController.navigate("home") { popUpTo(0) { inclusive = true } }
+                },
+                onNavigateToLogin = { navController.popBackStack() }
+            )
         }
 
+        // ── Main ──────────────────────────────────────────────────────────────
         composable("home") {
             HomeRoute(
                 onProductClick = { id -> navController.navigate("detail/$id") },
-                onCartClick = { navController.navigate("cart") }
+                onCartClick    = { navController.navigate("cart") },
+                onProfileClick = { navController.navigate("profile") }
             )
         }
 
@@ -83,17 +99,31 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) {
             ProductDetailRoute(
-                onBack = { navController.popBackStack() },
+                onBack      = { navController.popBackStack() },
                 onCartClick = { navController.navigate("cart") }
             )
         }
 
         composable("cart") {
             CartRoute(
+                onBack     = { navController.popBackStack() },
+                onCheckout = { navController.navigate("checkout") }
+            )
+        }
+
+        composable("checkout") {
+            CheckoutRoute(
                 onBack = { navController.popBackStack() },
-                onCheckout = {
-                    // TODO: navigate to CheckoutScreen when implemented
-                    navController.popBackStack()
+                onDone = {
+                    navController.navigate("home") { popUpTo("home") { inclusive = true } }
+                }
+            )
+        }
+
+        composable("profile") {
+            ProfileRoute(
+                onLogout = {
+                    navController.navigate("login") { popUpTo(0) { inclusive = true } }
                 }
             )
         }

@@ -27,13 +27,15 @@ import com.mercadoapp.domain.model.Product
 fun HomeRoute(
     onProductClick: (String) -> Unit,
     onCartClick: () -> Unit,
+    onProfileClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val pagingItems = viewModel.productsPaged.collectAsLazyPagingItems()
     HomeScreen(
         pagingItems = pagingItems,
         onProductClick = onProductClick,
-        onCartClick = onCartClick
+        onCartClick = onCartClick,
+        onProfileClick = onProfileClick
     )
 }
 
@@ -42,7 +44,8 @@ fun HomeRoute(
 private fun HomeScreen(
     pagingItems: LazyPagingItems<Product>,
     onProductClick: (String) -> Unit,
-    onCartClick: () -> Unit
+    onCartClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -51,6 +54,9 @@ private fun HomeScreen(
                     Text("MercadoApp", fontWeight = FontWeight.Bold)
                 },
                 actions = {
+                    IconButton(onClick = onProfileClick) {
+                        Icon(Icons.Default.Person, contentDescription = "Perfil")
+                    }
                     IconButton(onClick = onCartClick) {
                         Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
                     }
