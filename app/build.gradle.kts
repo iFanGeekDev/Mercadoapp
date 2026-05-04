@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("com.google.android.material:material:1.13.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
@@ -108,7 +109,6 @@ dependencies {
 
     // ── Coil ──────────────────────────────────────────────────────────────────
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("io.coil-kt:coil-network-okhttp:2.7.0")
 
     // ── Security (EncryptedSharedPreferences fallback) ─────────────────────────
     implementation("androidx.security:security-crypto:1.1.0-alpha06")

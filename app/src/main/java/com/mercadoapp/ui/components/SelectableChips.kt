@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.mercadoapp.domain.model.SelectableOption
 import com.mercadoapp.ui.theme.Brand500
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun <T> SelectableChips(
     title: String,
