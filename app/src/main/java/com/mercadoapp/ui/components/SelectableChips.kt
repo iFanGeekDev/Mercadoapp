@@ -60,24 +60,24 @@ fun <T> SelectableChips(
 
                 FilterChip(
                     selected = isSelected,
-                    onClick  = { if (option.enabled) onSelected(option.value) },
+                    onClick  = { onSelected(option.value) },
                     label = {
                         Text(
                             toLabel(option.value),
                             color = textColor,
                             style = MaterialTheme.typography.labelMedium,
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                            textDecoration = if (!option.enabled && !isSelected) androidx.compose.ui.text.style.TextDecoration.LineThrough else null
                         )
                     },
-                    enabled = option.enabled,
+                    enabled = true,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor         = bgColor,
-                        selectedContainerColor = bgColor,
-                        disabledContainerColor = bgColor
+                        selectedContainerColor = bgColor
                     ),
                     border = if (isSelected) null else BorderStroke(
                         1.dp,
-                        MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                        MaterialTheme.colorScheme.outline.copy(alpha = if (option.enabled) 0.4f else 0.15f)
                     ),
                     shape = RoundedCornerShape(10.dp)
                 )

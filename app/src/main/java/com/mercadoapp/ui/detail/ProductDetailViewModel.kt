@@ -43,11 +43,11 @@ class ProductDetailViewModel @Inject constructor(
         )
     }
 
-    fun onConditionChanged(value: Condition) = updateSelection { copy(condition = value) }
-    fun onProcessorChanged(value: String)   = updateSelection { copy(processor = value) }
-    fun onRamChanged(value: Int)            = updateSelection { copy(ramGb = value) }
-    fun onStorageChanged(value: Int)        = updateSelection { copy(storageGb = value) }
-    fun onColorChanged(value: String)       = updateSelection { copy(color = value) }
+    fun onConditionChanged(value: Condition) = updateSelection("condition", value)
+    fun onProcessorChanged(value: String)    = updateSelection("processor", value)
+    fun onRamChanged(value: Int)             = updateSelection("ram", value)
+    fun onStorageChanged(value: Int)         = updateSelection("storage", value)
+    fun onColorChanged(value: String)        = updateSelection("color", value)
 
     fun addToCart() {
         val current = _state.value
@@ -66,10 +66,13 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelection(transform: ProductSelection.() -> ProductSelection) {
+    private fun updateSelection(anchorField: String, value: Any) {
         val current = _state.value
         val product = current.product ?: return
-        val updatedSelection = current.selection.transform().sanitizeAgainst(product)
+        
+        val rawSelection = current.selection.copyField(anchorField, value)
+        val updatedSelection = sanitizeSelection(product, rawSelection, anchorField)
+        
         _state.value = current.copy(
             selection = updatedSelection,
             optionsState = ProductOptionResolver.resolve(product, updatedSelection),
@@ -78,20 +81,71 @@ class ProductDetailViewModel @Inject constructor(
     }
 }
 
-private fun ProductSelection.sanitizeAgainst(product: Product): ProductSelection {
-    var sanitized = this
-    val options = ProductOptionResolver.resolve(product, sanitized)
-    if (sanitized.condition != null && options.conditions.none { it.value == sanitized.condition && it.enabled })
-        sanitized = sanitized.copy(condition = null)
-    if (sanitized.processor != null && options.processors.none { it.value == sanitized.processor && it.enabled })
-        sanitized = sanitized.copy(processor = null)
-    if (sanitized.ramGb != null && options.rams.none { it.value == sanitized.ramGb && it.enabled })
-        sanitized = sanitized.copy(ramGb = null)
-    if (sanitized.storageGb != null && options.storages.none { it.value == sanitized.storageGb && it.enabled })
-        sanitized = sanitized.copy(storageGb = null)
-    if (sanitized.color != null && options.colors.none { it.value == sanitized.color && it.enabled })
-        sanitized = sanitized.copy(color = null)
-    return sanitized
+private fun ProductSelection.copyField(field: String, value: Any): ProductSelection {
+    return when (field) {
+        "condition" -> copy(condition = value as Condition)
+        "processor" -> copy(processor = value as String)
+        "ram" -> copy(ramGb = value as Int)
+        "storage" -> copy(storageGb = value as Int)
+        "color" -> copy(color = value as String)
+        else -> this
+    }
+}
+
+private fun ProductSelection.getField(field: String): Any? {
+    return when (field) {
+        "condition" -> condition
+        "processor" -> processor
+        "ram" -> ramGb
+        "storage" -> storageGb
+        "color" -> color
+        else -> null
+    }
+}
+
+private fun ProductSelection.withField(field: String, other: ProductSelection): ProductSelection {
+    val value = other.getField(field) ?: return this
+    return when (field) {
+        "condition" -> copy(condition = value as Condition)
+        "processor" -> copy(processor = value as String)
+        "ram" -> copy(ramGb = value as Int)
+        "storage" -> copy(storageGb = value as Int)
+        "color" -> copy(color = value as String)
+        else -> this
+    }
+}
+
+private fun isValidSelection(product: Product, selection: ProductSelection): Boolean {
+    return product.variants.any { variant ->
+        (selection.condition == null || variant.condition == selection.condition) &&
+        (selection.processor == null || variant.processor == selection.processor) &&
+        (selection.ramGb == null || variant.ramGb == selection.ramGb) &&
+        (selection.storageGb == null || variant.storageGb == selection.storageGb) &&
+        (selection.color == null || variant.color == selection.color) &&
+        variant.stock > 0
+    }
+}
+
+private fun sanitizeSelection(product: Product, selection: ProductSelection, anchor: String): ProductSelection {
+    if (isValidSelection(product, selection)) return selection
+
+    // Start with just the anchor
+    var result = ProductSelection().withField(anchor, selection)
+    
+    // If the anchor alone has no stock, drop the selection entirely
+    if (!isValidSelection(product, result)) return ProductSelection()
+
+    // Try adding other fields one by one
+    val fields = listOf("condition", "processor", "ram", "storage", "color").filter { it != anchor }
+    for (field in fields) {
+        if (selection.getField(field) != null) {
+            val candidate = result.withField(field, selection)
+            if (isValidSelection(product, candidate)) {
+                result = candidate
+            }
+        }
+    }
+    return result
 }
 
 data class ProductDetailUiState(
