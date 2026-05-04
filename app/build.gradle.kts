@@ -21,8 +21,10 @@ android {
         testInstrumentationRunner = "com.mercadoapp.HiltTestRunner"
         vectorDrawables { useSupportLibrary = true }
 
-        // Base URL configurable via buildConfigField (override in local.properties)
-        buildConfigField("String", "BASE_URL", "\"https://api.mercadoapp.dev/v1/\"")
+        // ── Local backend ──────────────────────────────────────────────────────
+        // Emulador Android: 10.0.2.2 apunta al localhost del host
+        // Dispositivo físico: reemplazá con tu IP local (ej: "http://192.168.1.X:8080/v1/")
+        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/v1/\"")
     }
 
     buildTypes {

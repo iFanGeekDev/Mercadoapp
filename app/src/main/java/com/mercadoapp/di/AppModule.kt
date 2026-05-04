@@ -1,8 +1,8 @@
 package com.mercadoapp.di
 
+import com.mercadoapp.data.repository.AuthRepositoryImpl
 import com.mercadoapp.data.repository.CartRepositoryImpl
-import com.mercadoapp.data.repository.FakeAuthRepository        // ← DEMO MODE
-import com.mercadoapp.data.repository.FakeProductRepository     // ← DEMO MODE
+import com.mercadoapp.data.repository.RemoteProductRepository
 import com.mercadoapp.domain.repository.AuthRepository
 import com.mercadoapp.domain.repository.CartRepository
 import com.mercadoapp.domain.repository.ProductRepository
@@ -13,14 +13,15 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * AppModule — DEMO / DEVELOPMENT mode
+ * AppModule — MODO REAL (conectado al backend local en puerto 8080)
  *
- * Auth:     FakeAuthRepository  →  email: demo@mercadoapp.dev  |  password: demo1234
- * Products: FakeProductRepository → datos de ejemplo sin backend
+ * Para volver al modo demo sin backend:
+ *   AuthRepositoryImpl    → FakeAuthRepository
+ *   RemoteProductRepository → FakeProductRepository
  *
- * Para conectar el backend real, cambiar:
- *   FakeAuthRepository    → AuthRepositoryImpl
- *   FakeProductRepository → RemoteProductRepository
+ * Backend local:  cd backend && node server.js
+ * URL emulador:   http://10.0.2.2:8080/v1
+ * Credenciales:   demo@mercadoapp.dev / demo1234
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,11 +29,11 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindProductRepository(impl: FakeProductRepository): ProductRepository
+    abstract fun bindProductRepository(impl: RemoteProductRepository): ProductRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: FakeAuthRepository): AuthRepository
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
