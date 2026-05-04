@@ -35,11 +35,15 @@ class ProductDetailViewModel @Inject constructor(
 
     private fun loadProduct() = viewModelScope.launch {
         val product = repository.getProductById(productId)
+        var initialSelection = ProductSelection()
+        if (product != null) {
+            initialSelection = autoSelectFields(product, initialSelection)
+        }
         _state.value = ProductDetailUiState(
             isLoading = false,
             product = product,
-            selection = ProductSelection(),
-            optionsState = product?.let { ProductOptionResolver.resolve(it, ProductSelection()) }
+            selection = initialSelection,
+            optionsState = product?.let { ProductOptionResolver.resolve(it, initialSelection) }
         )
     }
 
@@ -71,7 +75,8 @@ class ProductDetailViewModel @Inject constructor(
         val product = current.product ?: return
         
         val rawSelection = current.selection.copyField(anchorField, value)
-        val updatedSelection = sanitizeSelection(product, rawSelection, anchorField)
+        var updatedSelection = sanitizeSelection(product, rawSelection, anchorField)
+        updatedSelection = autoSelectFields(product, updatedSelection)
         
         _state.value = current.copy(
             selection = updatedSelection,
@@ -146,6 +151,43 @@ private fun sanitizeSelection(product: Product, selection: ProductSelection, anc
         }
     }
     return result
+}
+
+private fun autoSelectFields(product: Product, selection: ProductSelection): ProductSelection {
+    var current = selection
+    var changed = true
+    val fields = listOf("condition", "processor", "ram", "storage", "color")
+    
+    while (changed) {
+        changed = false
+        for (field in fields) {
+            if (current.getField(field) == null) {
+                val matchingVariants = product.variants.filter { variant ->
+                    (current.condition == null || variant.condition == current.condition) &&
+                    (current.processor == null || variant.processor == current.processor) &&
+                    (current.ramGb == null || variant.ramGb == current.ramGb) &&
+                    (current.storageGb == null || variant.storageGb == current.storageGb) &&
+                    (current.color == null || variant.color == current.color) &&
+                    variant.stock > 0
+                }
+                
+                val uniqueValues = when (field) {
+                    "condition" -> matchingVariants.map { it.condition }.toSet()
+                    "processor" -> matchingVariants.map { it.processor }.toSet()
+                    "ram" -> matchingVariants.map { it.ramGb }.toSet()
+                    "storage" -> matchingVariants.map { it.storageGb }.toSet()
+                    "color" -> matchingVariants.map { it.color }.toSet()
+                    else -> emptySet()
+                }
+                
+                if (uniqueValues.size == 1) {
+                    current = current.copyField(field, uniqueValues.first()!!)
+                    changed = true
+                }
+            }
+        }
+    }
+    return current
 }
 
 data class ProductDetailUiState(
