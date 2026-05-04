@@ -3,6 +3,8 @@ package com.mercadoapp.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mercadoapp.BuildConfig
 import com.mercadoapp.data.remote.api.MercadoApiService
+import com.mercadoapp.data.remote.interceptor.AuthInterceptor
+import com.mercadoapp.data.remote.interceptor.TokenRefreshInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +29,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        tokenRefreshInterceptor: TokenRefreshInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)            // attaches Bearer token
+        .addInterceptor(tokenRefreshInterceptor)    // retries on 401 after refresh
         .addInterceptor(
             HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG)

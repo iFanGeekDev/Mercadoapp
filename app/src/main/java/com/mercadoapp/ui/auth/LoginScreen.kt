@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun LoginRoute(
     onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -41,7 +42,8 @@ fun LoginRoute(
         state = state,
         onEmailChanged = viewModel::onEmailChanged,
         onPasswordChanged = viewModel::onPasswordChanged,
-        onLogin = viewModel::login
+        onLogin = viewModel::login,
+        onNavigateToRegister = onNavigateToRegister
     )
 }
 
@@ -50,7 +52,8 @@ private fun LoginScreen(
     state: LoginUiState,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onNavigateToRegister: () -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
     var passwordVisible by remember { mutableStateOf(false) }
@@ -164,6 +167,10 @@ private fun LoginScreen(
                     } else {
                         Text("Iniciar sesión", style = MaterialTheme.typography.labelLarge)
                     }
+                }
+
+                TextButton(onClick = onNavigateToRegister) {
+                    Text("¿No tenés cuenta? Registrate")
                 }
             }
         }

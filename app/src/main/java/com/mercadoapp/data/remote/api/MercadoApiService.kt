@@ -3,6 +3,7 @@ package com.mercadoapp.data.remote.api
 import com.mercadoapp.data.remote.dto.LoginRequestDto
 import com.mercadoapp.data.remote.dto.PagedProductsDto
 import com.mercadoapp.data.remote.dto.ProductDto
+import com.mercadoapp.data.remote.dto.RegisterRequestDto
 import com.mercadoapp.data.remote.dto.TokenDto
 import com.mercadoapp.data.remote.dto.UserDto
 import retrofit2.http.Body
@@ -29,6 +30,9 @@ interface MercadoApiService {
 
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequestDto): TokenDto
+
+    @POST("auth/register")
+    suspend fun register(@Body request: RegisterRequestDto): TokenDto
 
     @GET("auth/me")
     suspend fun getMe(@Header("Authorization") bearerToken: String): UserDto
