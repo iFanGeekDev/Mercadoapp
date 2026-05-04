@@ -1,6 +1,7 @@
 package com.mercadoapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.FilterChip
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mercadoapp.domain.model.SelectableOption
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun <T> SelectableChips(
     title: String,
