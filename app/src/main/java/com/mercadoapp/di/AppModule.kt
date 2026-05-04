@@ -12,6 +12,17 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * AppModule — MODO REAL (conectado al backend local en puerto 8080)
+ *
+ * Para volver al modo demo sin backend:
+ *   AuthRepositoryImpl    → FakeAuthRepository
+ *   RemoteProductRepository → FakeProductRepository
+ *
+ * Backend local:  cd backend && node server.js
+ * URL emulador:   http://10.0.2.2:8080/v1
+ * Credenciales:   demo@mercadoapp.dev / demo1234
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
