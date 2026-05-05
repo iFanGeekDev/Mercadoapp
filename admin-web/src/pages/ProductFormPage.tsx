@@ -49,6 +49,9 @@ const ProductFormPage: React.FC = () => {
     ]
   });
 
+  const DESC_LIMIT = 200;
+  const ramOptions = [...Array.from({length: 16}, (_, i) => (i + 1) * 4), 128];
+
   useEffect(() => {
     if (isEditing) {
       const fetchProduct = async () => {
@@ -137,9 +140,16 @@ const ProductFormPage: React.FC = () => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-dark-400 ml-1">Descripción Corta</label>
+                <div className="flex justify-between items-center ml-1">
+                  <label className="text-sm text-dark-400">Descripción Corta</label>
+                  <span className={`text-[10px] font-bold ${formData.short_description.length >= DESC_LIMIT ? 'text-red-500' : 'text-dark-500'}`}>
+                    {DESC_LIMIT - formData.short_description.length} caracteres restantes
+                  </span>
+                </div>
                 <textarea 
-                  rows={3} required value={formData.short_description}
+                  rows={3} required 
+                  maxLength={DESC_LIMIT}
+                  value={formData.short_description}
                   onChange={e => setFormData({...formData, short_description: e.target.value})}
                   className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500"
                   placeholder="Resumen de características principales..."
@@ -165,11 +175,15 @@ const ProductFormPage: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <label className="text-sm text-dark-400 ml-1">RAM (GB)</label>
-                <input 
-                  type="number" value={formData.technical_specs.ram_gb[0]}
+                <select 
+                  value={formData.technical_specs.ram_gb[0]}
                   onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, ram_gb: [parseInt(e.target.value)]}})}
-                  className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl"
-                />
+                  className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 appearance-none"
+                >
+                  {ramOptions.map(ram => (
+                    <option key={ram} value={ram}>{ram} GB</option>
+                  ))}
+                </select>
               </div>
             </div>
           </section>
@@ -200,23 +214,35 @@ const ProductFormPage: React.FC = () => {
                       }}
                       className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm outline-none"
                     >
-                      <option value="NEW">Nuevo</option>
                       <option value="EXCELLENT">Excelente</option>
                       <option value="NORMAL">Normal</option>
                       <option value="FAIR">Regular</option>
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Color</label>
-                    <input 
-                      type="text" value={variant.color}
-                      onChange={e => {
-                        const newVariants = [...formData.variants];
-                        newVariants[index].color = e.target.value;
-                        setFormData({...formData, variants: newVariants});
-                      }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                    />
+                    <label className="text-[10px] uppercase font-black text-dark-500">Color (Hex)</label>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="color" 
+                        value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
+                        onChange={e => {
+                          const newVariants = [...formData.variants];
+                          newVariants[index].color = e.target.value.toUpperCase();
+                          setFormData({...formData, variants: newVariants});
+                        }}
+                        className="w-8 h-8 bg-transparent border-none cursor-pointer"
+                      />
+                      <input 
+                        type="text" value={variant.color}
+                        placeholder="#FFFFFF"
+                        onChange={e => {
+                          const newVariants = [...formData.variants];
+                          newVariants[index].color = e.target.value;
+                          setFormData({...formData, variants: newVariants});
+                        }}
+                        className="flex-1 bg-dark-800 border border-dark-700 p-2 rounded-lg text-xs font-mono"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase font-black text-dark-500">Almac.</label>
@@ -326,12 +352,14 @@ const ProductFormPage: React.FC = () => {
                       }}
                       className={`text-[10px] font-black px-2 py-1 rounded outline-none ${
                         check.status === 'APPROVED' ? 'bg-green-500/10 text-green-500' :
-                        check.status === 'FAILED' ? 'bg-red-500/10 text-red-500' : 'bg-dark-700 text-dark-400'
+                        check.status === 'FAILED' ? 'bg-red-500/10 text-red-500' : 
+                        check.status === 'NA' ? 'bg-blue-500/10 text-blue-400' : 'bg-dark-700 text-dark-400'
                       }`}
                     >
                       <option value="PENDING">PENDIENTE</option>
                       <option value="APPROVED">APROBADO</option>
                       <option value="FAILED">FALLIDO</option>
+                      <option value="NA">NO APLICA</option>
                     </select>
                   </div>
                   <p className="text-[11px] text-dark-500 leading-tight">{check.item}</p>
