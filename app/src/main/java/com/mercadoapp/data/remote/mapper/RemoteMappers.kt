@@ -1,14 +1,20 @@
 package com.mercadoapp.data.remote.mapper
 
+import com.mercadoapp.data.remote.dto.OrderDto
+import com.mercadoapp.data.remote.dto.OrderItemDto
 import com.mercadoapp.data.remote.dto.ProductDto
 import com.mercadoapp.data.remote.dto.ProductVariantDto
 import com.mercadoapp.data.remote.dto.TechnicalSpecsDto
 import com.mercadoapp.data.remote.dto.UserDto
 import com.mercadoapp.domain.model.Condition
+import com.mercadoapp.domain.model.Order
+import com.mercadoapp.domain.model.OrderItem
+import com.mercadoapp.domain.model.OrderStatus
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.domain.model.ProductVariant
 import com.mercadoapp.domain.model.TechnicalSpecs
 import com.mercadoapp.domain.model.User
+import java.time.Instant
 
 // ── Product mappers ────────────────────────────────────────────────────────────
 
@@ -47,4 +53,25 @@ fun UserDto.toDomain(): User = User(
     email = email,
     name = name,
     avatarUrl = avatarUrl
+)
+
+// ── Order mappers ─────────────────────────────────────────────────────────────
+
+fun OrderDto.toDomain(): Order = Order(
+    id        = id,
+    status    = runCatching { OrderStatus.valueOf(status.uppercase()) }.getOrDefault(OrderStatus.PROCESSING),
+    createdAt = runCatching { Instant.parse(createdAt) }.getOrDefault(Instant.now()),
+    total     = total,
+    items     = items.map { it.toDomain() }
+)
+
+fun OrderItemDto.toDomain(): OrderItem = OrderItem(
+    productId   = productId,
+    productName = productName,
+    imageUrl    = imageUrl,
+    condition   = condition,
+    color       = color,
+    storageGb   = storageGb,
+    quantity    = quantity,
+    price       = price
 )

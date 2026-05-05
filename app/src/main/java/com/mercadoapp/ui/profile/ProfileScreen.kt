@@ -29,21 +29,30 @@ import com.mercadoapp.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
+    onBack: () -> Unit,
     onLogout: () -> Unit,
+    onAddressesClick: () -> Unit,
+    onOrdersClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProfileScreen(state = state, onLogout = { viewModel.logout(); onLogout() })
+    ProfileScreen(state = state, onBack = onBack, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick, onOrdersClick = onOrdersClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit) {
+private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: () -> Unit, onAddressesClick: () -> Unit, onOrdersClick: () -> Unit) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        modifier = Modifier.systemBarsPadding(),
         topBar = {
             TopAppBar(
                 title = { Text("Mi perfil", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, null)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background)
             )
@@ -133,9 +142,11 @@ private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit) {
                     modifier = Modifier.padding(start = 4.dp))
 
                 // Settings rows
-                SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones")
-                SettingsRow(icon = Icons.Default.Security, label = "Seguridad")
-                SettingsRow(icon = Icons.Default.HelpOutline, label = "Ayuda y soporte")
+                SettingsRow(icon = Icons.Default.Receipt, label = "Mis Órdenes", onClick = onOrdersClick)
+                SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
+                SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones", onClick = {})
+                SettingsRow(icon = Icons.Default.Security, label = "Seguridad", onClick = {})
+                SettingsRow(icon = Icons.Default.HelpOutline, label = "Ayuda y soporte", onClick = {})
 
                 Spacer(Modifier.height(16.dp))
 
@@ -184,8 +195,8 @@ private fun ProfileTile(icon: ImageVector, label: String, value: String) {
 }
 
 @Composable
-private fun SettingsRow(icon: ImageVector, label: String) {
-    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+private fun SettingsRow(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Card(onClick = onClick, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(
             1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.12f))) {

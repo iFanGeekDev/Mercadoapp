@@ -18,6 +18,9 @@ import com.mercadoapp.ui.checkout.CheckoutRoute
 import com.mercadoapp.ui.detail.ProductDetailRoute
 import com.mercadoapp.ui.home.HomeRoute
 import com.mercadoapp.ui.profile.ProfileRoute
+import com.mercadoapp.ui.address.AddressEditRoute
+import com.mercadoapp.ui.address.AddressListRoute
+import com.mercadoapp.ui.order.OrderHistoryRoute
 import com.mercadoapp.ui.theme.MercadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -73,6 +76,9 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
             LoginRoute(
                 onLoginSuccess = {
                     navController.navigate("home") { popUpTo("login") { inclusive = true } }
+                },
+                onNavigateToRegister = {
+                    navController.navigate("register")
                 }
             )
         }
@@ -114,17 +120,45 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
         composable("checkout") {
             CheckoutRoute(
                 onBack = { navController.popBackStack() },
-                onDone = {
+                onPaymentSuccess = {
                     navController.navigate("home") { popUpTo("home") { inclusive = true } }
-                }
+                },
+                onChangeAddress = { navController.navigate("address_list") }
             )
         }
 
         composable("profile") {
             ProfileRoute(
+                onBack = { navController.popBackStack() },
                 onLogout = {
                     navController.navigate("login") { popUpTo(0) { inclusive = true } }
-                }
+                },
+                onAddressesClick = { navController.navigate("address_list") },
+                onOrdersClick = { navController.navigate("order_history") }
+            )
+        }
+
+        composable("order_history") {
+            OrderHistoryRoute(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("address_list") {
+            AddressListRoute(
+                onBack = { navController.popBackStack() },
+                onAddAddress = { navController.navigate("address_edit/new") },
+                onEditAddress = { id -> navController.navigate("address_edit/$id") }
+            )
+        }
+
+        composable(
+            route = "address_edit/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
+            AddressEditRoute(
+                onBack = { navController.popBackStack() },
+                onSaveSuccess = { navController.popBackStack() }
             )
         }
     }
