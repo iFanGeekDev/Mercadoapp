@@ -88,6 +88,13 @@ const ProductFormPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validación de imagen obligatoria
+    if (!formData.image_url) {
+      alert('¡Atención! La imagen del producto es obligatoria. Sube una foto real antes de continuar.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       if (isEditing) {
@@ -297,7 +304,7 @@ const ProductFormPage: React.FC = () => {
           <section className="bg-dark-800 border border-dark-700 p-8 rounded-3xl shadow-xl space-y-6">
             <h3 className="text-lg font-bold flex items-center gap-2">
               <Palette className="w-5 h-5 text-brand-400" />
-              Imagen del Equipo
+              Imagen del Equipo <span className="text-red-500">*</span>
             </h3>
             <div 
               className={`relative h-64 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center p-4 transition-all ${

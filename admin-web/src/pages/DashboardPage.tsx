@@ -14,9 +14,9 @@ import api from '../api/client';
 interface Product {
   id: string;
   name: string;
-  imageUrl: string;
-  isOffer: boolean;
-  isNewArrival: boolean;
+  image_url: string;
+  is_offer: boolean;
+  is_new_arrival: boolean;
   variants: any[];
 }
 
@@ -102,7 +102,7 @@ const DashboardPage: React.FC = () => {
                   >
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-4">
-                        <img src={product.imageUrl} className="w-12 h-12 rounded-xl object-cover bg-dark-900 border border-dark-700" alt="" />
+                        <img src={product.image_url} className="w-12 h-12 rounded-xl object-cover bg-dark-900 border border-dark-700" alt="" />
                         <div>
                           <p className="font-bold text-white group-hover:text-brand-400 transition-colors">{product.name}</p>
                           <p className="text-xs text-dark-500">ID: {product.id.slice(0, 8)}...</p>
@@ -111,8 +111,8 @@ const DashboardPage: React.FC = () => {
                     </td>
                     <td className="px-8 py-5">
                       <div className="flex gap-2">
-                        {product.isNewArrival && <Badge label="Nuevo" color="bg-accent-500/10 text-accent-500 border-accent-500/20" />}
-                        {product.isOffer && <Badge label="Oferta" color="bg-brand-500/10 text-brand-400 border-brand-500/20" />}
+                        {product.is_new_arrival && <Badge label="Nuevo" color="bg-accent-500/10 text-accent-500 border-accent-500/20" />}
+                        {product.is_offer && <Badge label="Oferta" color="bg-brand-500/10 text-brand-400 border-brand-500/20" />}
                       </div>
                     </td>
                     <td className="px-8 py-5 font-medium text-white">
