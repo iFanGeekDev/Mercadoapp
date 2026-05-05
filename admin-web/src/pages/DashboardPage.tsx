@@ -8,6 +8,7 @@ import {
   MoreVertical,
   Filter
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/client';
 
 interface Product {
@@ -22,6 +23,7 @@ interface Product {
 const DashboardPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -66,7 +68,10 @@ const DashboardPage: React.FC = () => {
             <button className="bg-dark-700 p-2.5 rounded-xl hover:bg-dark-600 transition-colors">
               <Filter className="w-5 h-5" />
             </button>
-            <button className="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-brand-500/20">
+            <button 
+              onClick={() => navigate('/productos/nuevo')}
+              className="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-brand-500/20"
+            >
               <Plus className="w-5 h-5" />
               <span>Añadir</span>
             </button>
@@ -90,13 +95,17 @@ const DashboardPage: React.FC = () => {
                 Array(5).fill(0).map((_, i) => <SkeletonRow key={i} />)
               ) : (
                 products.map((product) => (
-                  <tr key={product.id} className="hover:bg-dark-700/20 transition-colors group">
+                  <tr 
+                    key={product.id} 
+                    onClick={() => navigate(`/productos/${product.id}`)}
+                    className="hover:bg-dark-700/20 transition-colors group cursor-pointer"
+                  >
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-4">
                         <img src={product.imageUrl} className="w-12 h-12 rounded-xl object-cover bg-dark-900 border border-dark-700" alt="" />
                         <div>
                           <p className="font-bold text-white group-hover:text-brand-400 transition-colors">{product.name}</p>
-                          <p className="text-xs text-dark-500">ID: {product.id.take(8)}...</p>
+                          <p className="text-xs text-dark-500">ID: {product.id.slice(0, 8)}...</p>
                         </div>
                       </div>
                     </td>

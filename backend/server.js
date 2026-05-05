@@ -9,6 +9,9 @@ const express    = require('express');
 const bcrypt     = require('bcryptjs');
 const jwt        = require('jsonwebtoken');
 const cors       = require('cors');
+const path       = require('path');
+const fs         = require('fs');
+const multer     = require('multer');
 
 const app    = express();
 const PORT   = 8080;
@@ -16,6 +19,21 @@ const SECRET = 'YapaMarket_dev_secret_key';
 
 app.use(cors());
 app.use(express.json());
+
+// Configuración de carpeta estática para imágenes
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
+app.use('/uploads', express.static(UPLOADS_DIR));
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 const departamentos = require('./departamentos.json');
 const provincias = require('./provincias.json');
@@ -223,7 +241,7 @@ function generateTokens(userId, role = 'USER') {
   return { access_token: accessToken, refresh_token: refreshToken };
 }
 
-function authenticate(req, res, next) {
+function authenticateToken(req, res, next) {
   const header = req.headers['authorization'];
   if (!header || !header.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Token requerido' });
@@ -231,9 +249,18 @@ function authenticate(req, res, next) {
   try {
     const payload = jwt.verify(header.slice(7), SECRET);
     req.userId = payload.sub;
+    req.userRole = payload.role;
     next();
   } catch {
     return res.status(401).json({ error: 'Token inválido o expirado' });
+  }
+}
+
+function isAdmin(req, res, next) {
+  if (req.userRole === 'ADMIN') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso denegado: Se requiere rol de administrador' });
   }
 }
 
@@ -294,7 +321,7 @@ router.post('/auth/refresh', (req, res) => {
   }
 });
 
-router.get('/auth/me', authenticate, (req, res) => {
+router.get('/auth/me', authenticateToken, (req, res) => {
   const user = users.find(u => u.id === req.userId);
   if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
   return res.json(userToDto(user));
@@ -323,7 +350,7 @@ router.get('/products/:id', (req, res) => {
  * GET /v1/orders — Devuelve las órdenes del usuario autenticado
  * Soporta ?page=1&size=10
  */
-router.get('/orders', authenticate, (req, res) => {
+router.get('/orders', authenticateToken, (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const size = parseInt(req.query.size) || 10;
   const userOrders = orders
@@ -339,7 +366,7 @@ router.get('/orders', authenticate, (req, res) => {
 /**
  * GET /v1/orders/:id — Detalle de una orden específica
  */
-router.get('/orders/:id', authenticate, (req, res) => {
+router.get('/orders/:id', authenticateToken, (req, res) => {
   const order = orders.find(o => o.id === req.params.id && o.user_id === req.userId);
   if (!order) return res.status(404).json({ error: 'Orden no encontrada' });
   return res.json(order);
@@ -349,7 +376,7 @@ router.get('/orders/:id', authenticate, (req, res) => {
  * POST /v1/orders — Crea una nueva orden (se llama al confirmar checkout)
  * Body: { items: [{ product_id, condition, color, storage_gb, quantity, price }], total }
  */
-router.post('/orders', authenticate, (req, res) => {
+router.post('/orders', authenticateToken, (req, res) => {
   const { items, total } = req.body;
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Se requieren items para crear una orden' });
@@ -365,6 +392,46 @@ router.post('/orders', authenticate, (req, res) => {
   orders.push(newOrder);
   console.log(`[ORDER CREATED] id=${newOrder.id} user=${req.userId} total=$${newOrder.total}`);
   return res.status(201).json(newOrder);
+});
+
+// ── Product Management (ADMIN ONLY) ──────────────────────────────────────────
+
+router.post('/products', authenticateToken, isAdmin, (req, res) => {
+  const product = {
+    id: `prod-${Date.now()}`,
+    ...req.body
+  };
+  products.push(product);
+  console.log(`[ADMIN] Producto creado: ${product.name}`);
+  res.status(201).json(product);
+});
+
+router.put('/products/:id', authenticateToken, isAdmin, (req, res) => {
+  const { id } = req.params;
+  const index = products.findIndex(p => p.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Producto no encontrado' });
+  
+  products[index] = { ...products[index], ...req.body };
+  console.log(`[ADMIN] Producto actualizado: ${products[index].name}`);
+  res.json(products[index]);
+});
+
+router.delete('/products/:id', authenticateToken, isAdmin, (req, res) => {
+  const { id } = req.params;
+  const index = products.findIndex(p => p.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Producto no encontrado' });
+  
+  const deleted = products.splice(index, 1);
+  console.log(`[ADMIN] Producto eliminado: ${deleted[0].name}`);
+  res.json({ message: 'Producto eliminado' });
+});
+
+router.post('/upload', authenticateToken, isAdmin, upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No se subió ninguna imagen' });
+  
+  // En producción, esto debería ser la URL completa o relativa al host
+  const imageUrl = `http://localhost:8080/uploads/${req.file.filename}`;
+  res.json({ image_url: imageUrl });
 });
 
 // ── Ubigeo (Perú) ─────────────────────────────────────────────────────────────

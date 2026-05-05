@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import ProductFormPage from './pages/ProductFormPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AdminLayout from './layouts/AdminLayout';
 
@@ -29,7 +30,25 @@ function App() {
             path="/productos" 
             element={
               <ProtectedRoute>
-                <DashboardPage /> {/* Reusando por ahora como demo */}
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/productos/nuevo" 
+            element={
+              <ProtectedRoute>
+                <ProductFormPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/productos/:id" 
+            element={
+              <ProtectedRoute>
+                <ProductFormPage />
               </ProtectedRoute>
             } 
           />
