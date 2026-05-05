@@ -18,8 +18,9 @@ import com.mercadoapp.ui.checkout.CheckoutRoute
 import com.mercadoapp.ui.detail.ProductDetailRoute
 import com.mercadoapp.ui.home.HomeRoute
 import com.mercadoapp.ui.profile.ProfileRoute
-import com.mercadoapp.ui.address.AddressListRoute
 import com.mercadoapp.ui.address.AddressEditRoute
+import com.mercadoapp.ui.address.AddressListRoute
+import com.mercadoapp.ui.order.OrderHistoryRoute
 import com.mercadoapp.ui.theme.MercadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -132,7 +133,14 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
                 onLogout = {
                     navController.navigate("login") { popUpTo(0) { inclusive = true } }
                 },
-                onAddressesClick = { navController.navigate("address_list") }
+                onAddressesClick = { navController.navigate("address_list") },
+                onOrdersClick = { navController.navigate("order_history") }
+            )
+        }
+
+        composable("order_history") {
+            OrderHistoryRoute(
+                onBack = { navController.popBackStack() }
             )
         }
 

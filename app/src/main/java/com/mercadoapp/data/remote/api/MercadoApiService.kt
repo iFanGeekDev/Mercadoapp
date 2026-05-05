@@ -1,6 +1,7 @@
 package com.mercadoapp.data.remote.api
 
 import com.mercadoapp.data.remote.dto.LoginRequestDto
+import com.mercadoapp.data.remote.dto.PagedOrdersDto
 import com.mercadoapp.data.remote.dto.PagedProductsDto
 import com.mercadoapp.data.remote.dto.ProductDto
 import com.mercadoapp.data.remote.dto.RegisterRequestDto
@@ -37,6 +38,14 @@ interface MercadoApiService {
 
     @GET("auth/me")
     suspend fun getMe(@Header("Authorization") bearerToken: String): UserDto
+
+    // ── Orders ─────────────────────────────────────────────────────────────────
+
+    @GET("orders")
+    suspend fun getOrders(
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
+    ): PagedOrdersDto
 
     // ── Ubigeo (Perú) ──────────────────────────────────────────────────────────
 

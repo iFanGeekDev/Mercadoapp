@@ -32,15 +32,16 @@ fun ProfileRoute(
     onBack: () -> Unit,
     onLogout: () -> Unit,
     onAddressesClick: () -> Unit,
+    onOrdersClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProfileScreen(state = state, onBack = onBack, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick)
+    ProfileScreen(state = state, onBack = onBack, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick, onOrdersClick = onOrdersClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: () -> Unit, onAddressesClick: () -> Unit) {
+private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: () -> Unit, onAddressesClick: () -> Unit, onOrdersClick: () -> Unit) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.systemBarsPadding(),
@@ -141,6 +142,7 @@ private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: (
                     modifier = Modifier.padding(start = 4.dp))
 
                 // Settings rows
+                SettingsRow(icon = Icons.Default.Receipt, label = "Mis Órdenes", onClick = onOrdersClick)
                 SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
                 SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones", onClick = {})
                 SettingsRow(icon = Icons.Default.Security, label = "Seguridad", onClick = {})

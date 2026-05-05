@@ -1,5 +1,10 @@
 package com.mercadoapp.ui.auth
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -38,9 +43,13 @@ fun LoginRoute(
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(state.isSuccess) { if (state.isSuccess) onLoginSuccess() }
-    LoginScreen(state = state, onEmailChanged = viewModel::onEmailChanged,
-        onPasswordChanged = viewModel::onPasswordChanged, onLogin = viewModel::login,
-        onNavigateToRegister = onNavigateToRegister)
+    LoginScreen(
+        state = state,
+        onEmailChanged = viewModel::onEmailChanged,
+        onPasswordChanged = viewModel::onPasswordChanged,
+        onLogin = viewModel::login,
+        onNavigateToRegister = onNavigateToRegister
+    )
 }
 
 @Composable
@@ -126,27 +135,32 @@ private fun LoginScreen(
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
+                    // Email field
                     OutlinedTextField(
                         value = state.email,
                         onValueChange = onEmailChanged,
                         label = { Text("Correo electrónico") },
-                        leadingIcon = { Icon(Icons.Default.Email, null, tint = Brand400) },
+                        leadingIcon = { Icon(Icons.Default.Email, null, tint = if (state.emailError != null) ErrorRed else Brand400) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                         singleLine = true,
-                        isError = state.error != null,
+                        isError = state.emailError != null,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
                         colors = authFieldColors()
                     )
+                    FieldErrorMessage(message = state.emailError)
 
+                    Spacer(Modifier.height(8.dp))
+
+                    // Password field
                     OutlinedTextField(
                         value = state.password,
                         onValueChange = onPasswordChanged,
                         label = { Text("Contraseña") },
-                        leadingIcon = { Icon(Icons.Default.Lock, null, tint = Brand400) },
+                        leadingIcon = { Icon(Icons.Default.Lock, null, tint = if (state.passwordError != null) ErrorRed else Brand400) },
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
@@ -159,18 +173,37 @@ private fun LoginScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = { onLogin() }),
                         singleLine = true,
-                        isError = state.error != null,
+                        isError = state.passwordError != null,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
                         colors = authFieldColors()
                     )
+                    FieldErrorMessage(message = state.passwordError)
 
-                    if (state.error != null) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Error, null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.error)
-                            Text(state.error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    Spacer(Modifier.height(8.dp))
+
+                    // Error general (de red / credenciales)
+                    AnimatedVisibility(
+                        visible = state.generalError != null,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        state.generalError?.let { err ->
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(ErrorRed.copy(alpha = 0.10f), RoundedCornerShape(10.dp))
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            ) {
+                                Icon(Icons.Default.Error, null, modifier = Modifier.size(16.dp), tint = ErrorRed)
+                                Text(err, color = ErrorRed, style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                     }
+
+                    Spacer(Modifier.height(4.dp))
 
                     Box(
                         modifier = Modifier
@@ -192,9 +225,9 @@ private fun LoginScreen(
                             }
                         }
                     }
-                    
+
                     Spacer(Modifier.height(8.dp))
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -234,14 +267,43 @@ private fun LoginScreen(
 }
 
 @Composable
+fun FieldErrorMessage(message: String?) {
+    AnimatedVisibility(
+        visible = message != null,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
+    ) {
+        if (message != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
+            ) {
+                Icon(Icons.Default.Error, null, modifier = Modifier.size(12.dp), tint = ErrorRed)
+                Text(
+                    text = message,
+                    color = ErrorRed,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun authFieldColors() = OutlinedTextFieldDefaults.colors(
     unfocusedBorderColor  = Dark400,
     focusedBorderColor    = Brand500,
+    errorBorderColor      = ErrorRed,
+    errorLeadingIconColor = ErrorRed,
+    errorLabelColor       = ErrorRed,
     unfocusedLabelColor   = TextSecondary,
     focusedLabelColor     = Brand400,
     cursorColor           = Brand500,
     unfocusedContainerColor = Dark900.copy(alpha = 0.5f),
     focusedContainerColor   = Dark900.copy(alpha = 0.8f),
+    errorContainerColor     = ErrorRed.copy(alpha = 0.05f),
     unfocusedTextColor    = TextPrimary,
-    focusedTextColor      = TextPrimary
+    focusedTextColor      = TextPrimary,
+    errorTextColor        = TextPrimary
 )
