@@ -1,18 +1,43 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import AdminLayout from './layouts/AdminLayout';
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <AdminLayout>{children}</AdminLayout> : <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        
-        {/* Próximamente: Rutas protegidas para Dashboard */}
-        <Route path="/dashboard" element={<div className="text-white p-10">Dashboard (En construcción)</div>} />
-        
-        <Route path="/" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/productos" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage /> {/* Reusando por ahora como demo */}
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route path="/" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

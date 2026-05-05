@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../api/client';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -8,20 +11,29 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
-    // TODO: Implement real login logic with axios to backend
-    setTimeout(() => {
-      if (email === 'admin@YapaMarket.dev' && password === 'admin1234') {
-        alert('Login exitoso (Simulado)');
-      } else {
-        setError('Credenciales inválidas para administrador.');
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      const { access_token, user } = response.data;
+
+      if (user.role !== 'ADMIN') {
+        throw new Error('No tienes permisos de administrador.');
       }
+
+      login(access_token, user);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.response?.data?.error || err.message || 'Error al conectar con el servidor.');
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
