@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.mercadoapp.data.remote.api.MercadoApiService
+import com.mercadoapp.data.remote.dto.UbigeoDto
 
 data class AddressEditUiState(
     val id: String = "",
@@ -21,12 +23,18 @@ data class AddressEditUiState(
     val departamento: String = "",
     val isDefault: Boolean = false,
     val isSuccess: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val departments: List<UbigeoDto> = emptyList(),
+    val provinces: List<UbigeoDto> = emptyList(),
+    val districts: List<UbigeoDto> = emptyList(),
+    val selectedDepartmentId: String? = null,
+    val selectedProvinceId: String? = null
 )
 
 @HiltViewModel
 class AddressEditViewModel @Inject constructor(
     private val addressRepository: AddressRepository,
+    private val apiService: MercadoApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -36,8 +44,18 @@ class AddressEditViewModel @Inject constructor(
     private val addressId: String? = savedStateHandle.get<String>("id")
 
     init {
+        loadDepartments()
         if (addressId != null && addressId != "new") {
             loadAddress(addressId)
+        }
+    }
+
+    private fun loadDepartments() {
+        viewModelScope.launch {
+            try {
+                val deps = apiService.getDepartments()
+                _state.update { it.copy(departments = deps) }
+            } catch (e: Exception) {}
         }
     }
 
@@ -65,6 +83,31 @@ class AddressEditViewModel @Inject constructor(
     fun onDistritoChanged(value: String) { _state.update { it.copy(distrito = value) } }
     fun onProvinciaChanged(value: String) { _state.update { it.copy(provincia = value) } }
     fun onDepartamentoChanged(value: String) { _state.update { it.copy(departamento = value) } }
+
+    fun selectDepartment(id: String, name: String) {
+        _state.update { it.copy(departamento = name, selectedDepartmentId = id, provincia = "", distrito = "", provinces = emptyList(), districts = emptyList()) }
+        viewModelScope.launch {
+            try {
+                val provs = apiService.getProvinces(id)
+                _state.update { it.copy(provinces = provs) }
+            } catch (e: Exception) {}
+        }
+    }
+
+    fun selectProvince(id: String, name: String) {
+        _state.update { it.copy(provincia = name, selectedProvinceId = id, distrito = "", districts = emptyList()) }
+        viewModelScope.launch {
+            try {
+                val dists = apiService.getDistricts(id)
+                _state.update { it.copy(districts = dists) }
+            } catch (e: Exception) {}
+        }
+    }
+
+    fun selectDistrict(id: String, name: String) {
+        _state.update { it.copy(distrito = name) }
+    }
+
     fun onIsDefaultChanged(value: Boolean) { _state.update { it.copy(isDefault = value) } }
 
     fun saveAddress() {

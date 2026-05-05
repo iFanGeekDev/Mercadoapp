@@ -35,9 +35,9 @@ fun AddressEditRoute(
         onBack = onBack,
         onAliasChanged = viewModel::onAliasChanged,
         onStreetChanged = viewModel::onStreetChanged,
-        onDistritoChanged = viewModel::onDistritoChanged,
-        onProvinciaChanged = viewModel::onProvinciaChanged,
-        onDepartamentoChanged = viewModel::onDepartamentoChanged,
+        onDistritoSelected = viewModel::selectDistrict,
+        onProvinciaSelected = viewModel::selectProvince,
+        onDepartamentoSelected = viewModel::selectDepartment,
         onIsDefaultChanged = viewModel::onIsDefaultChanged,
         onSave = viewModel::saveAddress
     )
@@ -50,9 +50,9 @@ private fun AddressEditScreen(
     onBack: () -> Unit,
     onAliasChanged: (String) -> Unit,
     onStreetChanged: (String) -> Unit,
-    onDistritoChanged: (String) -> Unit,
-    onProvinciaChanged: (String) -> Unit,
-    onDepartamentoChanged: (String) -> Unit,
+    onDistritoSelected: (String, String) -> Unit,
+    onProvinciaSelected: (String, String) -> Unit,
+    onDepartamentoSelected: (String, String) -> Unit,
     onIsDefaultChanged: (Boolean) -> Unit,
     onSave: () -> Unit
 ) {
@@ -100,20 +100,28 @@ private fun AddressEditScreen(
                 value = state.street, onValueChange = onStreetChanged, label = { Text("Dirección (Calle, Urb, Nro)") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
             )
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                OutlinedTextField(
-                    value = state.departamento, onValueChange = onDepartamentoChanged, label = { Text("Departamento") },
-                    modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
-                )
-                OutlinedTextField(
-                    value = state.provincia, onValueChange = onProvinciaChanged, label = { Text("Provincia") },
-                    modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
-                )
-            }
-            OutlinedTextField(
-                value = state.distrito, onValueChange = onDistritoChanged, label = { Text("Distrito") },
-                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+            UbigeoDropdown(
+                label = "Departamento",
+                options = state.departments,
+                selectedName = state.departamento,
+                onOptionSelected = onDepartamentoSelected,
+                modifier = Modifier.fillMaxWidth()
+            )
+            UbigeoDropdown(
+                label = "Provincia",
+                options = state.provinces,
+                selectedName = state.provincia,
+                onOptionSelected = onProvinciaSelected,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = state.provinces.isNotEmpty()
+            )
+            UbigeoDropdown(
+                label = "Distrito",
+                options = state.districts,
+                selectedName = state.distrito,
+                onOptionSelected = onDistritoSelected,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = state.districts.isNotEmpty()
             )
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Checkbox(checked = state.isDefault, onCheckedChange = onIsDefaultChanged, colors = CheckboxDefaults.colors(checkedColor = Brand500, uncheckedColor = TextSecondary))
@@ -136,3 +144,50 @@ fun addressFieldColors() = OutlinedTextFieldDefaults.colors(
     unfocusedTextColor    = TextPrimary,
     focusedTextColor      = TextPrimary
 )
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UbigeoDropdown(
+    label: String,
+    options: List<com.mercadoapp.data.remote.dto.UbigeoDto>,
+    selectedName: String,
+    onOptionSelected: (id: String, name: String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded && enabled,
+        onExpandedChange = { if (enabled) expanded = !expanded },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            value = selectedName,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier.menuAnchor().fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = addressFieldColors(),
+            singleLine = true,
+            enabled = enabled
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(Dark800)
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option.name, color = TextPrimary) },
+                    onClick = {
+                        onOptionSelected(option.id, option.name)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}

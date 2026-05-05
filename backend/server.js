@@ -17,6 +17,10 @@ const SECRET = 'mercadoapp_dev_secret_key';
 app.use(cors());
 app.use(express.json());
 
+const departamentos = require('./departamentos.json');
+const provincias = require('./provincias.json');
+const distritos = require('./distritos.json');
+
 // ─────────────────────────────────────────────────────────────────────────────
 // IN-MEMORY DATA STORE
 // ─────────────────────────────────────────────────────────────────────────────
@@ -228,6 +232,20 @@ router.get('/products/:id', (req, res) => {
   const product = products.find(p => p.id === req.params.id);
   if (!product) return res.status(404).json({ error: 'Producto no encontrado' });
   return res.json(product);
+});
+
+// ── Ubigeo (Perú) ─────────────────────────────────────────────────────────────
+
+router.get('/ubigeo/departments', (req, res) => {
+  return res.json(departamentos);
+});
+
+router.get('/ubigeo/provinces/:departmentId', (req, res) => {
+  return res.json(provincias.filter(p => p.department_id === req.params.departmentId));
+});
+
+router.get('/ubigeo/districts/:provinceId', (req, res) => {
+  return res.json(distritos.filter(d => d.province_id === req.params.provinceId));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
