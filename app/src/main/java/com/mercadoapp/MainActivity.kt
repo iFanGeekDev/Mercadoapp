@@ -75,6 +75,9 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
             LoginRoute(
                 onLoginSuccess = {
                     navController.navigate("home") { popUpTo("login") { inclusive = true } }
+                },
+                onNavigateToRegister = {
+                    navController.navigate("register")
                 }
             )
         }
@@ -125,6 +128,7 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
 
         composable("profile") {
             ProfileRoute(
+                onBack = { navController.popBackStack() },
                 onLogout = {
                     navController.navigate("login") { popUpTo(0) { inclusive = true } }
                 },

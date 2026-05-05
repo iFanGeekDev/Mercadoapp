@@ -46,6 +46,7 @@ private fun ProductDetailScreen(
     val options = state.optionsState ?: EmptyOptions
 
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         containerColor = Dark900,
         topBar = {
             Row(

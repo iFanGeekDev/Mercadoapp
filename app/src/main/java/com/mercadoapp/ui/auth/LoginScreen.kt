@@ -54,7 +54,7 @@ private fun LoginScreen(
     val focusManager = LocalFocusManager.current
     var passwordVisible by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize().background(Dark900)) {
+    Box(modifier = Modifier.fillMaxSize().background(Dark900).systemBarsPadding()) {
         // Animated gradient background
         Box(
             modifier = Modifier

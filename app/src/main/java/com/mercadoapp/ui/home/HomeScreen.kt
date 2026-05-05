@@ -55,6 +55,7 @@ private fun HomeScreen(
     val categories = listOf("LAPTOPS", "PHONES", "AUDIO", "WEARABLES")
 
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         containerColor = Dark900,
         topBar = {
             Row(

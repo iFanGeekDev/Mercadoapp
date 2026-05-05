@@ -32,7 +32,13 @@ fun CartRoute(
     viewModel: CartViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    CartScreen(state = state, onBack = onBack, onCheckout = onCheckout, onRemoveItem = viewModel::removeItem)
+    CartScreen(
+        state = state, 
+        onBack = onBack, 
+        onCheckout = onCheckout, 
+        onRemoveItem = viewModel::removeItem,
+        onUpdateQuantity = viewModel::updateQuantity
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,9 +47,11 @@ private fun CartScreen(
     state: CartUiState,
     onBack: () -> Unit,
     onCheckout: () -> Unit,
-    onRemoveItem: (String) -> Unit
+    onRemoveItem: (Int) -> Unit,
+    onUpdateQuantity: (Int, Int) -> Unit
 ) {
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         containerColor = Dark900,
         topBar = {
             Row(
@@ -91,11 +99,6 @@ private fun CartScreen(
         }
     ) { padding ->
 
-        if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = Brand500) }
-            return@Scaffold
-        }
-
         if (state.items.isEmpty()) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -112,14 +115,19 @@ private fun CartScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(state.items, key = { it.id }) { item ->
-                CartItemCard(item = item, onRemove = { onRemoveItem(item.id) })
+                CartItemCard(
+                    item = item,
+                    onRemove = { onRemoveItem(item.id) },
+                    onIncrease = { if (item.quantity < item.variant.stock) onUpdateQuantity(item.id, item.quantity + 1) },
+                    onDecrease = { if (item.quantity > 1) onUpdateQuantity(item.id, item.quantity - 1) }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun CartItemCard(item: CartItem, onRemove: () -> Unit) {
+private fun CartItemCard(item: CartItem, onRemove: () -> Unit, onIncrease: () -> Unit, onDecrease: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -132,10 +140,18 @@ private fun CartItemCard(item: CartItem, onRemove: () -> Unit) {
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(item.productName, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(4.dp))
-                Text("Qty: ${item.quantity}", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
                 Spacer(Modifier.height(8.dp))
-                Text("$${"%.2f".format(item.price)}", style = MaterialTheme.typography.titleMedium, color = Brand500, fontWeight = FontWeight.Bold)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    IconButton(onClick = onDecrease, modifier = Modifier.size(28.dp).background(Dark700, CircleShape)) {
+                        Icon(Icons.Default.Remove, null, tint = if (item.quantity > 1) Color.White else Dark400, modifier = Modifier.size(16.dp))
+                    }
+                    Text("${item.quantity}", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
+                    IconButton(onClick = onIncrease, modifier = Modifier.size(28.dp).background(Dark700, CircleShape)) {
+                        Icon(Icons.Default.Add, null, tint = if (item.quantity < item.variant.stock) Color.White else Dark400, modifier = Modifier.size(16.dp))
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                Text("$${"%.2f".format(item.variant.price * item.quantity)}", style = MaterialTheme.typography.titleMedium, color = Brand500, fontWeight = FontWeight.Bold)
             }
             IconButton(onClick = onRemove, modifier = Modifier.background(Dark700, CircleShape).size(36.dp)) {
                 Icon(Icons.Default.Delete, null, tint = ErrorRed, modifier = Modifier.size(18.dp))

@@ -29,22 +29,29 @@ import com.mercadoapp.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
+    onBack: () -> Unit,
     onLogout: () -> Unit,
     onAddressesClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProfileScreen(state = state, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick)
+    ProfileScreen(state = state, onBack = onBack, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(state: ProfileUiState, onLogout: () -> Unit, onAddressesClick: () -> Unit) {
+private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: () -> Unit, onAddressesClick: () -> Unit) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        modifier = Modifier.systemBarsPadding(),
         topBar = {
             TopAppBar(
                 title = { Text("Mi perfil", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, null)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background)
             )

@@ -64,7 +64,7 @@ private fun RegisterScreen(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize().background(Dark900)) {
+    Box(modifier = Modifier.fillMaxSize().background(Dark900).systemBarsPadding()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

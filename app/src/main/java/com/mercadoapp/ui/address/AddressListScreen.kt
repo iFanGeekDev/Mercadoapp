@@ -49,6 +49,7 @@ private fun AddressListScreen(
     onDelete: (String) -> Unit
 ) {
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         containerColor = Dark900,
         topBar = {
             Row(

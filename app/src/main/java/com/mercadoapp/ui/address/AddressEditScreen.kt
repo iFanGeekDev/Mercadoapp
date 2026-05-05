@@ -57,6 +57,7 @@ private fun AddressEditScreen(
     onSave: () -> Unit
 ) {
     Scaffold(
+        modifier = Modifier.systemBarsPadding(),
         containerColor = Dark900,
         topBar = {
             Row(
