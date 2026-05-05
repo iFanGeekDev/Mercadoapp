@@ -31,7 +31,16 @@ const users = [
     name:     'Diego Demo',
     email:    'demo@YapaMarket.dev',
     password: bcrypt.hashSync('demo1234', 8),
-    avatar_url: null
+    avatar_url: null,
+    role:     'USER'
+  },
+  {
+    id:       'admin-001',
+    name:     'Admin Principal',
+    email:    'admin@YapaMarket.dev',
+    password: bcrypt.hashSync('admin1234', 8),
+    avatar_url: null,
+    role:     'ADMIN'
   }
 ];
 
@@ -208,8 +217,8 @@ const orders = [
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 
-function generateTokens(userId) {
-  const accessToken  = jwt.sign({ sub: userId }, SECRET, { expiresIn: '1h' });
+function generateTokens(userId, role = 'USER') {
+  const accessToken  = jwt.sign({ sub: userId, role }, SECRET, { expiresIn: '1h' });
   const refreshToken = jwt.sign({ sub: userId, type: 'refresh' }, SECRET, { expiresIn: '30d' });
   return { access_token: accessToken, refresh_token: refreshToken };
 }
@@ -229,7 +238,7 @@ function authenticate(req, res, next) {
 }
 
 function userToDto(user) {
-  return { id: user.id, name: user.name, email: user.email, avatar_url: user.avatar_url };
+  return { id: user.id, name: user.name, email: user.email, avatar_url: user.avatar_url, role: user.role };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -246,9 +255,9 @@ router.post('/auth/login', (req, res) => {
   if (!user || !bcrypt.compareSync(password, user.password)) {
     return res.status(401).json({ error: 'Credenciales inválidas' });
   }
-  const tokens = generateTokens(user.id);
-  console.log(`[LOGIN] ${email} ✓`);
-  return res.json(tokens);
+  const tokens = generateTokens(user.id, user.role);
+  console.log(`[LOGIN] ${email} (Role: ${user.role}) ✓`);
+  return res.json({ ...tokens, user: userToDto(user) });
 });
 
 router.post('/auth/register', (req, res) => {
@@ -385,8 +394,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📱 Emulador Android  → http://10.0.2.2:${PORT}/v1`);
   console.log(`📡 Dispositivo físico → http://<TU_IP_LOCAL>:${PORT}/v1`);
   console.log(`\n🔑 Credenciales demo:`);
-  console.log(`   Email:    demo@YapaMarket.dev`);
-  console.log(`   Password: demo1234\n`);
+  console.log(`   [Usuario] Email: demo@YapaMarket.dev | Pass: demo1234`);
+  console.log(`   [Admin]   Email: admin@YapaMarket.dev | Pass: admin1234\n`);
   console.log(`📦 Endpoints disponibles:`);
   console.log(`   GET  /v1/orders          → Lista de órdenes del usuario`);
   console.log(`   GET  /v1/orders/:id      → Detalle de una orden`);
