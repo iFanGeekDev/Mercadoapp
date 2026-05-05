@@ -35,9 +35,9 @@ fun AddressEditRoute(
         onBack = onBack,
         onAliasChanged = viewModel::onAliasChanged,
         onStreetChanged = viewModel::onStreetChanged,
-        onCityChanged = viewModel::onCityChanged,
-        onStateChanged = viewModel::onStateChanged,
-        onZipCodeChanged = viewModel::onZipCodeChanged,
+        onDistritoChanged = viewModel::onDistritoChanged,
+        onProvinciaChanged = viewModel::onProvinciaChanged,
+        onDepartamentoChanged = viewModel::onDepartamentoChanged,
         onIsDefaultChanged = viewModel::onIsDefaultChanged,
         onSave = viewModel::saveAddress
     )
@@ -50,9 +50,9 @@ private fun AddressEditScreen(
     onBack: () -> Unit,
     onAliasChanged: (String) -> Unit,
     onStreetChanged: (String) -> Unit,
-    onCityChanged: (String) -> Unit,
-    onStateChanged: (String) -> Unit,
-    onZipCodeChanged: (String) -> Unit,
+    onDistritoChanged: (String) -> Unit,
+    onProvinciaChanged: (String) -> Unit,
+    onDepartamentoChanged: (String) -> Unit,
     onIsDefaultChanged: (Boolean) -> Unit,
     onSave: () -> Unit
 ) {
@@ -68,7 +68,7 @@ private fun AddressEditScreen(
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
                 Spacer(Modifier.width(16.dp))
-                Text(if (state.id.isEmpty()) "Add Address" else "Edit Address", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text(if (state.id.isEmpty()) "Añadir Dirección" else "Editar Dirección", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
             }
         },
         bottomBar = {
@@ -82,7 +82,7 @@ private fun AddressEditScreen(
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         if (state.isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                        else Text("SAVE ADDRESS", fontWeight = FontWeight.Bold, color = Color.White)
+                        else Text("GUARDAR DIRECCIÓN", fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 }
             }
@@ -93,31 +93,31 @@ private fun AddressEditScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
-                value = state.alias, onValueChange = onAliasChanged, label = { Text("Address Alias (e.g. Home)") },
+                value = state.alias, onValueChange = onAliasChanged, label = { Text("Nombre de dirección (Ej. Casa)") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
             )
             OutlinedTextField(
-                value = state.street, onValueChange = onStreetChanged, label = { Text("Street Address") },
+                value = state.street, onValueChange = onStreetChanged, label = { Text("Dirección (Calle, Urb, Nro)") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
             )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 OutlinedTextField(
-                    value = state.city, onValueChange = onCityChanged, label = { Text("City") },
+                    value = state.departamento, onValueChange = onDepartamentoChanged, label = { Text("Departamento") },
                     modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
                 )
                 OutlinedTextField(
-                    value = state.stateStr, onValueChange = onStateChanged, label = { Text("State") },
+                    value = state.provincia, onValueChange = onProvinciaChanged, label = { Text("Provincia") },
                     modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
                 )
             }
             OutlinedTextField(
-                value = state.zipCode, onValueChange = onZipCodeChanged, label = { Text("Zip Code") },
+                value = state.distrito, onValueChange = onDistritoChanged, label = { Text("Distrito") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Checkbox(checked = state.isDefault, onCheckedChange = onIsDefaultChanged, colors = CheckboxDefaults.colors(checkedColor = Brand500, uncheckedColor = TextSecondary))
-                Text("Set as default shipping address", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                Text("Usar como dirección de envío principal", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
             }
             Spacer(Modifier.height(40.dp))
         }

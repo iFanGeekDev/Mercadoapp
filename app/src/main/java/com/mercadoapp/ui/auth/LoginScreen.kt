@@ -109,9 +109,9 @@ private fun LoginScreen(
 
             Spacer(Modifier.height(32.dp))
 
-            Text("Sign in to your account", style = MaterialTheme.typography.headlineMedium,
+            Text("Inicia sesión en tu cuenta", style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold, color = Color.White)
-            Text("Welcome back, please enter your details",
+            Text("Bienvenido de nuevo, ingresa tus datos",
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary,
                 modifier = Modifier.padding(top = 8.dp))
@@ -131,7 +131,7 @@ private fun LoginScreen(
                     OutlinedTextField(
                         value = state.email,
                         onValueChange = onEmailChanged,
-                        label = { Text("Email address") },
+                        label = { Text("Correo electrónico") },
                         leadingIcon = { Icon(Icons.Default.Email, null, tint = Brand400) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
@@ -145,7 +145,7 @@ private fun LoginScreen(
                     OutlinedTextField(
                         value = state.password,
                         onValueChange = onPasswordChanged,
-                        label = { Text("Password") },
+                        label = { Text("Contraseña") },
                         leadingIcon = { Icon(Icons.Default.Lock, null, tint = Brand400) },
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -188,7 +188,7 @@ private fun LoginScreen(
                             if (state.isLoading) {
                                 CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.5.dp)
                             } else {
-                                Text("SIGN IN", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                                Text("INICIAR SESIÓN", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }
@@ -224,8 +224,8 @@ private fun LoginScreen(
             Spacer(Modifier.height(20.dp))
 
             TextButton(onClick = onNavigateToRegister) {
-                Text("Don't have an account? ", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
-                Text("Sign up", color = Brand400, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text("¿No tienes una cuenta? ", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                Text("Regístrate", color = Brand400, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
             }
 
             Spacer(Modifier.height(40.dp))

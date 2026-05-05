@@ -89,8 +89,8 @@ private fun RegisterScreen(
 
             Spacer(Modifier.height(32.dp))
 
-            Text("Initialize your ecosystem access.", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Center)
-            Text("Create an account to continue", style = MaterialTheme.typography.bodyMedium, color = TextSecondary, modifier = Modifier.padding(top = 8.dp))
+            Text("Inicializa tu acceso al ecosistema.", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Center)
+            Text("Crea una cuenta para continuar", style = MaterialTheme.typography.bodyMedium, color = TextSecondary, modifier = Modifier.padding(top = 8.dp))
 
             Spacer(Modifier.height(40.dp))
 
@@ -102,7 +102,7 @@ private fun RegisterScreen(
             ) {
                 Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     OutlinedTextField(
-                        value = state.name, onValueChange = onNameChanged, label = { Text("Full Name") },
+                        value = state.name, onValueChange = onNameChanged, label = { Text("Nombre Completo") },
                         leadingIcon = { Icon(Icons.Default.Person, null, tint = Brand400) },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
@@ -110,7 +110,7 @@ private fun RegisterScreen(
                     )
 
                     OutlinedTextField(
-                        value = state.email, onValueChange = onEmailChanged, label = { Text("Email address") },
+                        value = state.email, onValueChange = onEmailChanged, label = { Text("Correo electrónico") },
                         leadingIcon = { Icon(Icons.Default.Email, null, tint = Brand400) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
@@ -118,7 +118,7 @@ private fun RegisterScreen(
                     )
 
                     OutlinedTextField(
-                        value = state.password, onValueChange = onPasswordChanged, label = { Text("Password") },
+                        value = state.password, onValueChange = onPasswordChanged, label = { Text("Contraseña") },
                         leadingIcon = { Icon(Icons.Default.Lock, null, tint = Brand400) },
                         trailingIcon = { IconButton(onClick = { passwordVisible = !passwordVisible }) { Icon(if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, null, tint = TextSecondary) } },
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -128,7 +128,7 @@ private fun RegisterScreen(
                     )
 
                     OutlinedTextField(
-                        value = state.confirmPassword, onValueChange = onConfirmPasswordChanged, label = { Text("Confirm Password") },
+                        value = state.confirmPassword, onValueChange = onConfirmPasswordChanged, label = { Text("Confirmar Contraseña") },
                         leadingIcon = { Icon(Icons.Default.Lock, null, tint = Brand400) },
                         trailingIcon = { IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) { Icon(if (confirmPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, null, tint = TextSecondary) } },
                         visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -153,7 +153,7 @@ private fun RegisterScreen(
                             contentPadding = PaddingValues(0.dp)
                         ) {
                             if (state.isLoading) CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.5.dp)
-                            else Text("CREATE ACCOUNT", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                            else Text("CREAR CUENTA", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }
@@ -161,8 +161,8 @@ private fun RegisterScreen(
 
             Spacer(Modifier.height(20.dp))
             TextButton(onClick = onNavigateToLogin) {
-                Text("Already have an account? ", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
-                Text("Sign in", color = Brand400, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text("¿Ya tienes una cuenta? ", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                Text("Inicia sesión", color = Brand400, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
             }
             Spacer(Modifier.height(40.dp))
         }

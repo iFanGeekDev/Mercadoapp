@@ -4,8 +4,8 @@ data class Address(
     val id: String = "",
     val alias: String,
     val street: String,
-    val city: String,
-    val state: String,
-    val zipCode: String,
+    val distrito: String,
+    val provincia: String,
+    val departamento: String,
     val isDefault: Boolean = false
 )

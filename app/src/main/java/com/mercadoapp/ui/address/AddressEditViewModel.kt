@@ -16,9 +16,9 @@ data class AddressEditUiState(
     val id: String = "",
     val alias: String = "",
     val street: String = "",
-    val city: String = "",
-    val stateStr: String = "",
-    val zipCode: String = "",
+    val distrito: String = "",
+    val provincia: String = "",
+    val departamento: String = "",
     val isDefault: Boolean = false,
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false
@@ -50,9 +50,9 @@ class AddressEditViewModel @Inject constructor(
                         id = address.id,
                         alias = address.alias,
                         street = address.street,
-                        city = address.city,
-                        stateStr = address.state,
-                        zipCode = address.zipCode,
+                        distrito = address.distrito,
+                        provincia = address.provincia,
+                        departamento = address.departamento,
                         isDefault = address.isDefault
                     )
                 }
@@ -62,9 +62,9 @@ class AddressEditViewModel @Inject constructor(
 
     fun onAliasChanged(value: String) { _state.update { it.copy(alias = value) } }
     fun onStreetChanged(value: String) { _state.update { it.copy(street = value) } }
-    fun onCityChanged(value: String) { _state.update { it.copy(city = value) } }
-    fun onStateChanged(value: String) { _state.update { it.copy(stateStr = value) } }
-    fun onZipCodeChanged(value: String) { _state.update { it.copy(zipCode = value) } }
+    fun onDistritoChanged(value: String) { _state.update { it.copy(distrito = value) } }
+    fun onProvinciaChanged(value: String) { _state.update { it.copy(provincia = value) } }
+    fun onDepartamentoChanged(value: String) { _state.update { it.copy(departamento = value) } }
     fun onIsDefaultChanged(value: Boolean) { _state.update { it.copy(isDefault = value) } }
 
     fun saveAddress() {
@@ -73,11 +73,11 @@ class AddressEditViewModel @Inject constructor(
             val currentState = _state.value
             val address = Address(
                 id = currentState.id,
-                alias = currentState.alias.ifEmpty { "Home" },
+                alias = currentState.alias.ifEmpty { "Casa" },
                 street = currentState.street,
-                city = currentState.city,
-                state = currentState.stateStr,
-                zipCode = currentState.zipCode,
+                distrito = currentState.distrito,
+                provincia = currentState.provincia,
+                departamento = currentState.departamento,
                 isDefault = currentState.isDefault
             )
             addressRepository.saveAddress(address)

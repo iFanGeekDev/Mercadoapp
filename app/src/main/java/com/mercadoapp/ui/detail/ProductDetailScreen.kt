@@ -72,7 +72,7 @@ private fun ProductDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text("Total Price", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                            Text("Precio Total", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
                             Text("$${"%.2f".format(variant.price)}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, color = Color.White)
                         }
                         Box(modifier = Modifier.width(180.dp).height(56.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(16.dp))) {
@@ -83,7 +83,7 @@ private fun ProductDetailScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, disabledContainerColor = Color.Transparent),
                                 contentPadding = PaddingValues(0.dp)
                             ) {
-                                Text(if (state.cartAdded) "Added to Cart" else "Add to Cart", fontWeight = FontWeight.Bold, color = Color.White)
+                                Text(if (state.cartAdded) "En el Carrito" else "Añadir al Carrito", fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }
@@ -115,7 +115,7 @@ private fun ProductDetailScreen(
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Icon(Icons.Default.Star, null, tint = Accent500, modifier = Modifier.size(16.dp))
                                 Text("4.9", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
-                                Text("(1,284 reviews)", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
+                                Text("(1,284 reseñas)", color = TextSecondary, style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }
@@ -124,12 +124,12 @@ private fun ProductDetailScreen(
 
                     HorizontalDivider(color = Dark700)
 
-                    Text("Configure your device", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                    Text("Configura tu equipo", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
 
-                    SelectableChips(title = "Condition", options = options.conditions, selected = state.selection.condition, toLabel = { it.name }, onSelected = viewModel::onConditionChanged)
-                    SelectableChips(title = "Processor", options = options.processors, selected = state.selection.processor, toLabel = { it }, onSelected = viewModel::onProcessorChanged)
+                    SelectableChips(title = "Condición", options = options.conditions, selected = state.selection.condition, toLabel = { it.name }, onSelected = viewModel::onConditionChanged)
+                    SelectableChips(title = "Procesador", options = options.processors, selected = state.selection.processor, toLabel = { it }, onSelected = viewModel::onProcessorChanged)
                     SelectableChips(title = "RAM", options = options.rams, selected = state.selection.ramGb, toLabel = { "$it GB" }, onSelected = viewModel::onRamChanged)
-                    SelectableChips(title = "Storage", options = options.storages, selected = state.selection.storageGb, toLabel = { "$it GB" }, onSelected = viewModel::onStorageChanged)
+                    SelectableChips(title = "Almacenamiento", options = options.storages, selected = state.selection.storageGb, toLabel = { "$it GB" }, onSelected = viewModel::onStorageChanged)
                     SelectableChips(title = "Color", options = options.colors, selected = state.selection.color, toLabel = { it }, onSelected = viewModel::onColorChanged)
 
                     Spacer(Modifier.height(100.dp))

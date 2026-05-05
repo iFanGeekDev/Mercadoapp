@@ -54,7 +54,7 @@ private fun CheckoutScreen(
                 IconButton(onClick = onBack, modifier = Modifier.background(Dark800, CircleShape)) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
-                Text("Payment", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("Pago", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Box(modifier = Modifier.size(48.dp))
             }
         },
@@ -70,7 +70,7 @@ private fun CheckoutScreen(
                             contentPadding = PaddingValues(0.dp)
                         ) {
                             if (state.isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                            else Text("PAY NOW", fontWeight = FontWeight.Bold, color = Color.White)
+                            else Text("PAGAR AHORA", fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }
@@ -87,19 +87,18 @@ private fun CheckoutScreen(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 24.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Steps indicator
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                StepIndicator(step = 1, title = "Cart", isCompleted = true)
+                StepIndicator(step = 1, title = "Carrito", isCompleted = true)
                 HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), color = Brand500)
-                StepIndicator(step = 2, title = "Payment", isCompleted = false, isActive = true)
+                StepIndicator(step = 2, title = "Pago", isCompleted = false, isActive = true)
                 HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), color = Dark700)
-                StepIndicator(step = 3, title = "Confirm", isCompleted = false)
+                StepIndicator(step = 3, title = "Confirmar", isCompleted = false)
             }
 
             // Shipping Address
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Shipping Address", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
-                TextButton(onClick = onChangeAddress) { Text("Change", color = Brand400) }
+                Text("Dirección de Envío", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                TextButton(onClick = onChangeAddress) { Text("Cambiar", color = Brand400) }
             }
             if (state.selectedAddress != null) {
                 val addr = state.selectedAddress
@@ -108,17 +107,17 @@ private fun CheckoutScreen(
                         Icon(Icons.Default.LocationOn, null, tint = Brand500)
                         Column {
                             Text(addr.alias, color = Color.White, fontWeight = FontWeight.Bold)
-                            Text("${addr.street}, ${addr.city}, ${addr.state}", color = TextSecondary, style = MaterialTheme.typography.bodySmall)
+                            Text("${addr.street}, ${addr.distrito}, ${addr.provincia}, ${addr.departamento}", color = TextSecondary, style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }
             } else {
                 OutlinedButton(onClick = onChangeAddress, modifier = Modifier.fillMaxWidth()) {
-                    Text("Select or Add an Address", color = Color.White)
+                    Text("Selecciona o Añade una Dirección", color = Color.White)
                 }
             }
 
-            Text("Payment Method", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+            Text("Método de Pago", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
 
             // Visa Card 4242
             Card(
@@ -129,17 +128,17 @@ private fun CheckoutScreen(
                 Box(modifier = Modifier.fillMaxSize().background(Brush.linearGradient(listOf(Color(0xFF1E1E2E), Color(0xFF2E2E45))))) {
                     Column(modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.SpaceBetween) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text("Credit Card", color = TextSecondary, style = MaterialTheme.typography.bodySmall)
+                            Text("Tarjeta de Crédito", color = TextSecondary, style = MaterialTheme.typography.bodySmall)
                             Text("VISA", color = Color.White, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleMedium)
                         }
                         Text("**** **** **** 4242", color = Color.White, style = MaterialTheme.typography.titleLarge, letterSpacing = 2.sp)
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column {
-                                Text("Card Holder", color = TextSecondary, style = MaterialTheme.typography.labelSmall)
+                                Text("Titular", color = TextSecondary, style = MaterialTheme.typography.labelSmall)
                                 Text("ALEX EXPLORER", color = Color.White, style = MaterialTheme.typography.bodyMedium)
                             }
                             Column {
-                                Text("Expires", color = TextSecondary, style = MaterialTheme.typography.labelSmall)
+                                Text("Expira", color = TextSecondary, style = MaterialTheme.typography.labelSmall)
                                 Text("12/28", color = Color.White, style = MaterialTheme.typography.bodyMedium)
                             }
                         }
@@ -148,7 +147,7 @@ private fun CheckoutScreen(
             }
 
             // Other payment options
-            PaymentOption(icon = Icons.Default.CreditCard, title = "Add new card")
+            PaymentOption(icon = Icons.Default.CreditCard, title = "Añadir nueva tarjeta")
             PaymentOption(icon = Icons.Default.AccountBalanceWallet, title = "Apple Pay")
             PaymentOption(icon = Icons.Default.AccountBalanceWallet, title = "Google Pay")
         }

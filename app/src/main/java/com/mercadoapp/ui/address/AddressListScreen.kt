@@ -60,7 +60,7 @@ private fun AddressListScreen(
                 IconButton(onClick = onBack, modifier = Modifier.background(Dark800, CircleShape)) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
-                Text("My Addresses", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("Mis Direcciones", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 IconButton(onClick = onAddAddress, modifier = Modifier.background(Brand500.copy(alpha = 0.15f), CircleShape)) {
                     Icon(Icons.Default.Add, null, tint = Brand400)
                 }
@@ -76,9 +76,9 @@ private fun AddressListScreen(
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Icon(Icons.Default.LocationOn, null, modifier = Modifier.size(64.dp), tint = Dark700)
-                    Text("No addresses found", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+                    Text("No hay direcciones guardadas", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
                     Button(onClick = onAddAddress, colors = ButtonDefaults.buttonColors(containerColor = Brand500)) {
-                        Text("Add New Address")
+                        Text("Añadir Dirección")
                     }
                 }
             }
@@ -118,11 +118,11 @@ private fun AddressCard(
         Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Icon(if (address.alias.equals("home", true)) Icons.Default.Home else Icons.Default.LocationOn, null, tint = Brand400, modifier = Modifier.size(20.dp))
+                    Icon(if (address.alias.equals("casa", true) || address.alias.equals("home", true)) Icons.Default.Home else Icons.Default.LocationOn, null, tint = Brand400, modifier = Modifier.size(20.dp))
                     Text(address.alias, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
                     if (address.isDefault) {
                         Surface(color = Brand500.copy(alpha = 0.15f), shape = RoundedCornerShape(6.dp)) {
-                            Text("DEFAULT", style = MaterialTheme.typography.labelSmall, color = Brand400, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), fontWeight = FontWeight.Bold)
+                            Text("PRINCIPAL", style = MaterialTheme.typography.labelSmall, color = Brand400, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -131,16 +131,16 @@ private fun AddressCard(
                 }
             }
 
-            Text("${address.street}\n${address.city}, ${address.state} ${address.zipCode}", style = MaterialTheme.typography.bodyMedium, color = TextSecondary, lineHeight = 20.sp)
+            Text("${address.street}\n${address.distrito}, ${address.provincia}, ${address.departamento}", style = MaterialTheme.typography.bodyMedium, color = TextSecondary, lineHeight = 20.sp)
 
             if (!address.isDefault) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = onDelete) {
-                        Text("Delete", color = ErrorRed)
+                        Text("Eliminar", color = ErrorRed)
                     }
                     Spacer(Modifier.width(8.dp))
                     TextButton(onClick = onSetDefault) {
-                        Text("Set as Default", color = Brand400)
+                        Text("Hacer principal", color = Brand400)
                     }
                 }
             }

@@ -62,7 +62,7 @@ private fun CartScreen(
                 IconButton(onClick = onBack, modifier = Modifier.background(Dark800, CircleShape)) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
-                Text("My Cart", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("Mi Carrito", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Box(modifier = Modifier.size(48.dp)) // Spacer for alignment
             }
         },
@@ -75,8 +75,8 @@ private fun CartScreen(
                             Text("$${"%.2f".format(state.total)}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
                         }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text("Shipping", style = MaterialTheme.typography.bodyMedium, color = TextSecondary)
-                            Text("Free", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Accent500)
+                            Text("Envío", style = MaterialTheme.typography.bodyMedium, color = TextSecondary)
+                            Text("Gratis", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Accent500)
                         }
                         HorizontalDivider(color = Dark700)
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -90,7 +90,7 @@ private fun CartScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                                 contentPadding = PaddingValues(0.dp)
                             ) {
-                                Text("CHECKOUT", fontWeight = FontWeight.Bold, color = Color.White)
+                                Text("IR A PAGAR", fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }
@@ -103,7 +103,7 @@ private fun CartScreen(
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Icon(Icons.Default.ShoppingCart, null, modifier = Modifier.size(64.dp), tint = Dark700)
-                    Text("Your cart is empty", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+                    Text("Tu carrito está vacío", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
                 }
             }
             return@Scaffold
@@ -142,12 +142,12 @@ private fun CartItemCard(item: CartItem, onRemove: () -> Unit, onIncrease: () ->
                 Text(item.productName, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    IconButton(onClick = onDecrease, modifier = Modifier.size(28.dp).background(Dark700, CircleShape)) {
-                        Icon(Icons.Default.Remove, null, tint = if (item.quantity > 1) Color.White else Dark400, modifier = Modifier.size(16.dp))
+                    IconButton(onClick = onDecrease, modifier = Modifier.size(24.dp).background(Dark700, CircleShape)) {
+                        Icon(Icons.Default.Remove, null, tint = if (item.quantity > 1) Color.White else Dark400, modifier = Modifier.size(14.dp))
                     }
                     Text("${item.quantity}", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
-                    IconButton(onClick = onIncrease, modifier = Modifier.size(28.dp).background(Dark700, CircleShape)) {
-                        Icon(Icons.Default.Add, null, tint = if (item.quantity < item.variant.stock) Color.White else Dark400, modifier = Modifier.size(16.dp))
+                    IconButton(onClick = onIncrease, modifier = Modifier.size(24.dp).background(Dark700, CircleShape)) {
+                        Icon(Icons.Default.Add, null, tint = if (item.quantity < item.variant.stock) Color.White else Dark400, modifier = Modifier.size(14.dp))
                     }
                 }
                 Spacer(Modifier.height(8.dp))

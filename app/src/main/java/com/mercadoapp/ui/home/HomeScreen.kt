@@ -74,7 +74,7 @@ private fun HomeScreen(
                     }
                     Spacer(Modifier.width(12.dp))
                     Column {
-                        Text("Welcome,", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                        Text("Hola,", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
                         Text("Explorer", style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
@@ -104,7 +104,7 @@ private fun HomeScreen(
                 OutlinedTextField(
                     value = "",
                     onValueChange = {},
-                    placeholder = { Text("Search products...", color = TextSecondary) },
+                    placeholder = { Text("Buscar productos...", color = TextSecondary) },
                     leadingIcon = { Icon(Icons.Default.Search, null, tint = TextSecondary) },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     shape = RoundedCornerShape(16.dp),
@@ -144,7 +144,7 @@ private fun HomeScreen(
             // Flash Deal
             if (offers.isNotEmpty()) {
                 item {
-                    Text("Flash Deal", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
+                    Text("Oferta Relámpago", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
                     Spacer(Modifier.height(12.dp))
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 24.dp),
@@ -159,7 +159,7 @@ private fun HomeScreen(
 
             // For You Section
             item {
-                Text("For You", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
+                Text("Para Ti", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
             }
             
             items(count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }) { index ->
@@ -189,7 +189,7 @@ private fun FlashDealCard(product: Product, onClick: () -> Unit) {
             
             Column(modifier = Modifier.padding(20.dp).fillMaxHeight(), verticalArrangement = Arrangement.Center) {
                 Surface(color = Brand500, shape = RoundedCornerShape(6.dp)) {
-                    Text("CYBER MONDAY", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                    Text("CYBER DAYS", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                 }
                 Spacer(Modifier.height(12.dp))
                 Text(product.name, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1)
