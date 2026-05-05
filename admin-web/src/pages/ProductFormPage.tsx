@@ -50,7 +50,7 @@ const ProductFormPage: React.FC = () => {
   });
 
   const DESC_LIMIT = 200;
-  const ramOptions = [...Array.from({length: 16}, (_, i) => (i + 1) * 4), 128];
+  const ramOptions = [4, 8, 16, 24, 32, 40, 48, 64, 128];
 
   useEffect(() => {
     if (isEditing) {
