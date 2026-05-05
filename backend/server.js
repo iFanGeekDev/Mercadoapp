@@ -1,5 +1,5 @@
 /**
- * MercadoApp — Backend local de desarrollo
+ * YapaMarket — Backend local de desarrollo
  * Puerto: 8080
  * Base URL para emulador Android: http://10.0.2.2:8080/v1
  * Base URL para dispositivo físico: http://<TU_IP_LOCAL>:8080/v1
@@ -12,7 +12,7 @@ const cors       = require('cors');
 
 const app    = express();
 const PORT   = 8080;
-const SECRET = 'mercadoapp_dev_secret_key';
+const SECRET = 'YapaMarket_dev_secret_key';
 
 app.use(cors());
 app.use(express.json());
@@ -29,7 +29,7 @@ const users = [
   {
     id:       'user-001',
     name:     'Diego Demo',
-    email:    'demo@mercadoapp.dev',
+    email:    'demo@YapaMarket.dev',
     password: bcrypt.hashSync('demo1234', 8),
     avatar_url: null
   }
@@ -254,13 +254,13 @@ router.get('/ubigeo/districts/:provinceId', (req, res) => {
 
 app.use('/v1', router);
 
-app.get('/', (_, res) => res.json({ status: 'MercadoApp Backend running', version: '1.0' }));
+app.get('/', (_, res) => res.json({ status: 'YapaMarket Backend running', version: '1.0' }));
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n🚀 MercadoApp Backend corriendo en http://localhost:${PORT}/v1`);
+  console.log(`\n🚀 YapaMarket Backend corriendo en http://localhost:${PORT}/v1`);
   console.log(`📱 Emulador Android  → http://10.0.2.2:${PORT}/v1`);
   console.log(`📡 Dispositivo físico → http://<TU_IP_LOCAL>:${PORT}/v1`);
   console.log(`\n🔑 Credenciales demo:`);
-  console.log(`   Email:    demo@mercadoapp.dev`);
+  console.log(`   Email:    demo@YapaMarket.dev`);
   console.log(`   Password: demo1234\n`);
 });
