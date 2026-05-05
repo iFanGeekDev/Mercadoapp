@@ -40,3 +40,4 @@ El proyecto está estructurado como un monorepo que contiene el ecosistema compl
 *   **Verificar dependencias:** Antes de codificar, asegurar que las bibliotecas de Kotlin (como serialization) están configuradas adecuadamente.
 *   **Concurrencia:** Los cambios en un entorno pueden afectar al otro. Por ejemplo, al actualizar el modelo de producto en Backend, se debe actualizar la entidad/DTO en Android y en Web.
 *   **Commits y Git:** Utilizar el formato Conventional Commits (e.g., `feat:`, `fix:`, `refactor:`).
+*   **SKILL AUTOMÁTICO - AUTO-COMMIT:** Siempre que realice un cambio, implementación o modificación de código que cumpla un objetivo, **debo subir todo a Git de forma automática**. El commit debe contener un mensaje claro, descriptivo y bien comentado siguiendo Conventional Commits, para asegurar un excelente tracking y trazabilidad en el repositorio. No debo esperar a que el usuario me lo pida, debe ser parte de mi flujo de cierre de tarea.
