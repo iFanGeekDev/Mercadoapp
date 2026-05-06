@@ -31,7 +31,15 @@ class ProductDetailViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProductDetailUiState(isLoading = true))
     val state: StateFlow<ProductDetailUiState> = _state.asStateFlow()
 
-    init { loadProduct() }
+    init { 
+        loadProduct()
+        checkFavoriteStatus()
+    }
+
+    private fun checkFavoriteStatus() = viewModelScope.launch {
+        val isFav = repository.isProductFavorite(productId)
+        _state.value = _state.value.copy(isFavorite = isFav)
+    }
 
     private fun loadProduct() = viewModelScope.launch {
         val product = repository.getProductById(productId)
@@ -68,6 +76,13 @@ class ProductDetailViewModel @Inject constructor(
             delay(2_000)
             _state.value = _state.value.copy(cartAdded = false)
         }
+    }
+
+    fun toggleFavorite() = viewModelScope.launch {
+        val current = _state.value
+        val newStatus = !current.isFavorite
+        _state.value = current.copy(isFavorite = newStatus)
+        repository.toggleFavorite(productId, newStatus)
     }
 
     private fun updateSelection(anchorField: String, value: Any) {
@@ -195,7 +210,8 @@ data class ProductDetailUiState(
     val product: Product? = null,
     val selection: ProductSelection = ProductSelection(),
     val optionsState: ProductOptionsState? = null,
-    val cartAdded: Boolean = false
+    val cartAdded: Boolean = false,
+    val isFavorite: Boolean = false
 )
 
 val EmptyOptions = ProductOptionsState(

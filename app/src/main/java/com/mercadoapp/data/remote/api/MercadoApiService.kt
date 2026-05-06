@@ -9,6 +9,7 @@ import com.mercadoapp.data.remote.dto.TokenDto
 import com.mercadoapp.data.remote.dto.UbigeoDto
 import com.mercadoapp.data.remote.dto.UserDto
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -27,6 +28,17 @@ interface MercadoApiService {
 
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: String): ProductDto
+
+    // ── Favorites ──────────────────────────────────────────────────────────────
+
+    @GET("favorites")
+    suspend fun getFavorites(): List<ProductDto>
+
+    @POST("favorites")
+    suspend fun addFavorite(@Body request: Map<String, String>): Any
+
+    @DELETE("favorites/{productId}")
+    suspend fun removeFavorite(@Path("productId") productId: String): Any
 
     // ── Auth ───────────────────────────────────────────────────────────────────
 

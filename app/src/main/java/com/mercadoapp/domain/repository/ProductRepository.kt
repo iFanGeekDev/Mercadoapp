@@ -12,4 +12,8 @@ interface ProductRepository {
     suspend fun getHomeFeed(): List<Product>
 
     suspend fun getProductById(id: String): Product?
+
+    suspend fun getFavorites(): List<Product>
+    suspend fun toggleFavorite(productId: String, isFavorite: Boolean)
+    suspend fun isProductFavorite(productId: String): Boolean
 }

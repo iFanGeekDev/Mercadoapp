@@ -21,10 +21,8 @@ android {
         testInstrumentationRunner = "com.mercadoapp.HiltTestRunner"
         vectorDrawables { useSupportLibrary = true }
 
-        // ── Local backend ──────────────────────────────────────────────────────
-        // Emulador Android: 10.0.2.2 apunta al localhost del host
-        // Dispositivo físico: reemplazá con tu IP local (ej: "http://192.168.1.X:8080/v1/")
-        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/v1/\"")
+        // ── Production backend (Railway) ──────────────────────────────────────
+        buildConfigField("String", "BASE_URL", "\"https://mercadoapp-production-22eb.up.railway.app/v1/\"")
     }
 
     buildTypes {
