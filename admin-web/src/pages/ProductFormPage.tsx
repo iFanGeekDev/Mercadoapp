@@ -3,11 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Save, 
   ArrowLeft, 
-  Plus, 
   Trash2, 
   Upload, 
   CheckCircle2, 
-  AlertCircle,
   Smartphone,
   Cpu,
   Database,
