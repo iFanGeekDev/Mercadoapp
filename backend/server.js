@@ -91,7 +91,7 @@ const router = express.Router();
 router.post('/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    const result = await db.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     const user = result.rows[0];
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
@@ -114,7 +114,7 @@ router.post('/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'Nombre, email y contraseña son requeridos' });
     }
 
-    const exists = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    const exists = await db.query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     if (exists.rows.length > 0) {
       return res.status(409).json({ error: 'El email ya está registrado' });
     }
@@ -303,6 +303,59 @@ router.post('/orders', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Error al procesar la orden' });
   } finally {
     client.release();
+  }
+});
+
+// ── Favorites ─────────────────────────────────────────────────────────────────
+
+router.get('/favorites', authenticateToken, async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT p.* FROM products p 
+       JOIN favorites f ON p.id = f.product_id 
+       WHERE f.user_id = $1`,
+      [req.userId]
+    );
+    
+    // Obtener variantes para estos productos favoritos
+    const productIds = result.rows.map(p => p.id);
+    let items = result.rows;
+    if (productIds.length > 0) {
+      const variantsRes = await db.query('SELECT * FROM product_variants WHERE product_id = ANY($1)', [productIds]);
+      items = result.rows.map(p => ({
+        ...p,
+        variants: variantsRes.rows.filter(v => v.product_id === p.id)
+      }));
+    }
+
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener favoritos' });
+  }
+});
+
+router.post('/favorites', authenticateToken, async (req, res) => {
+  try {
+    const { product_id } = req.body;
+    await db.query(
+      'INSERT INTO favorites (user_id, product_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [req.userId, product_id]
+    );
+    res.status(201).json({ message: 'Añadido a favoritos' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al añadir a favoritos' });
+  }
+});
+
+router.delete('/favorites/:productId', authenticateToken, async (req, res) => {
+  try {
+    await db.query(
+      'DELETE FROM favorites WHERE user_id = $1 AND product_id = $2',
+      [req.userId, req.params.productId]
+    );
+    res.json({ message: 'Eliminado de favoritos' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar de favoritos' });
   }
 });
 

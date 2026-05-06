@@ -57,4 +57,33 @@ class RemoteProductRepository @Inject constructor(
             productDao.getById(id)?.toDomain()
         }
     }
+
+    override suspend fun getFavorites(): List<Product> {
+        return try {
+            api.getFavorites().map { it.toDomain() }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    override suspend fun toggleFavorite(productId: String, isFavorite: Boolean) {
+        try {
+            if (isFavorite) {
+                api.addFavorite(mapOf("product_id" to productId))
+            } else {
+                api.removeFavorite(productId)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override suspend fun isProductFavorite(productId: String): Boolean {
+        return try {
+            val favorites = api.getFavorites()
+            favorites.any { it.id == productId }
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

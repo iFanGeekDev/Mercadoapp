@@ -26,6 +26,7 @@ Diseñada bajo los estándares de Google Stitch, ofrece una interfaz fluida y mo
 *   **Transparencia Técnica:** Visualización del **Checklist de Inspección** para cada equipo (Pantalla, Batería, Cámaras, etc.).
 *   **Gestión de Direcciones (Perú):** Integración total con **Ubigeo** (Departamento, Provincia, Distrito) para envíos precisos.
 *   **Historial de Pedidos:** Seguimiento detallado de compras pasadas y estados de envío.
+*   **Sistema de Favoritos:** Lista de deseos personalizada sincronizada con el servidor para guardar equipos de interés.
 
 ---
 

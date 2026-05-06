@@ -57,8 +57,20 @@ private fun ProductDetailScreen(
                 IconButton(onClick = onBack, modifier = Modifier.background(Dark800, CircleShape)) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
-                IconButton(onClick = onCartClick, modifier = Modifier.background(Dark800, CircleShape)) {
-                    Icon(Icons.Default.ShoppingCart, null, tint = Color.White)
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    IconButton(
+                        onClick = { viewModel.toggleFavorite() },
+                        modifier = Modifier.background(Dark800, CircleShape)
+                    ) {
+                        Icon(
+                            if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = "Favorito",
+                            tint = if (state.isFavorite) Color.Red else Color.White
+                        )
+                    }
+                    IconButton(onClick = onCartClick, modifier = Modifier.background(Dark800, CircleShape)) {
+                        Icon(Icons.Default.ShoppingCart, null, tint = Color.White)
+                    }
                 }
             }
         },
