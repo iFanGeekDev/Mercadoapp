@@ -272,10 +272,10 @@ const ProductFormPage: React.FC = () => {
               {formData.variants.map((variant, index) => (
                 <div 
                   key={index} 
-                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-14 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
+                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-8 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
                 >
                   {/* Condición */}
-                  <div className="md:col-span-2 space-y-2">
+                  <div className="md:col-span-3 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Condición</label>
                     <select 
                       value={variant.condition}
@@ -284,16 +284,16 @@ const ProductFormPage: React.FC = () => {
                         newVariants[index].condition = e.target.value;
                         setFormData({...formData, variants: newVariants});
                       }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
+                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50 appearance-none"
                     >
-                      <option value="EXCELLENT">Excelente</option>
-                      <option value="NORMAL">Normal</option>
-                      <option value="FAIR">Regular</option>
+                      <option value="EXCELLENT">Excelente Condición</option>
+                      <option value="NORMAL">Uso Normal</option>
+                      <option value="FAIR">Desgastado (Regular)</option>
                     </select>
                   </div>
                   
                   {/* Color */}
-                  <div className="md:col-span-2 space-y-2 mr-4">
+                  <div className="md:col-span-2 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
                     <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
                       <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-dark-700 shrink-0">
@@ -325,23 +325,26 @@ const ProductFormPage: React.FC = () => {
                   {visibleSpecs.storage && (
                     <div className="md:col-span-2 space-y-2">
                       <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Almac.</label>
-                      <div className="relative">
-                        <input 
-                          type="number" value={variant.storage_gb}
-                          onChange={e => {
-                            const newVariants = [...formData.variants];
-                            newVariants[index].storage_gb = parseInt(e.target.value);
-                            setFormData({...formData, variants: newVariants});
-                          }}
-                          className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-dark-500">GB</span>
-                      </div>
+                      <select 
+                        value={variant.storage_gb}
+                        onChange={e => {
+                          const newVariants = [...formData.variants];
+                          newVariants[index].storage_gb = parseInt(e.target.value);
+                          setFormData({...formData, variants: newVariants});
+                        }}
+                        className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50 appearance-none"
+                      >
+                        {[8, 16, 32, 64, 128, 256, 512, 1024].map(size => (
+                          <option key={size} value={size}>
+                            {size >= 1024 ? '1 TB' : `${size} GB`}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   )}
 
                   {/* Precio */}
-                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-2'} space-y-2`}>
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Precio</label>
                     <div className="relative">
                       <input 
@@ -358,7 +361,7 @@ const ProductFormPage: React.FC = () => {
                   </div>
 
                   {/* Stock */}
-                  <div className="md:col-span-2 space-y-2">
+                  <div className="md:col-span-1 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Stock</label>
                     <input 
                       type="number" value={variant.stock}
@@ -372,7 +375,7 @@ const ProductFormPage: React.FC = () => {
                   </div>
 
                   {/* Eliminar */}
-                  <div className="md:col-span-2 flex justify-end pb-1">
+                  <div className="md:col-span-1 flex justify-end pb-1">
                     <button 
                       type="button" 
                       onClick={() => removeVariant(index)}
