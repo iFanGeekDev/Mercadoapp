@@ -33,6 +33,7 @@ fun ProfileRoute(
     onLogout: () -> Unit,
     onAddressesClick: () -> Unit,
     onOrdersClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onChangePasswordClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
@@ -44,6 +45,7 @@ fun ProfileRoute(
         onLogout = { viewModel.logout(); onLogout() }, 
         onAddressesClick = onAddressesClick, 
         onOrdersClick = onOrdersClick,
+        onFavoritesClick = onFavoritesClick,
         onEditProfileClick = onEditProfileClick,
         onChangePasswordClick = onChangePasswordClick
     )
@@ -57,6 +59,7 @@ private fun ProfileScreen(
     onLogout: () -> Unit, 
     onAddressesClick: () -> Unit, 
     onOrdersClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onChangePasswordClick: () -> Unit
 ) {
@@ -161,6 +164,7 @@ private fun ProfileScreen(
 
                 // Settings rows
                 SettingsRow(icon = Icons.Default.Receipt, label = "Mis Órdenes", onClick = onOrdersClick)
+                SettingsRow(icon = Icons.Default.Favorite, label = "Mis Favoritos", onClick = onFavoritesClick)
                 SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
                 SettingsRow(icon = Icons.Default.Edit, label = "Editar Perfil", onClick = onEditProfileClick)
                 SettingsRow(icon = Icons.Default.VpnKey, label = "Cambiar Contraseña", onClick = onChangePasswordClick)
