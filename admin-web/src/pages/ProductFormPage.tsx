@@ -3,11 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Save, 
   ArrowLeft, 
-  Plus, 
   Trash2, 
   Upload, 
   CheckCircle2, 
-  AlertCircle,
   Smartphone,
   Cpu,
   Database,
@@ -47,6 +45,12 @@ const ProductFormPage: React.FC = () => {
       { category: 'Botones', item: 'Respuesta táctica correcta', status: 'PENDING', note: '' },
       { category: 'Conectividad', item: 'Wi-Fi, Bluetooth y Red móvil', status: 'PENDING', note: '' },
     ]
+  });
+
+  const [visibleSpecs, setVisibleSpecs] = useState({
+    processor: true,
+    ram: true,
+    storage: true
   });
 
   const DESC_LIMIT = 200;
@@ -96,11 +100,29 @@ const ProductFormPage: React.FC = () => {
     }
 
     setIsLoading(true);
+    
+    // Preparar datos limpios según la visibilidad
+    const cleanedFormData = {
+      ...formData,
+      technical_specs: {
+        ...formData.technical_specs,
+        processor: visibleSpecs.processor ? formData.technical_specs.processor : [],
+        ram_gb: visibleSpecs.ram ? formData.technical_specs.ram_gb : [],
+        storage_gb: visibleSpecs.storage ? formData.technical_specs.storage_gb : [],
+      },
+      variants: formData.variants.map(v => ({
+        ...v,
+        processor: visibleSpecs.processor ? v.processor : '',
+        ram_gb: visibleSpecs.ram ? v.ram_gb : 0,
+        storage_gb: visibleSpecs.storage ? v.storage_gb : 0,
+      }))
+    };
+
     try {
       if (isEditing) {
-        await api.put(`/products/${id}`, formData);
+        await api.put(`/products/${id}`, cleanedFormData);
       } else {
-        await api.post('/products', formData);
+        await api.post('/products', cleanedFormData);
       }
       navigate('/dashboard');
     } catch (error) {
@@ -115,6 +137,13 @@ const ProductFormPage: React.FC = () => {
       ...formData,
       variants: [...formData.variants, { ...formData.variants[0], stock: 0, price: 0 }]
     });
+  };
+
+  const removeVariant = (index: number) => {
+    if (formData.variants.length > 1) {
+      const newVariants = formData.variants.filter((_, i) => i !== index);
+      setFormData({ ...formData, variants: newVariants });
+    }
   };
 
   return (
@@ -167,31 +196,63 @@ const ProductFormPage: React.FC = () => {
 
           {/* Technical Specs */}
           <section className="bg-dark-800 border border-dark-700 p-8 rounded-3xl shadow-xl space-y-6">
-            <h3 className="text-lg font-bold flex items-center gap-2">
-              <Cpu className="w-5 h-5 text-accent-500" />
-              Especificaciones Técnicas
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold flex items-center gap-2">
+                <Cpu className="w-5 h-5 text-accent-500" />
+                Especificaciones Técnicas
+              </h3>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="checkbox" checked={visibleSpecs.processor} 
+                    onChange={e => setVisibleSpecs({...visibleSpecs, processor: e.target.checked})}
+                    className="w-4 h-4 rounded border-dark-700 bg-dark-900 text-brand-500 focus:ring-0" 
+                  />
+                  <span className="text-[10px] font-black uppercase text-dark-400">Procesador</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="checkbox" checked={visibleSpecs.ram} 
+                    onChange={e => setVisibleSpecs({...visibleSpecs, ram: e.target.checked})}
+                    className="w-4 h-4 rounded border-dark-700 bg-dark-900 text-brand-500 focus:ring-0" 
+                  />
+                  <span className="text-[10px] font-black uppercase text-dark-400">RAM</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="checkbox" checked={visibleSpecs.storage} 
+                    onChange={e => setVisibleSpecs({...visibleSpecs, storage: e.target.checked})}
+                    className="w-4 h-4 rounded border-dark-700 bg-dark-900 text-brand-500 focus:ring-0" 
+                  />
+                  <span className="text-[10px] font-black uppercase text-dark-400">Almac.</span>
+                </label>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm text-dark-400 ml-1">Procesador</label>
-                <input 
-                  type="text" value={formData.technical_specs.processor[0]}
-                  onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, processor: [e.target.value]}})}
-                  className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm text-dark-400 ml-1">RAM (GB)</label>
-                <select 
-                  value={formData.technical_specs.ram_gb[0]}
-                  onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, ram_gb: [parseInt(e.target.value)]}})}
-                  className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 appearance-none"
-                >
-                  {ramOptions.map(ram => (
-                    <option key={ram} value={ram}>{ram} GB</option>
-                  ))}
-                </select>
-              </div>
+              {visibleSpecs.processor && (
+                <div className="space-y-2">
+                  <label className="text-sm text-dark-400 ml-1">Procesador</label>
+                  <input 
+                    type="text" value={formData.technical_specs.processor[0]}
+                    onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, processor: [e.target.value]}})}
+                    className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl"
+                  />
+                </div>
+              )}
+              {visibleSpecs.ram && (
+                <div className="space-y-2">
+                  <label className="text-sm text-dark-400 ml-1">RAM (GB)</label>
+                  <select 
+                    value={formData.technical_specs.ram_gb[0]}
+                    onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, ram_gb: [parseInt(e.target.value)]}})}
+                    className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 appearance-none"
+                  >
+                    {ramOptions.map(ram => (
+                      <option key={ram} value={ram}>{ram} GB</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           </section>
 
@@ -207,11 +268,15 @@ const ProductFormPage: React.FC = () => {
               </button>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {formData.variants.map((variant, index) => (
-                <div key={index} className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-dark-900/50 p-4 rounded-2xl border border-dark-700">
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Condición</label>
+                <div 
+                  key={index} 
+                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-8 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
+                >
+                  {/* Condición */}
+                  <div className="md:col-span-3 space-y-2">
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Condición</label>
                     <select 
                       value={variant.condition}
                       onChange={e => {
@@ -219,26 +284,30 @@ const ProductFormPage: React.FC = () => {
                         newVariants[index].condition = e.target.value;
                         setFormData({...formData, variants: newVariants});
                       }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm outline-none"
+                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50 appearance-none"
                     >
-                      <option value="EXCELLENT">Excelente</option>
-                      <option value="NORMAL">Normal</option>
-                      <option value="FAIR">Regular</option>
+                      <option value="EXCELLENT">Excelente Condición</option>
+                      <option value="NORMAL">Uso Normal</option>
+                      <option value="FAIR">Desgastado (Regular)</option>
                     </select>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Color (Hex)</label>
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="color" 
-                        value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
-                        onChange={e => {
-                          const newVariants = [...formData.variants];
-                          newVariants[index].color = e.target.value.toUpperCase();
-                          setFormData({...formData, variants: newVariants});
-                        }}
-                        className="w-8 h-8 bg-transparent border-none cursor-pointer"
-                      />
+                  
+                  {/* Color */}
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
+                    <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
+                      <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-dark-700 shrink-0">
+                        <input 
+                          type="color" 
+                          value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
+                          onChange={e => {
+                            const newVariants = [...formData.variants];
+                            newVariants[index].color = e.target.value.toUpperCase();
+                            setFormData({...formData, variants: newVariants});
+                          }}
+                          className="absolute -inset-2 w-12 h-12 bg-transparent border-none cursor-pointer"
+                        />
+                      </div>
                       <input 
                         type="text" value={variant.color}
                         placeholder="#FFFFFF"
@@ -247,48 +316,73 @@ const ProductFormPage: React.FC = () => {
                           newVariants[index].color = e.target.value;
                           setFormData({...formData, variants: newVariants});
                         }}
-                        className="flex-1 bg-dark-800 border border-dark-700 p-2 rounded-lg text-xs font-mono"
+                        className="w-full bg-transparent border-none p-1 text-[10px] font-mono outline-none text-dark-200"
                       />
                     </div>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Almac.</label>
-                    <input 
-                      type="number" value={variant.storage_gb}
-                      onChange={e => {
-                        const newVariants = [...formData.variants];
-                        newVariants[index].storage_gb = parseInt(e.target.value);
-                        setFormData({...formData, variants: newVariants});
-                      }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Precio</label>
-                    <input 
-                      type="number" value={variant.price}
-                      onChange={e => {
-                        const newVariants = [...formData.variants];
-                        newVariants[index].price = parseFloat(e.target.value);
-                        setFormData({...formData, variants: newVariants});
-                      }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                    />
-                  </div>
-                  <div className="flex items-end gap-2">
-                    <div className="flex-1 space-y-1">
-                      <label className="text-[10px] uppercase font-black text-dark-500">Stock</label>
-                      <input 
-                        type="number" value={variant.stock}
+
+                  {/* Almacenamiento */}
+                  {visibleSpecs.storage && (
+                    <div className="md:col-span-2 space-y-2">
+                      <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Almac.</label>
+                      <select 
+                        value={variant.storage_gb}
                         onChange={e => {
                           const newVariants = [...formData.variants];
-                          newVariants[index].stock = parseInt(e.target.value);
+                          newVariants[index].storage_gb = parseInt(e.target.value);
                           setFormData({...formData, variants: newVariants});
                         }}
-                        className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                      />
+                        className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50 appearance-none"
+                      >
+                        {[8, 16, 32, 64, 128, 256, 512, 1024].map(size => (
+                          <option key={size} value={size}>
+                            {size >= 1024 ? '1 TB' : `${size} GB`}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <button type="button" className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg">
+                  )}
+
+                  {/* Precio */}
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Precio</label>
+                    <div className="relative">
+                      <input 
+                        type="number" value={variant.price}
+                        onChange={e => {
+                          const newVariants = [...formData.variants];
+                          newVariants[index].price = parseFloat(e.target.value);
+                          setFormData({...formData, variants: newVariants});
+                        }}
+                        className="w-full bg-dark-800 border border-dark-700 p-2.5 pl-6 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
+                      />
+                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-dark-500 text-xs">$</span>
+                    </div>
+                  </div>
+
+                  {/* Stock */}
+                  <div className="md:col-span-1 space-y-2">
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Stock</label>
+                    <input 
+                      type="number" value={variant.stock}
+                      onChange={e => {
+                        const newVariants = [...formData.variants];
+                        newVariants[index].stock = parseInt(e.target.value);
+                        setFormData({...formData, variants: newVariants});
+                      }}
+                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
+                    />
+                  </div>
+
+                  {/* Eliminar */}
+                  <div className="md:col-span-1 flex justify-end pb-1">
+                    <button 
+                      type="button" 
+                      onClick={() => removeVariant(index)}
+                      disabled={formData.variants.length <= 1}
+                      className="p-2.5 text-dark-500 hover:text-red-500 hover:bg-red-500/10 rounded-xl disabled:opacity-0 disabled:pointer-events-none transition-all duration-200"
+                      title="Eliminar variante"
+                    >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
