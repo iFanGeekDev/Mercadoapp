@@ -272,7 +272,7 @@ const ProductFormPage: React.FC = () => {
               {formData.variants.map((variant, index) => (
                 <div 
                   key={index} 
-                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 gap-x-10 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
+                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-14 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
                 >
                   {/* Condición */}
                   <div className="md:col-span-2 space-y-2">
@@ -293,9 +293,9 @@ const ProductFormPage: React.FC = () => {
                   </div>
                   
                   {/* Color */}
-                  <div className="md:col-span-2 space-y-2">
+                  <div className="md:col-span-2 space-y-2 mr-4">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
-                    <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1 rounded-xl">
+                    <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
                       <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-dark-700 shrink-0">
                         <input 
                           type="color" 
@@ -341,7 +341,7 @@ const ProductFormPage: React.FC = () => {
                   )}
 
                   {/* Precio */}
-                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-2'} space-y-2`}>
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Precio</label>
                     <div className="relative">
                       <input 
@@ -358,7 +358,7 @@ const ProductFormPage: React.FC = () => {
                   </div>
 
                   {/* Stock */}
-                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
+                  <div className="md:col-span-2 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Stock</label>
                     <input 
                       type="number" value={variant.stock}
@@ -372,7 +372,7 @@ const ProductFormPage: React.FC = () => {
                   </div>
 
                   {/* Eliminar */}
-                  <div className="md:col-span-1 flex justify-end pb-1">
+                  <div className="md:col-span-2 flex justify-end pb-1">
                     <button 
                       type="button" 
                       onClick={() => removeVariant(index)}
