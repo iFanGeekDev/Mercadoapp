@@ -21,6 +21,8 @@ import com.mercadoapp.ui.profile.ProfileRoute
 import com.mercadoapp.ui.address.AddressEditRoute
 import com.mercadoapp.ui.address.AddressListRoute
 import com.mercadoapp.ui.order.OrderHistoryRoute
+import com.mercadoapp.ui.profile.EditProfileRoute
+import com.mercadoapp.ui.profile.ChangePasswordRoute
 import com.mercadoapp.ui.theme.MercadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -134,7 +136,21 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
                     navController.navigate("login") { popUpTo(0) { inclusive = true } }
                 },
                 onAddressesClick = { navController.navigate("address_list") },
-                onOrdersClick = { navController.navigate("order_history") }
+                onOrdersClick = { navController.navigate("order_history") },
+                onEditProfileClick = { navController.navigate("edit_profile") },
+                onChangePasswordClick = { navController.navigate("change_password") }
+            )
+        }
+
+        composable("edit_profile") {
+            EditProfileRoute(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("change_password") {
+            ChangePasswordRoute(
+                onBack = { navController.popBackStack() }
             )
         }
 

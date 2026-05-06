@@ -8,6 +8,8 @@ import com.mercadoapp.domain.repository.AuthRepository
 import com.mercadoapp.domain.repository.CartRepository
 import com.mercadoapp.domain.repository.OrderRepository
 import com.mercadoapp.domain.repository.ProductRepository
+import com.mercadoapp.domain.repository.UserRepository
+import com.mercadoapp.data.repository.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -48,4 +50,8 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindOrderRepository(impl: RemoteOrderRepository): OrderRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 }

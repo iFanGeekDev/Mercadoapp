@@ -158,6 +158,66 @@ router.get('/auth/me', authenticateToken, async (req, res) => {
   }
 });
 
+// ── Profile Management ─────────────────────────────────────────────────────────
+
+// Actualizar perfil (nombre, email)
+router.put('/users/profile', authenticateToken, async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    if (!name || !email) return res.status(400).json({ error: 'Nombre y email son requeridos' });
+
+    // Verificar si el nuevo email ya está en uso por OTRO usuario
+    const emailCheck = await db.query('SELECT id FROM users WHERE LOWER(email) = LOWER($1) AND id != $2', [email, req.userId]);
+    if (emailCheck.rows.length > 0) return res.status(409).json({ error: 'El email ya está en uso' });
+
+    const result = await db.query(
+      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
+      [name, email, req.userId]
+    );
+    
+    res.json(userToDto(result.rows[0]));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar perfil' });
+  }
+});
+
+// Cambiar contraseña
+router.put('/users/change-password', authenticateToken, async (req, res) => {
+  try {
+    const { old_password, new_password } = req.body;
+    if (!old_password || !new_password) return res.status(400).json({ error: 'Ambas contraseñas son requeridas' });
+
+    const result = await db.query('SELECT password FROM users WHERE id = $1', [req.userId]);
+    const user = result.rows[0];
+
+    if (!bcrypt.compareSync(old_password, user.password)) {
+      return res.status(400).json({ error: 'La contraseña actual es incorrecta' });
+    }
+
+    const hashed = bcrypt.hashSync(new_password, 8);
+    await db.query('UPDATE users SET password = $1 WHERE id = $2', [hashed, req.userId]);
+    
+    res.json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al cambiar contraseña' });
+  }
+});
+
+// Subir Avatar
+router.post('/users/avatar', authenticateToken, upload.single('avatar'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No se subió ningún archivo' });
+
+    const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const result = await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING *', [avatarUrl, req.userId]);
+    
+    res.json(userToDto(result.rows[0]));
+  } catch (error) {
+    res.status(500).json({ error: 'Error al subir avatar' });
+  }
+});
+
 // ── Products ──────────────────────────────────────────────────────────────────
 
 router.get('/products', async (req, res) => {
