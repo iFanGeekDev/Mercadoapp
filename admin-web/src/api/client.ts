@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/v1',
+  baseURL: 'https://mercadoapp-production-22eb.up.railway.app/v1',
   headers: {
     'Content-Type': 'application/json',
   },
