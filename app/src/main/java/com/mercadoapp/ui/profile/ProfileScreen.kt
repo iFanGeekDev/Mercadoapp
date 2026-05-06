@@ -33,15 +33,33 @@ fun ProfileRoute(
     onLogout: () -> Unit,
     onAddressesClick: () -> Unit,
     onOrdersClick: () -> Unit,
+    onEditProfileClick: () -> Unit,
+    onChangePasswordClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProfileScreen(state = state, onBack = onBack, onLogout = { viewModel.logout(); onLogout() }, onAddressesClick = onAddressesClick, onOrdersClick = onOrdersClick)
+    ProfileScreen(
+        state = state, 
+        onBack = onBack, 
+        onLogout = { viewModel.logout(); onLogout() }, 
+        onAddressesClick = onAddressesClick, 
+        onOrdersClick = onOrdersClick,
+        onEditProfileClick = onEditProfileClick,
+        onChangePasswordClick = onChangePasswordClick
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: () -> Unit, onAddressesClick: () -> Unit, onOrdersClick: () -> Unit) {
+private fun ProfileScreen(
+    state: ProfileUiState, 
+    onBack: () -> Unit, 
+    onLogout: () -> Unit, 
+    onAddressesClick: () -> Unit, 
+    onOrdersClick: () -> Unit,
+    onEditProfileClick: () -> Unit,
+    onChangePasswordClick: () -> Unit
+) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.systemBarsPadding(),
@@ -144,6 +162,8 @@ private fun ProfileScreen(state: ProfileUiState, onBack: () -> Unit, onLogout: (
                 // Settings rows
                 SettingsRow(icon = Icons.Default.Receipt, label = "Mis Órdenes", onClick = onOrdersClick)
                 SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
+                SettingsRow(icon = Icons.Default.Edit, label = "Editar Perfil", onClick = onEditProfileClick)
+                SettingsRow(icon = Icons.Default.VpnKey, label = "Cambiar Contraseña", onClick = onChangePasswordClick)
                 SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones", onClick = {})
                 SettingsRow(icon = Icons.Default.Security, label = "Seguridad", onClick = {})
                 SettingsRow(icon = Icons.Default.HelpOutline, label = "Ayuda y soporte", onClick = {})

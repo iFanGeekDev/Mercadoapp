@@ -8,15 +8,24 @@ import com.mercadoapp.data.remote.dto.RegisterRequestDto
 import com.mercadoapp.data.remote.dto.TokenDto
 import com.mercadoapp.data.remote.dto.UbigeoDto
 import com.mercadoapp.data.remote.dto.UserDto
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.PUT
+import retrofit2.http.Multipart
+import retrofit2.http.Part
+import okhttp3.MultipartBody
 
 interface MercadoApiService {
+
+    // ── User Management ─────────────────────────────────────────────────────────
+
+    @PUT("users/profile")
+    suspend fun updateProfile(@Body request: UpdateProfileRequestDto): UserDto
+
+    @PUT("users/change-password")
+    suspend fun changePassword(@Body request: ChangePasswordRequestDto): Any
+
+    @Multipart
+    @POST("users/avatar")
+    suspend fun uploadAvatar(@Part avatar: MultipartBody.Part): UserDto
 
     // ── Products ───────────────────────────────────────────────────────────────
 
@@ -49,7 +58,7 @@ interface MercadoApiService {
     suspend fun register(@Body request: RegisterRequestDto): TokenDto
 
     @GET("auth/me")
-    suspend fun getMe(@Header("Authorization") bearerToken: String): UserDto
+    suspend fun getMe(): UserDto
 
     // ── Orders ─────────────────────────────────────────────────────────────────
 

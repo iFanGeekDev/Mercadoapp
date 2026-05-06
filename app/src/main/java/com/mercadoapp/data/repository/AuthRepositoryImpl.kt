@@ -23,7 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
         if (token.isNullOrBlank()) AuthState.Unauthenticated
         else {
             try {
-                val user = api.getMe("Bearer $token").toDomain()
+                val user = api.getMe().toDomain()
                 AuthState.Authenticated(user)
             } catch (e: Exception) {
                 AuthState.Unauthenticated
@@ -35,7 +35,7 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val tokenDto = api.login(LoginRequestDto(email, password))
             authDataStore.saveTokens(tokenDto.accessToken, tokenDto.refreshToken)
-            val user = api.getMe("Bearer ${tokenDto.accessToken}").toDomain()
+            val user = api.getMe().toDomain()
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
@@ -46,7 +46,7 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val tokenDto = api.register(RegisterRequestDto(name, email, password))
             authDataStore.saveTokens(tokenDto.accessToken, tokenDto.refreshToken)
-            val user = api.getMe("Bearer ${tokenDto.accessToken}").toDomain()
+            val user = api.getMe().toDomain()
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)

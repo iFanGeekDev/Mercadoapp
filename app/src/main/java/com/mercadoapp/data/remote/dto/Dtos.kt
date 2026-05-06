@@ -69,3 +69,15 @@ data class UserDto(
     val name: String,
     @SerialName("avatar_url") val avatarUrl: String? = null
 )
+
+@Serializable
+data class UpdateProfileRequestDto(
+    val name: String,
+    val email: String
+)
+
+@Serializable
+data class ChangePasswordRequestDto(
+    @SerialName("old_password") val oldPassword: String,
+    @SerialName("new_password") val newPassword: String
+)
