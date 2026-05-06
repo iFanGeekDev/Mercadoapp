@@ -268,11 +268,15 @@ const ProductFormPage: React.FC = () => {
               </button>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {formData.variants.map((variant, index) => (
-                <div key={index} className="grid grid-cols-2 md:grid-cols-12 gap-4 bg-dark-900/50 p-4 rounded-2xl border border-dark-700 items-end">
-                  <div className="md:col-span-2 space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Condición</label>
+                <div 
+                  key={index} 
+                  className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
+                >
+                  {/* Condición */}
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Condición</label>
                     <select 
                       value={variant.condition}
                       onChange={e => {
@@ -280,7 +284,7 @@ const ProductFormPage: React.FC = () => {
                         newVariants[index].condition = e.target.value;
                         setFormData({...formData, variants: newVariants});
                       }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm outline-none"
+                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
                     >
                       <option value="EXCELLENT">Excelente</option>
                       <option value="NORMAL">Normal</option>
@@ -288,19 +292,22 @@ const ProductFormPage: React.FC = () => {
                     </select>
                   </div>
                   
-                  <div className="md:col-span-2 space-y-1">
-                    <label className="text-[10px] uppercase font-black text-dark-500">Color (Hex)</label>
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="color" 
-                        value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
-                        onChange={e => {
-                          const newVariants = [...formData.variants];
-                          newVariants[index].color = e.target.value.toUpperCase();
-                          setFormData({...formData, variants: newVariants});
-                        }}
-                        className="w-8 h-8 bg-transparent border-none cursor-pointer"
-                      />
+                  {/* Color */}
+                  <div className="md:col-span-3 space-y-2">
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
+                    <div className="flex items-center gap-3 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
+                      <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-dark-700">
+                        <input 
+                          type="color" 
+                          value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
+                          onChange={e => {
+                            const newVariants = [...formData.variants];
+                            newVariants[index].color = e.target.value.toUpperCase();
+                            setFormData({...formData, variants: newVariants});
+                          }}
+                          className="absolute -inset-2 w-12 h-12 bg-transparent border-none cursor-pointer"
+                        />
+                      </div>
                       <input 
                         type="text" value={variant.color}
                         placeholder="#FFFFFF"
@@ -309,41 +316,50 @@ const ProductFormPage: React.FC = () => {
                           newVariants[index].color = e.target.value;
                           setFormData({...formData, variants: newVariants});
                         }}
-                        className="flex-1 bg-dark-800 border border-dark-700 p-2 rounded-lg text-[10px] font-mono"
+                        className="flex-1 bg-transparent border-none p-1 text-[11px] font-mono outline-none text-dark-200"
                       />
                     </div>
                   </div>
 
+                  {/* Almacenamiento */}
                   {visibleSpecs.storage && (
-                    <div className="md:col-span-2 space-y-1">
-                      <label className="text-[10px] uppercase font-black text-dark-500">Almac.</label>
-                      <input 
-                        type="number" value={variant.storage_gb}
-                        onChange={e => {
-                          const newVariants = [...formData.variants];
-                          newVariants[index].storage_gb = parseInt(e.target.value);
-                          setFormData({...formData, variants: newVariants});
-                        }}
-                        className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                      />
+                    <div className="md:col-span-2 space-y-2">
+                      <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Almac.</label>
+                      <div className="relative">
+                        <input 
+                          type="number" value={variant.storage_gb}
+                          onChange={e => {
+                            const newVariants = [...formData.variants];
+                            newVariants[index].storage_gb = parseInt(e.target.value);
+                            setFormData({...formData, variants: newVariants});
+                          }}
+                          className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-dark-500">GB</span>
+                      </div>
                     </div>
                   )}
 
-                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-1`}>
-                    <label className="text-[10px] uppercase font-black text-dark-500">Precio</label>
-                    <input 
-                      type="number" value={variant.price}
-                      onChange={e => {
-                        const newVariants = [...formData.variants];
-                        newVariants[index].price = parseFloat(e.target.value);
-                        setFormData({...formData, variants: newVariants});
-                      }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
-                    />
+                  {/* Precio */}
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Precio</label>
+                    <div className="relative">
+                      <input 
+                        type="number" value={variant.price}
+                        onChange={e => {
+                          const newVariants = [...formData.variants];
+                          newVariants[index].price = parseFloat(e.target.value);
+                          setFormData({...formData, variants: newVariants});
+                        }}
+                        className="w-full bg-dark-800 border border-dark-700 p-2.5 pl-6 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
+                      />
+                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-dark-500 text-xs">$</span>
+                    </div>
                   </div>
 
-                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-1`}>
-                    <label className="text-[10px] uppercase font-black text-dark-500">Stock</label>
+                  {/* Stock */}
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-2' : 'md:col-span-3'} space-y-2`}>
+                    <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Stock</label>
                     <input 
                       type="number" value={variant.stock}
                       onChange={e => {
@@ -351,16 +367,18 @@ const ProductFormPage: React.FC = () => {
                         newVariants[index].stock = parseInt(e.target.value);
                         setFormData({...formData, variants: newVariants});
                       }}
-                      className="w-full bg-dark-800 border border-dark-700 p-2 rounded-lg text-sm"
+                      className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
                     />
                   </div>
 
-                  <div className="md:col-span-2 flex justify-end">
+                  {/* Eliminar */}
+                  <div className="md:col-span-1 flex justify-end pb-1">
                     <button 
                       type="button" 
                       onClick={() => removeVariant(index)}
                       disabled={formData.variants.length <= 1}
-                      className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="p-2.5 text-dark-500 hover:text-red-500 hover:bg-red-500/10 rounded-xl disabled:opacity-0 disabled:pointer-events-none transition-all duration-200"
+                      title="Eliminar variante"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
