@@ -19,9 +19,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.mercadoapp.ui.theme.*
+import com.mercadoapp.util.FileUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,10 +42,22 @@ fun EditProfileRoute(
         }
     }
 
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            FileUtil.fromUri(context, it)?.let { file ->
+                viewModel.uploadAvatar(file)
+            }
+        }
+    }
+
     EditProfileScreen(
         state = state,
         onBack = onBack,
-        onUpdate = { name, email -> viewModel.updateProfile(name, email) }
+        onUpdate = { name, email -> viewModel.updateProfile(name, email) },
+        onPickImage = { launcher.launch("image/*") }
     )
 }
 
@@ -50,7 +66,8 @@ fun EditProfileRoute(
 private fun EditProfileScreen(
     state: EditProfileUiState,
     onBack: () -> Unit,
-    onUpdate: (String, String) -> Unit
+    onUpdate: (String, String) -> Unit,
+    onPickImage: () -> Unit
 ) {
     var name by remember(state.user) { mutableStateOf(state.user?.name ?: "") }
     var email by remember(state.user) { mutableStateOf(state.user?.email ?: "") }
@@ -107,7 +124,7 @@ private fun EditProfileScreen(
                     }
                 }
                 IconButton(
-                    onClick = { /* TODO: Implement Image Picker */ },
+                    onClick = onPickImage,
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
