@@ -272,7 +272,7 @@ const ProductFormPage: React.FC = () => {
               {formData.variants.map((variant, index) => (
                 <div 
                   key={index} 
-                  className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
+                  className="grid grid-cols-1 md:grid-cols-12 gap-y-6 gap-x-10 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
                 >
                   {/* Condición */}
                   <div className="md:col-span-2 space-y-2">
@@ -293,10 +293,10 @@ const ProductFormPage: React.FC = () => {
                   </div>
                   
                   {/* Color */}
-                  <div className="md:col-span-3 space-y-2">
+                  <div className="md:col-span-2 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
-                    <div className="flex items-center gap-3 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
-                      <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-dark-700">
+                    <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1 rounded-xl">
+                      <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-dark-700 shrink-0">
                         <input 
                           type="color" 
                           value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
@@ -316,7 +316,7 @@ const ProductFormPage: React.FC = () => {
                           newVariants[index].color = e.target.value;
                           setFormData({...formData, variants: newVariants});
                         }}
-                        className="flex-1 bg-transparent border-none p-1 text-[11px] font-mono outline-none text-dark-200"
+                        className="w-full bg-transparent border-none p-1 text-[10px] font-mono outline-none text-dark-200"
                       />
                     </div>
                   </div>
