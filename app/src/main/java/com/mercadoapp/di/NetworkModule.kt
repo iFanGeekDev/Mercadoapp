@@ -5,6 +5,7 @@ import com.mercadoapp.BuildConfig
 import com.mercadoapp.data.remote.api.MercadoApiService
 import com.mercadoapp.data.remote.interceptor.AuthInterceptor
 import com.mercadoapp.data.remote.interceptor.TokenRefreshInterceptor
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +15,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module
@@ -30,11 +33,13 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        @ApplicationContext context: Context,
         authInterceptor: AuthInterceptor,
         tokenRefreshInterceptor: TokenRefreshInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(authInterceptor)            // attaches Bearer token
         .addInterceptor(tokenRefreshInterceptor)    // retries on 401 after refresh
+        .addInterceptor(ChuckerInterceptor(context)) // Visual HTTP tracker
         .addInterceptor(
             HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG)
