@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.mercadoapp-debug-89:/xml_network_security_config.xml.flat",
+        "source": "com.mercadoapp-main-91:/xml/network_security_config.xml"
+    }
+]

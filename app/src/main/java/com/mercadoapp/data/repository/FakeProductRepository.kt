@@ -103,4 +103,8 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
         delay(150)
         return products.firstOrNull { it.id == id }
     }
+
+    override suspend fun getFavorites(): List<Product> = emptyList()
+    override suspend fun toggleFavorite(productId: String, isFavorite: Boolean) {}
+    override suspend fun isProductFavorite(productId: String): Boolean = false
 }

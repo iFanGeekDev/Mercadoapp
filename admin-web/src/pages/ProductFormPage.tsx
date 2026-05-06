@@ -297,7 +297,7 @@ const ProductFormPage: React.FC = () => {
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Color (Hex)</label>
                     <div className="flex items-center gap-2 bg-dark-800 border border-dark-700 p-1.5 rounded-xl">
                       <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-dark-700 shrink-0">
-                        <input 
+                        <input
                           type="color" 
                           value={variant.color.startsWith('#') ? variant.color : '#6C63FF'}
                           onChange={e => {
@@ -325,7 +325,7 @@ const ProductFormPage: React.FC = () => {
                   {visibleSpecs.storage && (
                     <div className="md:col-span-2 space-y-2">
                       <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Almac.</label>
-                      <select 
+                      <select
                         value={variant.storage_gb}
                         onChange={e => {
                           const newVariants = [...formData.variants];
