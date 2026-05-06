@@ -14,8 +14,8 @@ const fs         = require('fs');
 const multer     = require('multer');
 
 const app    = express();
-const PORT   = 8080;
-const SECRET = 'YapaMarket_dev_secret_key';
+const PORT   = process.env.PORT || 8080;
+const SECRET = process.env.JWT_SECRET || 'YapaMarket_dev_secret_key';
 
 app.use(cors());
 app.use(express.json());
