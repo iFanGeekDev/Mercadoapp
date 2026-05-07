@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { 
   Plus, 
   Search, 
-  Smartphone, 
   AlertCircle,
   MoreVertical,
   Filter,

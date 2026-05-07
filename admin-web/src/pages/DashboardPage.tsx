@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Plus, 
-  TrendingUp, 
-  AlertCircle,
-  MoreVertical,
   DollarSign,
   ShoppingCart,
   Users,
@@ -31,7 +27,6 @@ const DashboardPage: React.FC = () => {
     revenue: 0
   });
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,8 +51,6 @@ const DashboardPage: React.FC = () => {
         ]);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchData();
