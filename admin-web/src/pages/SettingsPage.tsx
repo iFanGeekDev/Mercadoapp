@@ -73,16 +73,16 @@ const SettingsPage: React.FC = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-dark-400">Versión del Panel</span>
-                <span className="text-white font-medium">v2.4.0</span>
+                <span className="text-white font-medium">v2.5.0-stable</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-dark-400">Último backup</span>
-                <span className="text-white font-medium">Hace 2 horas</span>
+                <span className="text-white font-medium">Hoy, 04:00 AM</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-dark-400">Database</span>
                 <span className="text-accent-500 font-bold flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 bg-accent-500 rounded-full" />
+                  <div className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-pulse" />
                   Conectado
                 </span>
               </div>
