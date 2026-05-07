@@ -34,7 +34,10 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 } // 2MB
+});
 
 const db         = require('./db');
 

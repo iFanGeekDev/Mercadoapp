@@ -132,8 +132,8 @@ const AccountSection = () => {
     if (!file) return;
 
     // Validar tamaño (máximo 800KB como dice el UI)
-    if (file.size > 800 * 1024) {
-      setStatus({ type: 'error', message: 'El archivo es demasiado grande (Máx 800KB)' });
+    if (file.size > 2 * 1024 * 1024) {
+      setStatus({ type: 'error', message: 'El archivo es demasiado grande (Máx 2MB)' });
       return;
     }
 
@@ -209,7 +209,7 @@ const AccountSection = () => {
         </div>
         <div>
           <h4 className="font-bold text-white mb-1">Tu Avatar</h4>
-          <p className="text-xs text-dark-400 mb-3">JPG o PNG. Tamaño máximo 800KB.</p>
+          <p className="text-xs text-dark-400 mb-3">JPG o PNG. Tamaño máximo 2MB.</p>
           <button 
             onClick={handleAvatarClick}
             disabled={isUploading}
