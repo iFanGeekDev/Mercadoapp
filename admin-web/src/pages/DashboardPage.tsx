@@ -68,7 +68,10 @@ const DashboardPage: React.FC = () => {
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-brand-600/10 to-transparent p-8 rounded-[2.5rem] border border-brand-500/10">
         <div>
-          <h2 className="text-3xl font-black text-white tracking-tight">¡Hola de nuevo, Admin! 👋</h2>
+          <div className="flex items-center gap-3 mb-1">
+            <h2 className="text-3xl font-black text-white tracking-tight">¡Hola de nuevo, Admin! 👋</h2>
+            <span className="bg-accent-500/20 text-accent-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-accent-500/30">LIVE</span>
+          </div>
           <p className="text-dark-400 mt-1">Aquí tienes un resumen de lo que ha pasado en YapaMarket hoy.</p>
         </div>
         <div className="flex items-center gap-3">
