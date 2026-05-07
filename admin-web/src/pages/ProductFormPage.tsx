@@ -21,6 +21,7 @@ const ProductFormPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -135,7 +136,11 @@ const ProductFormPage: React.FC = () => {
       } else {
         await api.post('/products', cleanedFormData);
       }
-      navigate('/dashboard');
+      
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
     } catch (error: any) {
       const msg = error.response?.data?.error || 'Error desconocido al guardar';
       alert(`¡Vaya! Algo salió mal:\n\n${msg}`);
@@ -159,7 +164,22 @@ const ProductFormPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-20">
+    <div className="max-w-6xl mx-auto space-y-8 pb-20 relative">
+      {/* Success Toast */}
+      {showSuccess && (
+        <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-10 duration-500">
+          <div className="bg-emerald-500 text-white px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 flex items-center gap-3 border border-emerald-400/50 backdrop-blur-md">
+            <div className="bg-white/20 p-1.5 rounded-full">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-black text-lg leading-none">¡Cambios Guardados!</p>
+              <p className="text-emerald-100 text-sm mt-1">El producto se ha actualizado correctamente.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
