@@ -11,6 +11,7 @@ const jwt        = require('jsonwebtoken');
 const cors       = require('cors');
 const path       = require('path');
 const fs         = require('fs');
+const fsPromises = require('fs').promises;
 const multer     = require('multer');
 
 const app    = express();
@@ -213,12 +214,17 @@ router.post('/users/avatar', authenticateToken, upload.single('avatar'), async (
   try {
     if (!req.file) return res.status(400).json({ error: 'No se subió ningún archivo' });
 
-    // En Railway, req.protocol puede ser 'http'. Usamos x-forwarded-proto para detectar HTTPS.
-    const protocol = req.get('x-forwarded-proto') || req.protocol;
-    const host = req.get('host');
-    const avatarUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+    // Leer el archivo recién subido
+    const imageBuffer = await fsPromises.readFile(req.file.path);
+    // Convertir a Base64
+    const base64Image = imageBuffer.toString('base64');
+    const dataUri = `data:${req.file.mimetype};base64,${base64Image}`;
     
-    const result = await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING *', [avatarUrl, req.userId]);
+    // Guardar el Data URI (texto largo) en la base de datos
+    const result = await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING *', [dataUri, req.userId]);
+    
+    // Eliminar el archivo físico del servidor (ya no lo necesitamos)
+    await fsPromises.unlink(req.file.path);
     
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -227,7 +233,7 @@ router.post('/users/avatar', authenticateToken, upload.single('avatar'), async (
     res.json(userToDto(result.rows[0]));
   } catch (error) {
     console.error('[AVATAR_ERROR]', error);
-    res.status(500).json({ error: error.message || 'Error al subir avatar' });
+    res.status(500).json({ error: error.message || 'Error al procesar avatar' });
   }
 });
 
