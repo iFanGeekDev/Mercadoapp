@@ -143,7 +143,7 @@ const ProductsPage: React.FC = () => {
                     </td>
                     <td className="px-10 py-6">
                       <div className="space-y-0.5">
-                        <p className="text-white font-black text-lg">${product.variants[0]?.price?.toFixed(2) || '0.00'}</p>
+                        <p className="text-white font-black text-lg">${Number(product.variants[0]?.price || 0).toFixed(2)}</p>
                         <p className="text-[10px] text-dark-500 font-bold uppercase tracking-tighter">Precio Base</p>
                       </div>
                     </td>
