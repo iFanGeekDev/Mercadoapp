@@ -14,6 +14,8 @@ import com.mercadoapp.domain.model.Product
 import com.mercadoapp.domain.model.ProductVariant
 import com.mercadoapp.domain.model.TechnicalSpecs
 import com.mercadoapp.domain.model.User
+import com.mercadoapp.data.remote.dto.AddressDto
+import com.mercadoapp.domain.model.Address
 import java.time.Instant
 
 // ── Product mappers ────────────────────────────────────────────────────────────
@@ -77,9 +79,6 @@ fun OrderItemDto.toDomain(): OrderItem = OrderItem(
 )
 
 // ── Address mappers ───────────────────────────────────────────────────────────
-
-import com.mercadoapp.data.remote.dto.AddressDto
-import com.mercadoapp.domain.model.Address
 
 fun AddressDto.toDomain(): Address = Address(
     id = id ?: "",
