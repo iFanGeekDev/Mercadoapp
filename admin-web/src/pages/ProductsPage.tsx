@@ -66,9 +66,9 @@ const ProductsPage: React.FC = () => {
 
       {/* Inventory Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <InventoryStat icon={Package} label="Total SKUs" value={products.length.toString()} color="text-white" />
-        <InventoryStat icon={Layers} label="Variantes Activas" value={products.reduce((acc, p) => acc + (p.variants?.length || 0), 0).toString()} color="text-brand-400" />
-        <InventoryStat icon={AlertCircle} label="Stock Bajo" value={products.filter(p => p.variants.some(v => v.stock < 5)).length.toString()} color="text-red-400" />
+        <InventoryStat icon={Package} label="Total SKUs" value={(products || []).length.toString()} color="text-white" />
+        <InventoryStat icon={Layers} label="Variantes Activas" value={(products || []).reduce((acc, p) => acc + (p.variants?.length || 0), 0).toString()} color="text-brand-400" />
+        <InventoryStat icon={AlertCircle} label="Stock Bajo" value={(products || []).filter(p => (p.variants || []).some(v => v.stock < 5)).length.toString()} color="text-red-400" />
       </div>
 
       {/* Table Container */}
