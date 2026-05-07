@@ -81,3 +81,23 @@ data class ChangePasswordRequestDto(
     @SerialName("old_password") val oldPassword: String,
     @SerialName("new_password") val newPassword: String
 )
+
+@Serializable
+data class AddressDto(
+    val id: String? = null,
+    val alias: String,
+    val street: String,
+    val number: String? = null,
+    @SerialName("department_id") val departmentId: String? = null,
+    @SerialName("province_id") val provinceId: String? = null,
+    @SerialName("district_id") val districtId: String? = null,
+    @SerialName("department_name") val departmentName: String,
+    @SerialName("province_name") val provinceName: String,
+    @SerialName("district_name") val districtName: String,
+    @SerialName("is_default") val isDefault: Boolean = false
+)
+
+@Serializable
+data class MessageResponseDto(
+    val message: String
+)

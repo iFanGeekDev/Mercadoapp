@@ -75,3 +75,28 @@ fun OrderItemDto.toDomain(): OrderItem = OrderItem(
     quantity    = quantity,
     price       = price
 )
+
+// ── Address mappers ───────────────────────────────────────────────────────────
+
+import com.mercadoapp.data.remote.dto.AddressDto
+import com.mercadoapp.domain.model.Address
+
+fun AddressDto.toDomain(): Address = Address(
+    id = id ?: "",
+    alias = alias,
+    street = street,
+    distrito = districtName,
+    provincia = provinceName,
+    departamento = departmentName,
+    isDefault = isDefault
+)
+
+fun Address.toDto(): AddressDto = AddressDto(
+    id = id.ifEmpty { null },
+    alias = alias,
+    street = street,
+    departmentName = departamento,
+    provinceName = provincia,
+    districtName = distrito,
+    isDefault = isDefault
+)
