@@ -224,7 +224,7 @@ router.post('/users/avatar', authenticateToken, upload.single('avatar'), async (
     res.json(userToDto(result.rows[0]));
   } catch (error) {
     console.error('[AVATAR_ERROR]', error);
-    res.status(500).json({ error: 'Error al subir avatar' });
+    res.status(500).json({ error: error.message || 'Error al subir avatar' });
   }
 });
 

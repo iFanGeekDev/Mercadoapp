@@ -144,13 +144,12 @@ const AccountSection = () => {
     setStatus({ type: 'idle' });
 
     try {
-      const response = await api.post('/users/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await api.post('/users/avatar', formData);
       updateUser(response.data);
       setStatus({ type: 'success', message: 'Foto de perfil actualizada' });
     } catch (error: any) {
-      setStatus({ type: 'error', message: 'Error al subir la imagen' });
+      const msg = error.response?.data?.error || 'Error al subir la imagen';
+      setStatus({ type: 'error', message: msg });
     } finally {
       setIsUploading(false);
     }
