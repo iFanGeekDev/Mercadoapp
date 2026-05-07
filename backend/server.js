@@ -542,7 +542,7 @@ router.post('/products', authenticateToken, isAdmin, async (req, res) => {
   const client = await db.pool.connect();
   try {
     const { 
-      name, image_url, short_description, is_offer, is_new_arrival, 
+      name, image_url, short_description, is_offer, is_new_arrival, category,
       technical_specs, inspection_checklist, variants 
     } = req.body;
 
@@ -582,7 +582,7 @@ router.put('/products/:id', authenticateToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { 
-      name, image_url, short_description, is_offer, is_new_arrival, 
+      name, image_url, short_description, is_offer, is_new_arrival, category,
       technical_specs, inspection_checklist, variants 
     } = req.body;
 
