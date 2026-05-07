@@ -35,7 +35,10 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="p-8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center font-black text-xl">M</div>
-            <span className="font-bold text-xl tracking-tight">YapaMarket <span className="text-brand-400">Admin</span></span>
+            <div className="flex flex-col">
+              <span className="font-bold text-xl tracking-tight leading-none">YapaMarket</span>
+              <span className="text-brand-400 text-[10px] font-black uppercase tracking-widest mt-1">Admin v2.0</span>
+            </div>
           </div>
         </div>
 
