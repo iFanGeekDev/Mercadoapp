@@ -16,7 +16,7 @@ import {
   CheckCircle2,
   XCircle
 } from 'lucide-react';
-import { useAuth, User } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 
 const SettingsPage: React.FC = () => {
