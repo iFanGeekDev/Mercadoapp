@@ -5,10 +5,14 @@ import com.mercadoapp.data.remote.mapper.toDomain
 import com.mercadoapp.data.remote.mapper.toDto
 import com.mercadoapp.domain.model.Address
 import com.mercadoapp.domain.repository.AddressRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,10 +21,8 @@ class RemoteAddressRepository @Inject constructor(
     private val api: MercadoApiService
 ) : AddressRepository {
 
+    private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val _addressesFlow = MutableStateFlow<List<Address>>(emptyList())
-    
-    // Initial fetch trigger
-    private var hasFetched = false
 
     override fun getAddresses(): Flow<List<Address>> {
         refreshAddresses()
@@ -28,7 +30,7 @@ class RemoteAddressRepository @Inject constructor(
     }
 
     private fun refreshAddresses() {
-        kotlinx.coroutines.GlobalScope.launch {
+        repositoryScope.launch {
             try {
                 val remote = api.getAddresses()
                 _addressesFlow.update { remote.map { it.toDomain() } }
@@ -45,7 +47,7 @@ class RemoteAddressRepository @Inject constructor(
             val list = remote.map { it.toDomain() }
             _addressesFlow.update { list }
             list.find { it.id == id }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             _addressesFlow.value.find { it.id == id }
         }
     }
@@ -71,7 +73,7 @@ class RemoteAddressRepository @Inject constructor(
             api.deleteAddress(id)
             val remote = api.getAddresses()
             _addressesFlow.update { remote.map { it.toDomain() } }
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
 
     override suspend fun setDefaultAddress(id: String) {
@@ -84,7 +86,7 @@ class RemoteAddressRepository @Inject constructor(
             if (address != null) {
                 saveAddress(address.copy(isDefault = true))
             }
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
     
     /** Trigger a manual refresh from ViewModels */
@@ -92,6 +94,6 @@ class RemoteAddressRepository @Inject constructor(
         try {
             val remote = api.getAddresses()
             _addressesFlow.update { remote.map { it.toDomain() } }
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
 }
