@@ -63,6 +63,14 @@ const ProductFormPage: React.FC = () => {
         try {
           const res = await api.get(`/products/${id}`);
           setFormData(res.data);
+          
+          // Sincronizar visibilidad con los datos reales
+          const specs = res.data.technical_specs || {};
+          setVisibleSpecs({
+            processor: !!(Array.isArray(specs.processor) ? specs.processor[0] : specs.processor),
+            ram: !!(Array.isArray(specs.ram_gb) ? specs.ram_gb[0] : specs.ram_gb),
+            storage: !!(res.data.variants?.[0]?.storage_gb)
+          });
         } catch (error) {
           console.error(error);
         }
@@ -107,9 +115,9 @@ const ProductFormPage: React.FC = () => {
       ...formData,
       technical_specs: {
         ...formData.technical_specs,
-        processor: visibleSpecs.processor ? formData.technical_specs.processor : [],
-        ram_gb: visibleSpecs.ram ? formData.technical_specs.ram_gb : [],
-        storage_gb: visibleSpecs.storage ? formData.technical_specs.storage_gb : [],
+        processor: visibleSpecs.processor ? (Array.isArray(formData.technical_specs.processor) ? formData.technical_specs.processor : [formData.technical_specs.processor]) : [],
+        ram_gb: visibleSpecs.ram ? (Array.isArray(formData.technical_specs.ram_gb) ? formData.technical_specs.ram_gb : [formData.technical_specs.ram_gb]) : [],
+        storage_gb: visibleSpecs.storage ? (Array.isArray(formData.technical_specs.storage_gb) ? formData.technical_specs.storage_gb : [formData.technical_specs.storage_gb]) : [],
       },
       variants: formData.variants.map(v => ({
         ...v,
@@ -248,7 +256,7 @@ const ProductFormPage: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-sm text-dark-400 ml-1">Procesador</label>
                   <input 
-                    type="text" value={formData.technical_specs.processor[0]}
+                    type="text" value={Array.isArray(formData.technical_specs.processor) ? formData.technical_specs.processor[0] : formData.technical_specs.processor}
                     onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, processor: [e.target.value]}})}
                     className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl"
                   />
@@ -258,7 +266,7 @@ const ProductFormPage: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-sm text-dark-400 ml-1">RAM (GB)</label>
                   <select 
-                    value={formData.technical_specs.ram_gb[0]}
+                    value={Array.isArray(formData.technical_specs.ram_gb) ? formData.technical_specs.ram_gb[0] : formData.technical_specs.ram_gb}
                     onChange={e => setFormData({...formData, technical_specs: {...formData.technical_specs, ram_gb: [parseInt(e.target.value)]}})}
                     className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 appearance-none"
                   >
