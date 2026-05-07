@@ -23,6 +23,7 @@ interface Product {
 }
 
 const ProductsPage: React.FC = () => {
+  console.log('📦 ProductsPage: Rendering...');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,9 +33,10 @@ const ProductsPage: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await api.get('/products?size=100');
-        setProducts(response.data.items);
+        console.log('📦 ProductsPage: Data received', response.data.items);
+        setProducts(response.data.items || []);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('📦 ProductsPage: Error fetching products:', error);
       } finally {
         setIsLoading(false);
       }
