@@ -551,7 +551,16 @@ router.post('/products', authenticateToken, isAdmin, async (req, res) => {
     const productRes = await client.query(
       `INSERT INTO products (name, image_url, short_description, is_offer, is_new_arrival, category, technical_specs, inspection_checklist) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [name, image_url, short_description, is_offer, is_new_arrival, category || 'PHONES', technical_specs, inspection_checklist]
+      [
+        name, 
+        image_url, 
+        short_description, 
+        is_offer, 
+        is_new_arrival, 
+        category || 'PHONES', 
+        JSON.stringify(technical_specs), 
+        JSON.stringify(inspection_checklist)
+      ]
     );
     const productId = productRes.rows[0].id;
 
@@ -591,7 +600,17 @@ router.put('/products/:id', authenticateToken, isAdmin, async (req, res) => {
     const productRes = await client.query(
       `UPDATE products SET name=$1, image_url=$2, short_description=$3, is_offer=$4, is_new_arrival=$5, 
        category=$6, technical_specs=$7, inspection_checklist=$8 WHERE id=$9 RETURNING *`,
-      [name, image_url, short_description, is_offer, is_new_arrival, category, technical_specs, inspection_checklist, id]
+      [
+        name, 
+        image_url, 
+        short_description, 
+        is_offer, 
+        is_new_arrival, 
+        category, 
+        JSON.stringify(technical_specs), 
+        JSON.stringify(inspection_checklist), 
+        id
+      ]
     );
 
     if (productRes.rows.length === 0) {
