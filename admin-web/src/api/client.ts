@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://mercadoapp-production-22eb.up.railway.app/v1',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Interceptor para añadir el token a las peticiones
