@@ -42,9 +42,9 @@ const ProductsPage: React.FC = () => {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = (products || []).filter(p => 
+    (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.category || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -129,8 +129,8 @@ const ProductsPage: React.FC = () => {
                           )}
                         </div>
                         <div>
-                          <p className="font-bold text-white text-lg group-hover:text-brand-400 transition-colors leading-tight">{product.name}</p>
-                          <p className="text-xs text-dark-500 mt-1 font-mono uppercase">{product.id.slice(0, 13)}</p>
+                          <p className="font-bold text-white text-lg group-hover:text-brand-400 transition-colors leading-tight">{product.name || 'Producto sin nombre'}</p>
+                          <p className="text-xs text-dark-500 mt-1 font-mono uppercase">{(product.id || '').slice(0, 13)}</p>
                         </div>
                       </div>
                     </td>
@@ -149,12 +149,12 @@ const ProductsPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-24 h-2 bg-dark-900 rounded-full overflow-hidden border border-dark-700">
                           <div 
-                            className={`h-full rounded-full ${getStockColor(product.variants.reduce((acc, v) => acc + v.stock, 0))}`} 
-                            style={{ width: `${Math.min(100, product.variants.reduce((acc, v) => acc + v.stock, 0) * 2)}%` }}
+                            className={`h-full rounded-full ${getStockColor((product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0))}`} 
+                            style={{ width: `${Math.min(100, (product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0) * 2)}%` }}
                           />
                         </div>
                         <span className="font-bold text-white text-sm">
-                          {product.variants.reduce((acc, v) => acc + v.stock, 0)}
+                          {(product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0)}
                         </span>
                       </div>
                     </td>
