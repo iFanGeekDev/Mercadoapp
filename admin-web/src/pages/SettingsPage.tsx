@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  User, 
+  User as UserIcon, 
   Lock, 
   Globe, 
   Bell, 
@@ -16,14 +16,14 @@ import {
   CheckCircle2,
   XCircle
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth, User } from '../context/AuthContext';
 import api from '../api/client';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'perfil' | 'marketplace' | 'seguridad' | 'notificaciones'>('perfil');
 
   const tabs = [
-    { id: 'perfil', label: 'Cuenta', icon: User },
+    { id: 'perfil', label: 'Cuenta', icon: UserIcon },
     { id: 'marketplace', label: 'Marketplace', icon: Globe },
     { id: 'seguridad', label: 'Seguridad', icon: Shield },
     { id: 'notificaciones', label: 'Notificaciones', icon: Bell },
@@ -194,7 +194,7 @@ const AccountSection = () => {
             ) : user?.avatar_url ? (
               <img src={user.avatar_url} className="w-full h-full object-cover" alt="Profile" />
             ) : (
-              <User className="w-10 h-10 text-dark-500" />
+              <UserIcon className="w-10 h-10 text-dark-500" />
             )}
           </div>
           <div className="absolute bottom-0 right-0 bg-brand-500 p-2 rounded-full shadow-lg border-4 border-dark-800 group-hover:scale-110 transition-transform">

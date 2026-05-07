@@ -7,7 +7,7 @@ import {
   Settings, 
   LogOut, 
   ChevronRight,
-  User
+  User as UserIcon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -67,7 +67,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {user?.avatar_url ? (
                   <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-5 h-5 text-brand-400" />
+                  <UserIcon className="w-5 h-5 text-brand-400" />
                 )}
               </div>
               <div className="overflow-hidden">
