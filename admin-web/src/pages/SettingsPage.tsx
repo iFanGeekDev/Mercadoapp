@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   XCircle
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
 
 const SettingsPage: React.FC = () => {
@@ -111,51 +112,148 @@ const SectionHeader = ({ title, description }: { title: string, description: str
   </div>
 );
 
-const AccountSection = () => (
-  <div className="bg-dark-800 border border-dark-700 rounded-3xl p-8 shadow-xl">
-    <SectionHeader title="Perfil del Administrador" description="Gestiona la información pública de tu cuenta corporativa." />
-    
-    <div className="flex items-center gap-8 mb-8 pb-8 border-b border-dark-700/50">
-      <div className="relative group">
-        <div className="w-24 h-24 bg-dark-700 rounded-full flex items-center justify-center border-2 border-dashed border-dark-600 group-hover:border-brand-500 transition-colors">
-          <User className="w-10 h-10 text-dark-500" />
-        </div>
-        <button className="absolute bottom-0 right-0 bg-brand-500 p-2 rounded-full shadow-lg border-4 border-dark-800 hover:scale-110 transition-transform">
-          <Camera className="w-4 h-4 text-white" />
-        </button>
-      </div>
-      <div>
-        <h4 className="font-bold text-white mb-1">Tu Avatar</h4>
-        <p className="text-xs text-dark-400 mb-3">JPG o PNG. Tamaño máximo 800KB.</p>
-        <button className="text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors">Subir nueva imagen</button>
-      </div>
-    </div>
+const AccountSection = () => {
+  const { user, updateUser } = useAuth();
+  const [isUploading, setIsUploading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [status, setStatus] = useState<{ type: 'success' | 'error' | 'idle', message?: string }>({ type: 'idle' });
+  
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
 
-    <form className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-dark-400">Nombre Completo</label>
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validar tamaño (máximo 800KB como dice el UI)
+    if (file.size > 800 * 1024) {
+      setStatus({ type: 'error', message: 'El archivo es demasiado grande (Máx 800KB)' });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    setIsUploading(true);
+    setStatus({ type: 'idle' });
+
+    try {
+      const response = await api.post('/users/avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      updateUser(response.data);
+      setStatus({ type: 'success', message: 'Foto de perfil actualizada' });
+    } catch (error: any) {
+      setStatus({ type: 'error', message: 'Error al subir la imagen' });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUpdating(true);
+    setStatus({ type: 'idle' });
+
+    try {
+      const response = await api.put('/users/profile', { name, email });
+      updateUser(response.data);
+      setStatus({ type: 'success', message: 'Información actualizada correctamente' });
+    } catch (error: any) {
+      const msg = error.response?.data?.error || 'Error al actualizar el perfil';
+      setStatus({ type: 'error', message: msg });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  return (
+    <div className="bg-dark-800 border border-dark-700 rounded-3xl p-8 shadow-xl">
+      <SectionHeader title="Perfil del Administrador" description="Gestiona la información pública de tu cuenta corporativa." />
+      
+      {status.type !== 'idle' && (
+        <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-in slide-in-from-top-2 ${
+          status.type === 'success' ? 'bg-accent-500/10 text-accent-500 border border-accent-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+        }`}>
+          {status.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+          <span className="text-sm font-bold">{status.message}</span>
+        </div>
+      )}
+
+      <div className="flex items-center gap-8 mb-8 pb-8 border-b border-dark-700/50">
+        <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+          <div className="w-24 h-24 bg-dark-700 rounded-full flex items-center justify-center border-2 border-dashed border-dark-600 group-hover:border-brand-500 transition-colors overflow-hidden">
+            {isUploading ? (
+              <Loader2 className="w-8 h-8 text-brand-400 animate-spin" />
+            ) : user?.avatar_url ? (
+              <img src={user.avatar_url} className="w-full h-full object-cover" alt="Profile" />
+            ) : (
+              <User className="w-10 h-10 text-dark-500" />
+            )}
+          </div>
+          <div className="absolute bottom-0 right-0 bg-brand-500 p-2 rounded-full shadow-lg border-4 border-dark-800 group-hover:scale-110 transition-transform">
+            <Camera className="w-4 h-4 text-white" />
+          </div>
           <input 
-            type="text" 
-            defaultValue="Diego" 
-            className="w-full bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all text-white font-medium"
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            className="hidden" 
+            accept="image/*" 
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-dark-400">Correo Electrónico</label>
-          <input 
-            type="email" 
-            defaultValue="admin@yapamarket.com" 
-            className="w-full bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all text-white font-medium"
-          />
+        <div>
+          <h4 className="font-bold text-white mb-1">Tu Avatar</h4>
+          <p className="text-xs text-dark-400 mb-3">JPG o PNG. Tamaño máximo 800KB.</p>
+          <button 
+            onClick={handleAvatarClick}
+            disabled={isUploading}
+            className="text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors disabled:opacity-50"
+          >
+            {isUploading ? 'Subiendo...' : 'Subir nueva imagen'}
+          </button>
         </div>
       </div>
-      <button className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-3 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-brand-500/20">
-        <Save className="w-4 h-4" /> Guardar Cambios
-      </button>
-    </form>
-  </div>
-);
+
+      <form className="space-y-6" onSubmit={handleProfileUpdate}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-dark-400">Nombre Completo</label>
+            <input 
+              type="text" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all text-white font-medium"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-dark-400">Correo Electrónico</label>
+            <input 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all text-white font-medium"
+            />
+          </div>
+        </div>
+        <button 
+          type="submit"
+          disabled={isUpdating}
+          className="bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-white font-bold px-8 py-3 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-brand-500/20"
+        >
+          {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} 
+          Guardar Cambios
+        </button>
+      </form>
+    </div>
+  );
+};
 
 const MarketplaceSection = () => (
   <div className="bg-dark-800 border border-dark-700 rounded-3xl p-8 shadow-xl">
