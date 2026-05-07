@@ -91,7 +91,7 @@ const ProductsPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <InventoryStat icon={Package} label="Total SKUs" value={(products || []).length.toString()} color="text-white" />
         <InventoryStat icon={Layers} label="Variantes Activas" value={(products || []).reduce((acc, p) => acc + (p.variants?.length || 0), 0).toString()} color="text-brand-400" />
-        <InventoryStat icon={AlertCircle} label="Stock Bajo" value={(products || []).filter(p => (p.variants || []).some(v => Number(v.stock || 0) < 10)).length.toString()} color="text-red-400" />
+        <InventoryStat icon={AlertCircle} label="PRODUCTOS EN ALERTA" value={(products || []).filter(p => (p.variants || []).some(v => Number(v.stock || 0) < 10)).length.toString()} color="text-red-500" />
       </div>
 
       {/* Table Container */}
@@ -169,16 +169,25 @@ const ProductsPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-10 py-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-24 h-2 bg-dark-900 rounded-full overflow-hidden border border-dark-700">
-                          <div 
-                            className={`h-full rounded-full ${getStockColor((product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0))}`} 
-                            style={{ width: `${Math.min(100, (product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0) * 2)}%` }}
-                          />
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">Disponibilidad</span>
+                          <span className="text-xs font-black text-white">{product.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0}</span>
                         </div>
-                        <span className="font-bold text-white text-sm">
-                          {(product.variants || []).reduce((acc, v) => acc + (v.stock || 0), 0)}
-                        </span>
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 h-2 bg-dark-900 rounded-full overflow-hidden max-w-[120px] border border-dark-700/50">
+                            <div 
+                              className={`h-full transition-all duration-1000 ${(product.variants || []).some(v => Number(v.stock || 0) < 10) ? 'animate-pulse' : ''} ${getStockColor(
+                                product.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0,
+                                (product.variants || []).some(v => Number(v.stock || 0) < 10)
+                              )}`}
+                              style={{ width: `${Math.min((product.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0) * 1.5, 100)}%` }}
+                            />
+                          </div>
+                          {(product.variants || []).some(v => Number(v.stock || 0) < 10) && (
+                            <span className="text-[9px] font-black bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full border border-red-500/30 animate-pulse">REVISAR</span>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="px-10 py-6">
@@ -235,9 +244,9 @@ const Badge = ({ label, color }: any) => (
   </span>
 );
 
-const getStockColor = (stock: number) => {
-  if (stock === 0) return 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]';
-  if (stock < 10) return 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]';
+const getStockColor = (totalStock: number, hasLowStockVariant: boolean) => {
+  if (totalStock <= 0 || hasLowStockVariant) return 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.6)]';
+  if (totalStock < 20) return 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]';
   return 'bg-accent-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]';
 };
 
