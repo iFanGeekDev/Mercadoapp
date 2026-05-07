@@ -144,12 +144,25 @@ const AccountSection = () => {
     setStatus({ type: 'idle' });
 
     try {
-      const response = await api.post('/users/avatar', formData);
-      updateUser(response.data);
+      const token = localStorage.getItem('admin_token');
+      const response = await fetch('https://mercadoapp-production-22eb.up.railway.app/v1/users/avatar', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error en el servidor');
+      }
+
+      const data = await response.json();
+      updateUser(data);
       setStatus({ type: 'success', message: 'Foto de perfil actualizada' });
     } catch (error: any) {
-      const msg = error.response?.data?.error || 'Error al subir la imagen';
-      setStatus({ type: 'error', message: msg });
+      setStatus({ type: 'error', message: error.message || 'Error al subir la imagen' });
     } finally {
       setIsUploading(false);
     }
