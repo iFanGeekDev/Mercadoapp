@@ -167,14 +167,14 @@ const ProductFormPage: React.FC = () => {
     <div className="max-w-6xl mx-auto space-y-8 pb-20 relative">
       {/* Success Toast */}
       {showSuccess && (
-        <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-10 duration-500">
-          <div className="bg-emerald-500 text-white px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 flex items-center gap-3 border border-emerald-400/50 backdrop-blur-md">
-            <div className="bg-white/20 p-1.5 rounded-full">
-              <CheckCircle2 className="w-6 h-6" />
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-center pointer-events-none">
+          <div className="bg-emerald-600 text-white px-10 py-5 rounded-3xl shadow-[0_20px_50px_rgba(16,185,129,0.4)] flex items-center gap-4 border border-emerald-400/30 scale-110">
+            <div className="bg-white/20 p-2 rounded-full">
+              <CheckCircle2 className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-black text-lg leading-none">¡Cambios Guardados!</p>
-              <p className="text-emerald-100 text-sm mt-1">El producto se ha actualizado correctamente.</p>
+              <p className="font-black text-xl leading-none">¡ÉXITO!</p>
+              <p className="text-emerald-100 text-sm mt-1">Cambios aplicados correctamente.</p>
             </div>
           </div>
         </div>
