@@ -1,15 +1,6 @@
 package com.mercadoapp.data.remote.api
 
-import com.mercadoapp.data.remote.dto.LoginRequestDto
-import com.mercadoapp.data.remote.dto.PagedOrdersDto
-import com.mercadoapp.data.remote.dto.PagedProductsDto
-import com.mercadoapp.data.remote.dto.ProductDto
-import com.mercadoapp.data.remote.dto.RegisterRequestDto
-import com.mercadoapp.data.remote.dto.TokenDto
-import com.mercadoapp.data.remote.dto.UbigeoDto
-import com.mercadoapp.data.remote.dto.UserDto
-import com.mercadoapp.data.remote.dto.UpdateProfileRequestDto
-import com.mercadoapp.data.remote.dto.ChangePasswordRequestDto
+import com.mercadoapp.data.remote.dto.*
 import retrofit2.http.*
 import okhttp3.MultipartBody
 
@@ -21,7 +12,7 @@ interface MercadoApiService {
     suspend fun updateProfile(@Body request: UpdateProfileRequestDto): UserDto
 
     @PUT("users/change-password")
-    suspend fun changePassword(@Body request: ChangePasswordRequestDto): Any
+    suspend fun changePassword(@Body request: ChangePasswordRequestDto): MessageResponseDto
 
     @Multipart
     @POST("users/avatar")
@@ -44,10 +35,10 @@ interface MercadoApiService {
     suspend fun getFavorites(): List<ProductDto>
 
     @POST("favorites")
-    suspend fun addFavorite(@Body request: Map<String, String>): Any
+    suspend fun addFavorite(@Body request: Map<String, String>): MessageResponseDto
 
     @DELETE("favorites/{productId}")
-    suspend fun removeFavorite(@Path("productId") productId: String): Any
+    suspend fun removeFavorite(@Path("productId") productId: String): MessageResponseDto
 
     // ── Auth ───────────────────────────────────────────────────────────────────
 
@@ -78,4 +69,18 @@ interface MercadoApiService {
 
     @GET("ubigeo/districts/{provinceId}")
     suspend fun getDistricts(@Path("provinceId") provinceId: String): List<UbigeoDto>
+
+    // ── Addresses ──────────────────────────────────────────────────────────────
+
+    @GET("addresses")
+    suspend fun getAddresses(): List<AddressDto>
+
+    @POST("addresses")
+    suspend fun saveAddress(@Body address: AddressDto): AddressDto
+
+    @PUT("addresses/{id}")
+    suspend fun updateAddress(@Path("id") id: String, @Body address: AddressDto): AddressDto
+
+    @DELETE("addresses/{id}")
+    suspend fun deleteAddress(@Path("id") id: String): MessageResponseDto
 }

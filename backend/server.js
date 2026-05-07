@@ -419,6 +419,91 @@ router.delete('/favorites/:productId', authenticateToken, async (req, res) => {
   }
 });
 
+// ── Addresses ─────────────────────────────────────────────────────────────────
+
+router.get('/addresses', authenticateToken, async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT * FROM addresses WHERE user_id = $1 ORDER BY is_default DESC, created_at DESC',
+      [req.userId]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener direcciones' });
+  }
+});
+
+router.post('/addresses', authenticateToken, async (req, res) => {
+  const client = await db.pool.connect();
+  try {
+    const { alias, street, number, department_id, province_id, district_id, department_name, province_name, district_name, is_default } = req.body;
+    
+    await client.query('BEGIN');
+
+    // Si es la primera o se marca como default, desmarcar las otras
+    if (is_default) {
+      await client.query('UPDATE addresses SET is_default = FALSE WHERE user_id = $1', [req.userId]);
+    }
+
+    const result = await client.query(
+      `INSERT INTO addresses (user_id, alias, street, number, department_id, province_id, district_id, department_name, province_name, district_name, is_default) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+      [req.userId, alias, street, number, department_id, province_id, district_id, department_name, province_name, district_name, is_default]
+    );
+
+    await client.query('COMMIT');
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    await client.query('ROLLBACK');
+    res.status(500).json({ error: 'Error al crear dirección' });
+  } finally {
+    client.release();
+  }
+});
+
+router.put('/addresses/:id', authenticateToken, async (req, res) => {
+  const client = await db.pool.connect();
+  try {
+    const { id } = req.params;
+    const { alias, street, number, department_id, province_id, district_id, department_name, province_name, district_name, is_default } = req.body;
+
+    await client.query('BEGIN');
+
+    if (is_default) {
+      await client.query('UPDATE addresses SET is_default = FALSE WHERE user_id = $1', [req.userId]);
+    }
+
+    const result = await client.query(
+      `UPDATE addresses SET alias=$1, street=$2, number=$3, department_id=$4, province_id=$5, district_id=$6, 
+       department_name=$7, province_name=$8, district_name=$9, is_default=$10 WHERE id=$11 AND user_id=$12 RETURNING *`,
+      [alias, street, number, department_id, province_id, district_id, department_name, province_name, district_name, is_default, id, req.userId]
+    );
+
+    if (result.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Dirección no encontrada' });
+    }
+
+    await client.query('COMMIT');
+    res.json(result.rows[0]);
+  } catch (error) {
+    await client.query('ROLLBACK');
+    res.status(500).json({ error: 'Error al actualizar dirección' });
+  } finally {
+    client.release();
+  }
+});
+
+router.delete('/addresses/:id', authenticateToken, async (req, res) => {
+  try {
+    const result = await db.query('DELETE FROM addresses WHERE id = $1 AND user_id = $2 RETURNING *', [req.params.id, req.userId]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Dirección no encontrada' });
+    res.json({ message: 'Dirección eliminada' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar dirección' });
+  }
+});
+
 // ── Product Management (ADMIN ONLY) ──────────────────────────────────────────
 
 router.post('/products', authenticateToken, isAdmin, async (req, res) => {

@@ -45,7 +45,7 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindAddressRepository(impl: com.mercadoapp.data.repository.FakeAddressRepository): com.mercadoapp.domain.repository.AddressRepository
+    abstract fun bindAddressRepository(impl: com.mercadoapp.data.repository.RemoteAddressRepository): com.mercadoapp.domain.repository.AddressRepository
 
     @Binds
     @Singleton

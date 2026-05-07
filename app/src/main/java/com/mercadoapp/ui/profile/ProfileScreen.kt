@@ -33,6 +33,7 @@ fun ProfileRoute(
     onLogout: () -> Unit,
     onAddressesClick: () -> Unit,
     onOrdersClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onChangePasswordClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
@@ -44,6 +45,7 @@ fun ProfileRoute(
         onLogout = { viewModel.logout(); onLogout() }, 
         onAddressesClick = onAddressesClick, 
         onOrdersClick = onOrdersClick,
+        onFavoritesClick = onFavoritesClick,
         onEditProfileClick = onEditProfileClick,
         onChangePasswordClick = onChangePasswordClick
     )
@@ -57,6 +59,7 @@ private fun ProfileScreen(
     onLogout: () -> Unit, 
     onAddressesClick: () -> Unit, 
     onOrdersClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onChangePasswordClick: () -> Unit
 ) {
@@ -135,6 +138,38 @@ private fun ProfileScreen(
 
             Spacer(Modifier.height(24.dp))
 
+            // ── Quick Actions ────────────────────────────────────────────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickActionCard(
+                    icon = Icons.Default.Favorite,
+                    label = "Favoritos",
+                    color = Color(0xFFE91E63),
+                    onClick = onFavoritesClick,
+                    modifier = Modifier.weight(1f)
+                )
+                QuickActionCard(
+                    icon = Icons.Default.Receipt,
+                    label = "Órdenes",
+                    color = Brand500,
+                    onClick = onOrdersClick,
+                    modifier = Modifier.weight(1f)
+                )
+                QuickActionCard(
+                    icon = Icons.Default.LocationOn,
+                    label = "Direcciones",
+                    color = Accent500,
+                    onClick = onAddressesClick,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(32.dp))
+
             // ── Info section ─────────────────────────────────────────────────
             Column(
                 modifier = Modifier
@@ -154,15 +189,13 @@ private fun ProfileScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-                Text("Configuración", style = MaterialTheme.typography.labelMedium,
+                Text("Configuración de perfil", style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(start = 4.dp))
 
                 // Settings rows
-                SettingsRow(icon = Icons.Default.Receipt, label = "Mis Órdenes", onClick = onOrdersClick)
-                SettingsRow(icon = Icons.Default.LocationOn, label = "Mis Direcciones", onClick = onAddressesClick)
-                SettingsRow(icon = Icons.Default.Edit, label = "Editar Perfil", onClick = onEditProfileClick)
+                SettingsRow(icon = Icons.Default.Edit, label = "Editar Información Personal", onClick = onEditProfileClick)
                 SettingsRow(icon = Icons.Default.VpnKey, label = "Cambiar Contraseña", onClick = onChangePasswordClick)
                 SettingsRow(icon = Icons.Default.Notifications, label = "Notificaciones", onClick = {})
                 SettingsRow(icon = Icons.Default.Security, label = "Seguridad", onClick = {})
@@ -215,24 +248,55 @@ private fun ProfileTile(icon: ImageVector, label: String, value: String) {
 }
 
 @Composable
+private fun QuickActionCard(
+    icon: ImageVector,
+    label: String,
+    color: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier.height(100.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Dark800),
+        border = androidx.compose.foundation.BorderStroke(1.dp, color.copy(alpha = 0.2f))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(color.copy(alpha = 0.15f), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, null, tint = color, modifier = Modifier.size(24.dp))
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color.White)
+        }
+    }
+}
+
+@Composable
 private fun SettingsRow(icon: ImageVector, label: String, onClick: () -> Unit) {
-    Card(onClick = onClick, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp),
+    Card(onClick = onClick, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(
-            1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.12f))) {
-        Row(modifier = Modifier.padding(16.dp),
+            1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.08f))) {
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Box(modifier = Modifier.size(40.dp)
-                .background(Dark600, RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center) {
-                Icon(icon, null, modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Text(label, style = MaterialTheme.typography.bodyMedium,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Icon(icon, null, modifier = Modifier.size(22.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium,
                 modifier = Modifier.weight(1f))
             Icon(Icons.Default.ChevronRight, null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                modifier = Modifier.size(18.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
         }
     }
 }

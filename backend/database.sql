@@ -64,10 +64,36 @@ CREATE TABLE IF NOT EXISTS order_items (
     price DECIMAL(10, 2) NOT NULL
 );
 
+-- 6. Tabla de Direcciones
+CREATE TABLE IF NOT EXISTS addresses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    alias VARCHAR(255), -- Ejemplo: 'Casa', 'Trabajo'
+    street VARCHAR(255) NOT NULL,
+    number VARCHAR(50),
+    department_id VARCHAR(50),
+    province_id VARCHAR(50),
+    district_id VARCHAR(50),
+    department_name VARCHAR(100),
+    province_name VARCHAR(100),
+    district_name VARCHAR(100),
+    is_default BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. Tabla de Favoritos
+CREATE TABLE IF NOT EXISTS favorites (
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, product_id)
+);
+
 -- Índices básicos para optimizar búsquedas
 CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
 CREATE INDEX IF NOT EXISTS idx_variants_product_id ON product_variants(product_id);
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_addresses_user_id ON addresses(user_id);
 
 -- Insertar Usuario Admin por defecto (Password: admin1234 - hash de ejemplo)
 -- Nota: En la implementación real, bcrypt.hash será usado por el servidor.
