@@ -48,6 +48,9 @@ const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [showInAlertOnly, setShowInAlertOnly] = useState<boolean>(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
   const navigate = useNavigate();
 
@@ -108,10 +111,33 @@ const ProductsPage: React.FC = () => {
     });
   };
 
-  const filteredProducts = getSortedProducts((products || []).filter(p => 
-    (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (p.category || '').toLowerCase().includes(searchTerm.toLowerCase())
-  ));
+  const handleExport = () => {
+    const headers = "ID,Producto,Categoria,Precio,Stock Total,En Alerta\n";
+    const csvContent = (products || []).map(p => {
+      const stock = p.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0;
+      const hasAlert = (p.variants || []).some(v => Number(v.stock || 0) < 10) ? 'SI' : 'NO';
+      return `${p.id},"${p.name}",${p.category},${p.variants?.[0]?.price || 0},${stock},${hasAlert}`;
+    }).join("\n");
+    
+    const blob = new Blob([headers + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `inventario_yapamarket_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const filteredProducts = getSortedProducts((products || []).filter(p => {
+    const matchesSearch = (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (p.category || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'ALL' || p.category === selectedCategory;
+    const matchesAlert = !showInAlertOnly || (p.variants || []).some(v => Number(v.stock || 0) < 10);
+    
+    return matchesSearch && matchesCategory && matchesAlert;
+  }));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -150,12 +176,58 @@ const ProductsPage: React.FC = () => {
               className="w-full bg-dark-900 border border-dark-700 text-white pl-12 pr-4 py-3.5 rounded-2xl outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder:text-dark-600"
             />
           </div>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-3.5 bg-dark-900 border border-dark-700 rounded-2xl text-dark-400 hover:text-white hover:border-dark-600 transition-all">
-              <Filter className="w-5 h-5" />
-              <span className="text-sm font-bold">Filtros</span>
-            </button>
-            <button className="flex items-center gap-2 px-4 py-3.5 bg-dark-900 border border-dark-700 rounded-2xl text-dark-400 hover:text-white hover:border-dark-600 transition-all">
+          <div className="flex items-center gap-3 relative">
+            <div className="relative">
+              <button 
+                onClick={() => setShowFilterMenu(!showFilterMenu)}
+                className={`flex items-center gap-2 px-4 py-3.5 border rounded-2xl transition-all ${
+                  showFilterMenu || selectedCategory !== 'ALL' || showInAlertOnly
+                  ? 'bg-brand-500/10 border-brand-500/30 text-brand-400'
+                  : 'bg-dark-900 border-dark-700 text-dark-400 hover:text-white hover:border-dark-600'
+                }`}
+              >
+                <Filter className="w-5 h-5" />
+                <span className="text-sm font-bold">Filtros</span>
+              </button>
+
+              {showFilterMenu && (
+                <div className="absolute right-0 mt-3 w-64 bg-dark-800 border border-dark-700 rounded-2xl shadow-2xl z-50 p-4 animate-in fade-in zoom-in duration-200">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] font-black text-dark-500 uppercase tracking-widest block mb-2">Categoría</label>
+                      <select 
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="w-full bg-dark-900 border border-dark-700 text-white rounded-xl px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-brand-500"
+                      >
+                        <option value="ALL">Todas las categorías</option>
+                        <option value="PHONES">Phones</option>
+                        <option value="LAPTOPS">Laptops</option>
+                        <option value="TABLETS">Tablets</option>
+                        <option value="AUDIO">Audio</option>
+                        <option value="WEARABLES">Wearables</option>
+                      </select>
+                    </div>
+                    <div className="pt-2 border-t border-dark-700">
+                      <label className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={showInAlertOnly}
+                          onChange={(e) => setShowInAlertOnly(e.target.checked)}
+                          className="w-4 h-4 rounded border-dark-700 bg-dark-900 text-brand-500 focus:ring-brand-500"
+                        />
+                        <span className="text-sm font-bold text-dark-300 group-hover:text-white transition-colors">Solo en Alerta</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button 
+              onClick={handleExport}
+              className="flex items-center gap-2 px-4 py-3.5 bg-dark-900 border border-dark-700 rounded-2xl text-dark-400 hover:text-white hover:border-dark-600 transition-all active:scale-95"
+            >
               <Archive className="w-5 h-5" />
               <span className="text-sm font-bold">Exportar</span>
             </button>
