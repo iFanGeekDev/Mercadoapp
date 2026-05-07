@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ProductFormPage from './pages/ProductFormPage';
+import SettingsPage from './pages/SettingsPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AdminLayout from './layouts/AdminLayout';
 
@@ -24,7 +25,7 @@ function App() {
                 <DashboardPage />
               </ProtectedRoute>
             } 
-          />
+            />
           
           <Route 
             path="/productos" 
@@ -33,7 +34,7 @@ function App() {
                 <DashboardPage />
               </ProtectedRoute>
             } 
-          />
+            />
 
           <Route 
             path="/productos/nuevo" 
@@ -42,7 +43,7 @@ function App() {
                 <ProductFormPage />
               </ProtectedRoute>
             } 
-          />
+            />
 
           <Route 
             path="/productos/:id" 
@@ -51,7 +52,16 @@ function App() {
                 <ProductFormPage />
               </ProtectedRoute>
             } 
-          />
+            />
+
+          <Route 
+            path="/ajustes" 
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            } 
+            />
           
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
