@@ -5,11 +5,14 @@ import com.mercadoapp.data.remote.api.MercadoApiService
 import com.mercadoapp.data.remote.dto.LoginRequestDto
 import com.mercadoapp.data.remote.dto.RegisterRequestDto
 import com.mercadoapp.data.remote.mapper.toDomain
+import com.mercadoapp.data.remote.dto.ErrorResponseDto
 import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.model.User
 import com.mercadoapp.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,6 +40,8 @@ class AuthRepositoryImpl @Inject constructor(
             authDataStore.saveTokens(tokenDto.accessToken, tokenDto.refreshToken)
             val user = api.getMe().toDomain()
             Result.success(user)
+        } catch (e: HttpException) {
+            Result.failure(Exception(parseError(e)))
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -48,8 +53,21 @@ class AuthRepositoryImpl @Inject constructor(
             authDataStore.saveTokens(tokenDto.accessToken, tokenDto.refreshToken)
             val user = api.getMe().toDomain()
             Result.success(user)
+        } catch (e: HttpException) {
+            Result.failure(Exception(parseError(e)))
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    private fun parseError(e: HttpException): String {
+        return try {
+            val errorBody = e.response()?.errorBody()?.string()
+            val json = Json { ignoreUnknownKeys = true }
+            val errorDto = json.decodeFromString<ErrorResponseDto>(errorBody ?: "")
+            errorDto.error
+        } catch (ex: Exception) {
+            "Error inesperado (${e.code()})"
         }
     }
 

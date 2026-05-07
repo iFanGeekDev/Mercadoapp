@@ -101,3 +101,8 @@ data class AddressDto(
 data class MessageResponseDto(
     val message: String
 )
+
+@Serializable
+data class ErrorResponseDto(
+    val error: String
+)

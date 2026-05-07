@@ -12,5 +12,11 @@ Whenever a change is made to the database schema in `backend/database.sql`, it m
 1. **Local Database**: `localhost:5432/yapamarket`
 2. **Railway Database**: Using the external connection string above.
 
+### Git Workflow
+All changes must be committed and pushed immediately to the remote repository:
+- **Branch**: `main`
+- **Remote**: `origin` (https://github.com/iFanGeekDev/Mercadoapp.git)
+- **Command**: `git push origin main`
+
 ### Configuration
 The backend is configured to use the `DATABASE_URL` environment variable. A `.env` file has been created in the `backend` directory to store this URL locally for maintenance tasks.
