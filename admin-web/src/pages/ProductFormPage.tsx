@@ -121,9 +121,11 @@ const ProductFormPage: React.FC = () => {
       },
       variants: formData.variants.map(v => ({
         ...v,
-        processor: visibleSpecs.processor ? v.processor : '',
-        ram_gb: visibleSpecs.ram ? v.ram_gb : 0,
-        storage_gb: visibleSpecs.storage ? v.storage_gb : 0,
+        processor: visibleSpecs.processor ? (v.processor || '') : '',
+        ram_gb: visibleSpecs.ram ? (Number(v.ram_gb) || 0) : 0,
+        storage_gb: visibleSpecs.storage ? (Number(v.storage_gb) || 0) : 0,
+        price: Number(v.price) || 0,
+        stock: Number(v.stock) || 0,
       }))
     };
 
@@ -374,7 +376,8 @@ const ProductFormPage: React.FC = () => {
                         type="number" value={variant.price}
                         onChange={e => {
                           const newVariants = [...formData.variants];
-                          newVariants[index].price = parseFloat(e.target.value);
+                          const val = e.target.value;
+                          newVariants[index].price = val === '' ? 0 : parseFloat(val);
                           setFormData({...formData, variants: newVariants});
                         }}
                         className="w-full bg-dark-800 border border-dark-700 p-2.5 pl-6 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
@@ -390,7 +393,8 @@ const ProductFormPage: React.FC = () => {
                       type="number" value={variant.stock}
                       onChange={e => {
                         const newVariants = [...formData.variants];
-                        newVariants[index].stock = parseInt(e.target.value);
+                        const val = e.target.value;
+                        newVariants[index].stock = val === '' ? 0 : parseInt(val);
                         setFormData({...formData, variants: newVariants});
                       }}
                       className="w-full bg-dark-800 border border-dark-700 p-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-brand-500/50"
