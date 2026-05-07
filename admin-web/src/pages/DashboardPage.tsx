@@ -1,187 +1,252 @@
 import React, { useEffect, useState } from 'react';
 import { 
   Plus, 
-  Search, 
-  Smartphone, 
   TrendingUp, 
   AlertCircle,
   MoreVertical,
-  Filter
+  DollarSign,
+  ShoppingCart,
+  Users,
+  ArrowUpRight,
+  ArrowDownRight,
+  Package,
+  Clock,
+  ExternalLink
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/client';
 
-interface Product {
+interface Order {
   id: string;
-  name: string;
-  image_url: string;
-  is_offer: boolean;
-  is_new_arrival: boolean;
-  variants: any[];
+  total: number;
+  status: string;
+  created_at: string;
+  user_name?: string;
 }
 
 const DashboardPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [stats, setStats] = useState({
+    products: 0,
+    orders: 0,
+    revenue: 0
+  });
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get('/products');
-        setProducts(response.data.items);
+        const productsRes = await api.get('/products');
+        // Para demo, generamos órdenes aleatorias o si existieran las traeríamos
+        // simulamos datos para un dashboard "vivo"
+        setStats({
+          products: productsRes.data.total_pages * 20, // aproximado
+          orders: 142,
+          revenue: 12450.80
+        });
+
+        // Mock de órdenes recientes con nombres reales para el diseño premium
+        setRecentOrders([
+          { id: 'ORD-2024-9921', total: 899.00, status: 'Completado', created_at: 'Hace 5 min', user_name: 'Carlos Mendoza' },
+          { id: 'ORD-2024-9920', total: 1240.50, status: 'Procesando', created_at: 'Hace 12 min', user_name: 'Elena Rivas' },
+          { id: 'ORD-2024-9919', total: 299.99, status: 'Pendiente', created_at: 'Hace 45 min', user_name: 'Juan Pérez' },
+          { id: 'ORD-2024-9918', total: 1560.00, status: 'Completado', created_at: 'Hace 2 horas', user_name: 'Ana García' },
+          { id: 'ORD-2024-9917', total: 450.00, status: 'Cancelado', created_at: 'Hace 3 horas', user_name: 'Roberto Díaz' },
+        ]);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching dashboard data:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   return (
-    <div className="space-y-8">
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard icon={Smartphone} label="Total Equipos" value={products.length.toString()} trend="+4% vs mes anterior" />
-        <MetricCard icon={TrendingUp} label="Ventas Hoy" value="$1,240.00" trend="+12% vs ayer" color="text-brand-400" />
-        <MetricCard icon={AlertCircle} label="Stock Bajo" value="3" trend="Requiere atención" color="text-amber-400" />
-        <MetricCard icon={TrendingUp} label="Conversión" value="3.2%" trend="-0.5% vs mes anterior" />
+    <div className="space-y-10 animate-in fade-in duration-700">
+      {/* Welcome Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-brand-600/10 to-transparent p-8 rounded-[2.5rem] border border-brand-500/10">
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tight">¡Hola de nuevo, Admin! 👋</h2>
+          <p className="text-dark-400 mt-1">Aquí tienes un resumen de lo que ha pasado en YapaMarket hoy.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="px-5 py-3 bg-dark-800 border border-dark-700 rounded-2xl text-white font-bold text-sm hover:bg-dark-700 transition-all">
+            Ver Reportes
+          </button>
+          <button 
+            onClick={() => navigate('/productos/nuevo')}
+            className="px-5 py-3 bg-brand-500 text-white rounded-2xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg shadow-brand-500/20"
+          >
+            Añadir Producto
+          </button>
+        </div>
       </div>
 
-      {/* Main Table Section */}
-      <div className="bg-dark-800 border border-dark-700 rounded-3xl overflow-hidden shadow-xl">
-        <div className="p-8 border-b border-dark-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-xl font-bold text-white">Inventario de Productos</h3>
-            <p className="text-dark-400 text-sm mt-1">Gestiona tus equipos, variantes y precios.</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-500" />
-              <input 
-                type="text" 
-                placeholder="Buscar equipo..." 
-                className="bg-dark-900 border border-dark-700 text-sm pl-10 pr-4 py-2.5 rounded-xl w-64 outline-none focus:ring-2 focus:ring-brand-500 transition-all"
-              />
+      {/* Primary Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard 
+          icon={DollarSign} 
+          label="Ingresos Mensuales" 
+          value={`$${stats.revenue.toLocaleString()}`} 
+          trend="+12.5%" 
+          isPositive={true} 
+          color="text-white" 
+        />
+        <MetricCard 
+          icon={ShoppingCart} 
+          label="Órdenes Totales" 
+          value={stats.orders.toString()} 
+          trend="+8.2%" 
+          isPositive={true} 
+          color="text-white" 
+        />
+        <MetricCard 
+          icon={Package} 
+          label="Productos Activos" 
+          value={stats.products.toString()} 
+          trend="+3" 
+          isPositive={true} 
+          color="text-white" 
+        />
+        <MetricCard 
+          icon={Users} 
+          label="Usuarios Nuevos" 
+          value="48" 
+          trend="-2.4%" 
+          isPositive={false} 
+          color="text-white" 
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Recent Activity Table */}
+        <div className="lg:col-span-2 bg-dark-800 border border-dark-700 rounded-[2.5rem] overflow-hidden shadow-2xl">
+          <div className="p-8 border-b border-dark-700 flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-black text-white">Órdenes Recientes</h3>
+              <p className="text-dark-500 text-xs mt-1 font-bold uppercase tracking-widest">Últimas transacciones del sistema</p>
             </div>
-            <button className="bg-dark-700 p-2.5 rounded-xl hover:bg-dark-600 transition-colors">
-              <Filter className="w-5 h-5" />
+            <button className="text-brand-400 hover:text-brand-300 font-bold text-sm flex items-center gap-1.5 transition-colors">
+              Ver Todo <ArrowUpRight className="w-4 h-4" />
             </button>
-            <button 
-              onClick={() => navigate('/productos/nuevo')}
-              className="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-brand-500/20"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Añadir</span>
-            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-dark-900/40 text-dark-500 text-[10px] font-black uppercase tracking-[0.2em]">
+                  <th className="px-8 py-5">Cliente</th>
+                  <th className="px-8 py-5">Orden ID</th>
+                  <th className="px-8 py-5">Total</th>
+                  <th className="px-8 py-5">Estado</th>
+                  <th className="px-8 py-5 text-right">Tiempo</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dark-700/50">
+                {recentOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-dark-700/20 transition-all group">
+                    <td className="px-8 py-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-dark-700 to-dark-900 rounded-xl flex items-center justify-center font-bold text-dark-300 border border-dark-700">
+                          {order.user_name?.charAt(0)}
+                        </div>
+                        <span className="font-bold text-white text-sm">{order.user_name}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-5 font-mono text-xs text-dark-400">{order.id}</td>
+                    <td className="px-8 py-5 font-black text-white text-sm">${order.total.toFixed(2)}</td>
+                    <td className="px-8 py-5">
+                      <StatusBadge status={order.status} />
+                    </td>
+                    <td className="px-8 py-5 text-right">
+                      <span className="text-xs text-dark-500 flex items-center justify-end gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        {order.created_at}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-dark-900/30 text-dark-400 text-xs font-bold uppercase tracking-wider">
-                <th className="px-8 py-4">Producto</th>
-                <th className="px-8 py-4">Estado</th>
-                <th className="px-8 py-4">Precio Base</th>
-                <th className="px-8 py-4">Stock</th>
-                <th className="px-8 py-4">Inspección</th>
-                <th className="px-8 py-4 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-dark-700">
-              {isLoading ? (
-                Array(5).fill(0).map((_, i) => <SkeletonRow key={i} />)
-              ) : (
-                products.map((product) => (
-                  <tr 
-                    key={product.id} 
-                    onClick={() => navigate(`/productos/${product.id}`)}
-                    className="hover:bg-dark-700/20 transition-colors group cursor-pointer"
-                  >
-                    <td className="px-8 py-5">
-                      <div className="flex items-center gap-4">
-                        <img src={product.image_url} className="w-12 h-12 rounded-xl object-cover bg-dark-900 border border-dark-700" alt="" />
-                        <div>
-                          <p className="font-bold text-white group-hover:text-brand-400 transition-colors">{product.name}</p>
-                          <p className="text-xs text-dark-500">ID: {product.id.slice(0, 8)}...</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-8 py-5">
-                      <div className="flex gap-2">
-                        {product.is_new_arrival && <Badge label="Nuevo" color="bg-accent-500/10 text-accent-500 border-accent-500/20" />}
-                        {product.is_offer && <Badge label="Oferta" color="bg-brand-500/10 text-brand-400 border-brand-500/20" />}
-                      </div>
-                    </td>
-                    <td className="px-8 py-5 font-medium text-white">
-                      ${product.variants[0]?.price || '0.00'}
-                    </td>
-                    <td className="px-8 py-5">
-                      <span className="bg-dark-900 px-3 py-1 rounded-lg border border-dark-700 text-sm">
-                        {product.variants.reduce((acc, v) => acc + v.stock, 0)} u.
-                      </span>
-                    </td>
-                    <td className="px-8 py-5 text-sm">
-                      <span className="text-dark-500 flex items-center gap-1.5">
-                        <div className="w-2 h-2 bg-accent-500 rounded-full" />
-                        Aprobada
-                      </span>
-                    </td>
-                    <td className="px-8 py-5 text-right">
-                      <button className="text-dark-500 hover:text-white transition-colors">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        {/* System Health / Quick Actions */}
+        <div className="space-y-6">
+          <div className="bg-dark-800 border border-dark-700 rounded-[2.5rem] p-8 shadow-2xl">
+            <h3 className="text-lg font-black text-white mb-6">Estado del Sistema</h3>
+            <div className="space-y-5">
+              <HealthItem label="API Backend" status="Online" color="bg-accent-500" />
+              <HealthItem label="Base de Datos" status="Estable" color="bg-accent-500" />
+              <HealthItem label="Almacenamiento" status="85% Libre" color="bg-accent-500" />
+              <HealthItem label="Notificaciones" status="Activas" color="bg-accent-500" />
+            </div>
+            <div className="mt-8 pt-8 border-t border-dark-700">
+              <button className="w-full py-4 bg-dark-900 border border-dark-700 rounded-2xl text-dark-400 font-bold hover:text-white transition-all flex items-center justify-center gap-2">
+                <ExternalLink className="w-4 h-4" />
+                <span>Logs de Sistema</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-brand-600 to-brand-400 rounded-[2.5rem] p-8 shadow-2xl shadow-brand-500/20 text-white">
+            <h3 className="text-lg font-black mb-2">Meta de Ventas</h3>
+            <p className="text-brand-100 text-sm mb-6">Estás al 82% de tu objetivo mensual.</p>
+            <div className="h-3 bg-white/20 rounded-full overflow-hidden mb-4 border border-white/10">
+              <div className="h-full bg-white w-[82%] shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+            </div>
+            <div className="flex justify-between text-xs font-black uppercase tracking-widest">
+              <span>$10.2k</span>
+              <span className="opacity-60">$12.5k</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const MetricCard = ({ icon: Icon, label, value, trend, color = 'text-white' }: any) => (
-  <div className="bg-dark-800 border border-dark-700 p-6 rounded-3xl shadow-lg relative overflow-hidden">
-    <div className="absolute top-0 right-0 p-4 opacity-5">
-      <Icon className="w-24 h-24" />
-    </div>
-    <div className="flex items-center gap-3 mb-4">
-      <div className="p-2.5 bg-dark-900 rounded-xl border border-dark-700">
-        <Icon className="w-5 h-5 text-brand-400" />
+const MetricCard = ({ icon: Icon, label, value, trend, isPositive, color }: any) => (
+  <div className="bg-dark-800 border border-dark-700 p-7 rounded-[2.5rem] shadow-xl relative overflow-hidden group hover:border-brand-500/30 transition-all">
+    <div className="flex items-center justify-between mb-4">
+      <div className="p-3 bg-dark-900 rounded-2xl border border-dark-700">
+        <Icon className="w-6 h-6 text-brand-400" />
       </div>
-      <span className="text-dark-400 text-sm font-medium">{label}</span>
+      <div className={`flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-lg ${isPositive ? 'bg-accent-500/10 text-accent-500' : 'bg-red-500/10 text-red-500'}`}>
+        {isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+        {trend}
+      </div>
     </div>
     <div className="space-y-1">
-      <h4 className={`text-2xl font-black ${color}`}>{value}</h4>
-      <p className="text-xs text-accent-500 font-bold">{trend}</p>
+      <p className="text-dark-400 text-xs font-bold uppercase tracking-[0.1em]">{label}</p>
+      <h4 className={`text-3xl font-black ${color}`}>{value}</h4>
     </div>
   </div>
 );
 
-const Badge = ({ label, color }: any) => (
-  <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${color}`}>
-    {label}
-  </span>
+const HealthItem = ({ label, status, color }: any) => (
+  <div className="flex items-center justify-between">
+    <span className="text-sm text-dark-400 font-medium">{label}</span>
+    <div className="flex items-center gap-2">
+      <span className="text-xs font-bold text-white">{status}</span>
+      <div className={`w-2 h-2 ${color} rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]`} />
+    </div>
+  </div>
 );
 
-const SkeletonRow = () => (
-  <tr>
-    <td className="px-8 py-5 animate-pulse">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-dark-700 rounded-xl" />
-        <div className="space-y-2">
-          <div className="h-4 w-32 bg-dark-700 rounded" />
-          <div className="h-3 w-20 bg-dark-700 rounded" />
-        </div>
-      </div>
-    </td>
-    <td colSpan={5} className="px-8 py-5"><div className="h-4 bg-dark-700 rounded w-full animate-pulse" /></td>
-  </tr>
-);
+const StatusBadge = ({ status }: { status: string }) => {
+  const colors: any = {
+    'Completado': 'bg-accent-500/10 text-accent-500 border-accent-500/20',
+    'Procesando': 'bg-brand-500/10 text-brand-400 border-brand-500/20',
+    'Pendiente': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+    'Cancelado': 'bg-red-500/10 text-red-500 border-red-500/20',
+  };
+  return (
+    <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider border ${colors[status] || colors['Pendiente']}`}>
+      {status}
+    </span>
+  );
+};
 
 export default DashboardPage;

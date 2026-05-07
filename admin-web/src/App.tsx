@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Loader2 } from 'lucide-react';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import ProductsPage from './pages/ProductsPage';
 import ProductFormPage from './pages/ProductFormPage';
 import SettingsPage from './pages/SettingsPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -41,7 +42,7 @@ function App() {
             path="/productos" 
             element={
               <ProtectedRoute>
-                <DashboardPage />
+                <ProductsPage />
               </ProtectedRoute>
             } 
             />
