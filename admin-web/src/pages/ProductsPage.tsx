@@ -48,6 +48,7 @@ const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,10 +66,52 @@ const ProductsPage: React.FC = () => {
     fetchProducts();
   }, []);
 
-  const filteredProducts = (products || []).filter(p => 
+  const handleSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedProducts = (items: Product[]) => {
+    if (!sortConfig) return items;
+
+    return [...items].sort((a, b) => {
+      let aValue: any;
+      let bValue: any;
+
+      switch (sortConfig.key) {
+        case 'name':
+          aValue = (a.name || '').toLowerCase();
+          bValue = (b.name || '').toLowerCase();
+          break;
+        case 'category':
+          aValue = (a.category || '').toLowerCase();
+          bValue = (b.category || '').toLowerCase();
+          break;
+        case 'price':
+          aValue = Number(a.variants?.[0]?.price || 0);
+          bValue = Number(b.variants?.[0]?.price || 0);
+          break;
+        case 'stock':
+          aValue = a.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0;
+          bValue = b.variants?.reduce((acc, v) => acc + Number(v.stock || 0), 0) || 0;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const filteredProducts = getSortedProducts((products || []).filter(p => 
     (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (p.category || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -123,10 +166,50 @@ const ProductsPage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-dark-900/50 text-dark-500 text-[11px] font-black uppercase tracking-[0.2em]">
-                <th className="px-10 py-5">Producto</th>
-                <th className="px-10 py-5">Categoría</th>
-                <th className="px-10 py-5">Precio</th>
-                <th className="px-10 py-5">Stock Total</th>
+                <th 
+                  className="px-10 py-5 cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort('name')}
+                >
+                  <div className="flex items-center gap-2">
+                    Producto
+                    {sortConfig?.key === 'name' && (
+                      <span className="text-brand-400">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="px-10 py-5 cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort('category')}
+                >
+                  <div className="flex items-center gap-2">
+                    Categoría
+                    {sortConfig?.key === 'category' && (
+                      <span className="text-brand-400">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="px-10 py-5 cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort('price')}
+                >
+                  <div className="flex items-center gap-2">
+                    Precio
+                    {sortConfig?.key === 'price' && (
+                      <span className="text-brand-400">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="px-10 py-5 cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort('stock')}
+                >
+                  <div className="flex items-center gap-2">
+                    Stock Total
+                    {sortConfig?.key === 'stock' && (
+                      <span className="text-brand-400">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </div>
+                </th>
                 <th className="px-10 py-5">Estado</th>
                 <th className="px-10 py-5 text-right">Acciones</th>
               </tr>
