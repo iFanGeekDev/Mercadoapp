@@ -19,18 +19,26 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const savedUser = localStorage.getItem('admin_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
+  
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem('admin_token');
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('admin_token');
-    const savedUser = localStorage.getItem('admin_user');
-    
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-    }
+    // Ya inicializado síncronamente, pero podemos marcar como no cargando
+    setIsLoading(false);
   }, []);
+
 
   const login = (newToken: string, newUser: User) => {
     setToken(newToken);
