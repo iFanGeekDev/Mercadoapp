@@ -18,6 +18,7 @@ const PORT   = process.env.PORT || 8080;
 const SECRET = process.env.JWT_SECRET || 'YapaMarket_dev_secret_key';
 
 app.use(cors());
+app.set('trust proxy', 1);
 app.use(express.json());
 
 // Configuración de carpeta estática para imágenes
@@ -209,11 +210,20 @@ router.post('/users/avatar', authenticateToken, upload.single('avatar'), async (
   try {
     if (!req.file) return res.status(400).json({ error: 'No se subió ningún archivo' });
 
-    const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // En Railway, req.protocol puede ser 'http'. Usamos x-forwarded-proto para detectar HTTPS.
+    const protocol = req.get('x-forwarded-proto') || req.protocol;
+    const host = req.get('host');
+    const avatarUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+    
     const result = await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING *', [avatarUrl, req.userId]);
     
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
     res.json(userToDto(result.rows[0]));
   } catch (error) {
+    console.error('[AVATAR_ERROR]', error);
     res.status(500).json({ error: 'Error al subir avatar' });
   }
 });
