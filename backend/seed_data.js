@@ -95,9 +95,9 @@ async function seed() {
       ];
 
       const productRes = await client.query(
-        `INSERT INTO products (name, image_url, short_description, is_offer, is_new_arrival, technical_specs, inspection_checklist) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
-        [p.name, p.img, p.desc, p.is_offer, p.is_new, JSON.stringify(technical_specs), JSON.stringify(checklist)]
+        `INSERT INTO products (name, image_url, short_description, is_offer, is_new_arrival, category, technical_specs, inspection_checklist) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+        [p.name, p.img, p.desc, p.is_offer, p.is_new, (p.cat === 'Smartphones' ? 'PHONES' : p.cat === 'Watches' ? 'WEARABLES' : p.cat.toUpperCase()), JSON.stringify(technical_specs), JSON.stringify(checklist)]
       );
       
       const productId = productRes.rows[0].id;

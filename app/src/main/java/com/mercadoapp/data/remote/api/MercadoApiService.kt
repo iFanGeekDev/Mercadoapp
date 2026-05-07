@@ -23,7 +23,8 @@ interface MercadoApiService {
     @GET("products")
     suspend fun getProducts(
         @Query("page") page: Int = 1,
-        @Query("size") size: Int = 20
+        @Query("size") size: Int = 20,
+        @Query("category") category: String? = null
     ): PagedProductsDto
 
     @GET("products/{id}")

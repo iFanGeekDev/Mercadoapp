@@ -12,7 +12,8 @@ data class ProductDto(
     @SerialName("technical_specs") val technicalSpecs: TechnicalSpecsDto,
     val variants: List<ProductVariantDto>,
     @SerialName("is_offer") val isOffer: Boolean = false,
-    @SerialName("is_new_arrival") val isNewArrival: Boolean = false
+    @SerialName("is_new_arrival") val isNewArrival: Boolean = false,
+    val category: String = "PHONES"
 )
 
 @Serializable

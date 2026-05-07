@@ -29,6 +29,7 @@ const ProductFormPage: React.FC = () => {
     image_url: '',
     is_offer: false,
     is_new_arrival: false,
+    category: 'PHONES',
     technical_specs: {
       processor: [''],
       ram_gb: [4],
@@ -174,6 +175,20 @@ const ProductFormPage: React.FC = () => {
                   className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500"
                   placeholder="ej. iPhone 15 Pro Max"
                 />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm text-dark-400 ml-1">Categoría</label>
+                <select 
+                  value={formData.category}
+                  onChange={e => setFormData({...formData, category: e.target.value})}
+                  className="w-full bg-dark-900 border border-dark-700 p-3 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 appearance-none"
+                >
+                  <option value="PHONES">PHONES</option>
+                  <option value="LAPTOPS">LAPTOPS</option>
+                  <option value="TABLETS">TABLETS</option>
+                  <option value="AUDIO">AUDIO</option>
+                  <option value="WEARABLES">WEARABLES</option>
+                </select>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center ml-1">

@@ -31,7 +31,8 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
                 ProductVariant(Condition.EXCELLENT, "A15 Bionic", 4, 256, "Red",      519.0, 4)
             ),
             isOffer = true,
-            isNewArrival = true
+            isNewArrival = true,
+            category = "PHONES"
         ),
         Product(
             id = "s22",
@@ -49,7 +50,8 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
                 ProductVariant(Condition.NORMAL, "Snapdragon 8 Gen 1", 8, 256, "White", 399.0, 7)
             ),
             isOffer = false,
-            isNewArrival = true
+            isNewArrival = true,
+            category = "PHONES"
         ),
         Product(
             id = "pixel-7",
@@ -67,7 +69,8 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
                 ProductVariant(Condition.EXCELLENT, "Google Tensor G2", 8, 256, "Snow",        549.0, 2)
             ),
             isOffer = true,
-            isNewArrival = false
+            isNewArrival = false,
+            category = "PHONES"
         ),
         Product(
             id = "xiaomi-13",
@@ -86,13 +89,18 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
                 ProductVariant(Condition.EXCELLENT, "Snapdragon 8 Gen 2", 12, 256, "Flora Green", 549.0, 1)
             ),
             isOffer = false,
-            isNewArrival = true
+            isNewArrival = true,
+            category = "PHONES"
         )
     )
 
     /** Used by HomeScreen via Paging 3 — returns a single page with all fake products */
-    override fun getProductsPaged(): Flow<PagingData<Product>> =
-        flowOf(PagingData.from(products))
+    override fun getProductsPaged(category: String?): Flow<PagingData<Product>> {
+        val filtered = if (category != null && category != "ALL") {
+            products.filter { it.category == category }
+        } else products
+        return flowOf(PagingData.from(filtered))
+    }
 
     override suspend fun getHomeFeed(): List<Product> {
         delay(250)

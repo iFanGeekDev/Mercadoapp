@@ -226,11 +226,24 @@ router.get('/products', async (req, res) => {
     const size = parseInt(req.query.size) || 20;
     const offset = (page - 1) * size;
 
-    // Obtener productos paginados
-    const productsRes = await db.query(
-      'SELECT * FROM products ORDER BY created_at DESC LIMIT $1 OFFSET $2',
-      [size, offset]
-    );
+    // Obtener productos paginados con filtro opcional de categoría
+    const category = req.query.category;
+    let productsRes;
+    let totalRes;
+
+    if (category && category !== 'ALL') {
+      productsRes = await db.query(
+        'SELECT * FROM products WHERE category = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
+        [category, size, offset]
+      );
+      totalRes = await db.query('SELECT COUNT(*) FROM products WHERE category = $1', [category]);
+    } else {
+      productsRes = await db.query(
+        'SELECT * FROM products ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+        [size, offset]
+      );
+      totalRes = await db.query('SELECT COUNT(*) FROM products');
+    }
 
     // Obtener todas las variantes de estos productos
     const productIds = productsRes.rows.map(p => p.id);
@@ -249,7 +262,7 @@ router.get('/products', async (req, res) => {
       variants: variants.filter(v => v.product_id === p.id)
     }));
 
-    const totalRes = await db.query('SELECT COUNT(*) FROM products');
+    // const totalRes = await db.query('SELECT COUNT(*) FROM products'); // Already handled above
     const totalPages = Math.ceil(parseInt(totalRes.rows[0].count) / size);
 
     return res.json({ items, page, total_pages: totalPages });
@@ -517,9 +530,9 @@ router.post('/products', authenticateToken, isAdmin, async (req, res) => {
     await client.query('BEGIN');
 
     const productRes = await client.query(
-      `INSERT INTO products (name, image_url, short_description, is_offer, is_new_arrival, technical_specs, inspection_checklist) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [name, image_url, short_description, is_offer, is_new_arrival, technical_specs, inspection_checklist]
+      `INSERT INTO products (name, image_url, short_description, is_offer, is_new_arrival, category, technical_specs, inspection_checklist) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [name, image_url, short_description, is_offer, is_new_arrival, category || 'PHONES', technical_specs, inspection_checklist]
     );
     const productId = productRes.rows[0].id;
 
@@ -558,8 +571,8 @@ router.put('/products/:id', authenticateToken, isAdmin, async (req, res) => {
 
     const productRes = await client.query(
       `UPDATE products SET name=$1, image_url=$2, short_description=$3, is_offer=$4, is_new_arrival=$5, 
-       technical_specs=$6, inspection_checklist=$7 WHERE id=$8 RETURNING *`,
-      [name, image_url, short_description, is_offer, is_new_arrival, technical_specs, inspection_checklist, id]
+       category=$6, technical_specs=$7, inspection_checklist=$8 WHERE id=$9 RETURNING *`,
+      [name, image_url, short_description, is_offer, is_new_arrival, category, technical_specs, inspection_checklist, id]
     );
 
     if (productRes.rows.length === 0) {

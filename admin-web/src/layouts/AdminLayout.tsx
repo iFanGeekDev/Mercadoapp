@@ -63,8 +63,12 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="p-4 border-t border-dark-700">
           <div className="bg-dark-900/50 rounded-2xl p-4 mb-4 border border-dark-700">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-dark-700 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-brand-400" />
+              <div className="w-10 h-10 bg-dark-700 rounded-full flex items-center justify-center overflow-hidden">
+                {user?.avatar_url ? (
+                  <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-5 h-5 text-brand-400" />
+                )}
               </div>
               <div className="overflow-hidden">
                 <p className="text-sm font-bold truncate">{user?.name}</p>

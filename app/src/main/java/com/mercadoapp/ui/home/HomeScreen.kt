@@ -38,21 +38,31 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val pagingItems = viewModel.productsPaged.collectAsLazyPagingItems()
-    HomeScreen(pagingItems = pagingItems, onProductClick = onProductClick,
-        onCartClick = onCartClick, onProfileClick = onProfileClick)
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
+    
+    HomeScreen(
+        pagingItems = pagingItems,
+        selectedCategory = selectedCategory,
+        onCategoryClick = viewModel::onCategorySelected,
+        onProductClick = onProductClick,
+        onCartClick = onCartClick, 
+        onProfileClick = onProfileClick
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     pagingItems: LazyPagingItems<Product>,
+    selectedCategory: String,
+    onCategoryClick: (String) -> Unit,
     onProductClick: (String) -> Unit,
     onCartClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
     val allItems = (0 until pagingItems.itemCount).mapNotNull { pagingItems[it] }
     val offers = allItems.filter { it.isOffer }
-    val categories = listOf("LAPTOPS", "PHONES", "AUDIO", "WEARABLES")
+    val categories = listOf("ALL", "PHONES", "LAPTOPS", "TABLETS", "AUDIO", "WEARABLES")
 
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
@@ -126,12 +136,13 @@ private fun HomeScreen(
                 ) {
                     items(categories) { category ->
                         Surface(
-                            color = if (category == "LAPTOPS") Brand500 else Dark800,
-                            shape = RoundedCornerShape(20.dp)
+                            color = if (category == selectedCategory) Brand500 else Dark800,
+                            shape = RoundedCornerShape(20.dp),
+                            onClick = { onCategoryClick(category) }
                         ) {
                             Text(
                                 text = category,
-                                color = if (category == "LAPTOPS") Color.White else TextSecondary,
+                                color = if (category == selectedCategory) Color.White else TextSecondary,
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)

@@ -7,7 +7,8 @@ import com.mercadoapp.data.remote.mapper.toDomain
 import com.mercadoapp.domain.model.Product
 
 class ProductPagingSource(
-    private val api: MercadoApiService
+    private val api: MercadoApiService,
+    private val category: String? = null
 ) : PagingSource<Int, Product>() {
 
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? =
@@ -19,7 +20,7 @@ class ProductPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
         return try {
-            val response = api.getProducts(page = page, size = params.loadSize)
+            val response = api.getProducts(page = page, size = params.loadSize, category = category)
             LoadResult.Page(
                 data = response.items.map { it.toDomain() },
                 prevKey = if (page == 1) null else page - 1,

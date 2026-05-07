@@ -8,7 +8,8 @@ data class Product(
     val technicalSpecs: TechnicalSpecs,
     val variants: List<ProductVariant>,
     val isOffer: Boolean = false,
-    val isNewArrival: Boolean = false
+    val isNewArrival: Boolean = false,
+    val category: String = "PHONES"
 )
 
 data class TechnicalSpecs(

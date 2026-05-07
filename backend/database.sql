@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS products (
     short_description TEXT,
     is_offer BOOLEAN DEFAULT FALSE,
     is_new_arrival BOOLEAN DEFAULT FALSE,
+    category VARCHAR(50) DEFAULT 'PHONES',
     technical_specs JSONB, -- Estructura: { processor: [], ram_gb: [], storage_gb: [], colors: [] }
     inspection_checklist JSONB, -- Estructura: [{ category, item, status, note }]
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

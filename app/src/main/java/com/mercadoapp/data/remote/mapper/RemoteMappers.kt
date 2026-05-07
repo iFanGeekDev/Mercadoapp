@@ -28,7 +28,8 @@ fun ProductDto.toDomain(): Product = Product(
     technicalSpecs = technicalSpecs.toDomain(),
     variants = variants.map { it.toDomain() },
     isOffer = isOffer,
-    isNewArrival = isNewArrival
+    isNewArrival = isNewArrival,
+    category = category
 )
 
 fun TechnicalSpecsDto.toDomain(): TechnicalSpecs = TechnicalSpecs(

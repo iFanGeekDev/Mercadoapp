@@ -41,7 +41,8 @@ fun Product.toEntity(): ProductEntity = ProductEntity(
         }
     ),
     isOffer = isOffer,
-    isNewArrival = isNewArrival
+    isNewArrival = isNewArrival,
+    category = category
 )
 
 fun ProductEntity.toDomain(): Product {
@@ -70,7 +71,8 @@ fun ProductEntity.toDomain(): Product {
             )
         },
         isOffer = isOffer,
-        isNewArrival = isNewArrival
+        isNewArrival = isNewArrival,
+        category = category
     )
 }
 
