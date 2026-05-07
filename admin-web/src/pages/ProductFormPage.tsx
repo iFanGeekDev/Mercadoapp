@@ -300,7 +300,7 @@ const ProductFormPage: React.FC = () => {
                   className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-8 bg-dark-900/40 p-6 rounded-3xl border border-dark-700/50 hover:border-brand-500/30 transition-all items-end group"
                 >
                   {/* Condición */}
-                  <div className="md:col-span-3 space-y-2">
+                  <div className={`${visibleSpecs.storage ? 'md:col-span-3' : 'md:col-span-4'} space-y-2`}>
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Condición</label>
                     <select 
                       value={variant.condition}
@@ -387,7 +387,7 @@ const ProductFormPage: React.FC = () => {
                   </div>
 
                   {/* Stock */}
-                  <div className="md:col-span-1 space-y-2">
+                  <div className="md:col-span-2 space-y-2">
                     <label className="text-[10px] uppercase font-black text-dark-500 tracking-wider ml-1">Stock</label>
                     <input 
                       type="number" value={variant.stock}
