@@ -115,9 +115,9 @@ const ProductFormPage: React.FC = () => {
       ...formData,
       technical_specs: {
         ...formData.technical_specs,
-        processor: visibleSpecs.processor ? (Array.isArray(formData.technical_specs.processor) ? formData.technical_specs.processor : [formData.technical_specs.processor]) : [],
-        ram_gb: visibleSpecs.ram ? (Array.isArray(formData.technical_specs.ram_gb) ? formData.technical_specs.ram_gb : [formData.technical_specs.ram_gb]) : [],
-        storage_gb: visibleSpecs.storage ? (Array.isArray(formData.technical_specs.storage_gb) ? formData.technical_specs.storage_gb : [formData.technical_specs.storage_gb]) : [],
+        processor: visibleSpecs.processor ? (Array.isArray(formData.technical_specs.processor) ? formData.technical_specs.processor[0] : formData.technical_specs.processor) : "",
+        ram_gb: visibleSpecs.ram ? (Array.isArray(formData.technical_specs.ram_gb) ? formData.technical_specs.ram_gb[0] : formData.technical_specs.ram_gb) : 0,
+        storage_gb: visibleSpecs.storage ? (Array.isArray(formData.technical_specs.storage_gb) ? formData.technical_specs.storage_gb[0] : formData.technical_specs.storage_gb) : 0,
       },
       variants: formData.variants.map(v => ({
         ...v,
