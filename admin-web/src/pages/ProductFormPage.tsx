@@ -136,8 +136,9 @@ const ProductFormPage: React.FC = () => {
         await api.post('/products', cleanedFormData);
       }
       navigate('/dashboard');
-    } catch (error) {
-      alert('Error al guardar producto');
+    } catch (error: any) {
+      const msg = error.response?.data?.error || 'Error desconocido al guardar';
+      alert(`¡Vaya! Algo salió mal:\n\n${msg}`);
     } finally {
       setIsLoading(false);
     }

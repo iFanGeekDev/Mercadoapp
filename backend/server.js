@@ -570,8 +570,8 @@ router.post('/products', authenticateToken, isAdmin, async (req, res) => {
     res.status(201).json(productRes.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error(error);
-    res.status(500).json({ error: 'Error al crear producto' });
+    console.error('[DB_CREATE_ERROR]', error);
+    res.status(500).json({ error: `Error al crear: ${error.message}` });
   } finally {
     client.release();
   }
@@ -617,8 +617,8 @@ router.put('/products/:id', authenticateToken, isAdmin, async (req, res) => {
     res.json(productRes.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error(error);
-    res.status(500).json({ error: 'Error al actualizar producto' });
+    console.error('[DB_UPDATE_ERROR]', error);
+    res.status(500).json({ error: `Error al actualizar: ${error.message}` });
   } finally {
     client.release();
   }
