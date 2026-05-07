@@ -22,6 +22,27 @@ interface Product {
   variants: any[];
 }
 
+const ProductImage = ({ src, alt }: { src: string, alt: string }) => {
+  const [error, setError] = useState(false);
+
+  if (error || !src) {
+    return (
+      <div className="w-14 h-14 rounded-2xl bg-dark-900 flex items-center justify-center border border-dark-700 shadow-inner overflow-hidden">
+        <Package className="w-7 h-7 text-dark-600 opacity-50" />
+      </div>
+    );
+  }
+
+  return (
+    <img 
+      src={src} 
+      className="w-14 h-14 rounded-2xl object-cover bg-dark-900 border border-dark-700 shadow-inner" 
+      alt={alt}
+      onError={() => setError(true)}
+    />
+  );
+};
+
 const ProductsPage: React.FC = () => {
   console.log('🚀 ProductsPage: VERSIÓN CORREGIDA 2.0');
   const [products, setProducts] = useState<Product[]>([]);
@@ -123,10 +144,10 @@ const ProductsPage: React.FC = () => {
                     <td className="px-10 py-6">
                       <div className="flex items-center gap-4">
                         <div className="relative">
-                          <img src={product.image_url} className="w-14 h-14 rounded-2xl object-cover bg-dark-900 border border-dark-700 shadow-inner" alt="" />
+                          <ProductImage src={product.image_url} alt={product.name} />
                           {product.is_offer && (
-                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center border-2 border-dark-800">
-                              <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center border-2 border-dark-800 shadow-lg">
+                              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                             </div>
                           )}
                         </div>
