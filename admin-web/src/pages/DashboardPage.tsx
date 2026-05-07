@@ -151,7 +151,7 @@ const DashboardPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-8 py-5 font-mono text-xs text-dark-400">{order.id}</td>
-                    <td className="px-8 py-5 font-black text-white text-sm">${order.total.toFixed(2)}</td>
+                    <td className="px-8 py-5 font-black text-white text-sm">${Number(order.total || 0).toFixed(2)}</td>
                     <td className="px-8 py-5">
                       <StatusBadge status={order.status} />
                     </td>

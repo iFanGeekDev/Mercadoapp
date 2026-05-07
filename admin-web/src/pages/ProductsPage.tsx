@@ -23,7 +23,7 @@ interface Product {
 }
 
 const ProductsPage: React.FC = () => {
-  console.log('📦 ProductsPage: Rendering...');
+  console.log('🚀 ProductsPage: VERSIÓN CORREGIDA 2.0');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
