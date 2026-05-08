@@ -195,7 +195,7 @@ private fun autoSelectFields(product: Product, selection: ProductSelection): Pro
                     else -> emptySet()
                 }
                 
-                if (uniqueValues.size == 1) {
+                if (uniqueValues.isNotEmpty()) {
                     current = current.copyField(field, uniqueValues.first()!!)
                     changed = true
                 }
