@@ -80,14 +80,6 @@ private fun EditProfileScreen(
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.Close, null)
                     }
-                },
-                actions = {
-                    TextButton(
-                        onClick = { onUpdate(name, email) },
-                        enabled = !state.isLoading && name.isNotBlank() && email.isNotBlank()
-                    ) {
-                        Text("Guardar", fontWeight = FontWeight.Bold)
-                    }
                 }
             )
         }
@@ -117,8 +109,10 @@ private fun EditProfileScreen(
                             modifier = Modifier.fillMaxSize()
                         )
                     } else {
+                        val initial = (state.user?.name ?: state.user?.email ?: "U")
+                            .first().uppercaseChar().toString()
                         Text(
-                            (state.user?.name ?: "U").first().uppercaseChar().toString(),
+                            initial,
                             fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.White
                         )
                     }
@@ -140,10 +134,16 @@ private fun EditProfileScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Nombre completo") },
+                placeholder = { Text("Ej. Juan Pérez") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 leadingIcon = { Icon(Icons.Default.Person, null) },
-                singleLine = true
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Brand500,
+                    focusedLabelColor = Brand500,
+                    focusedLeadingIconColor = Brand500
+                )
             )
 
             Spacer(Modifier.height(16.dp))
@@ -152,21 +152,56 @@ private fun EditProfileScreen(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Correo electrónico") },
+                placeholder = { Text("ejemplo@correo.com") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 leadingIcon = { Icon(Icons.Default.Email, null) },
-                singleLine = true
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Brand500,
+                    focusedLabelColor = Brand500,
+                    focusedLeadingIconColor = Brand500
+                )
             )
 
             if (state.error != null) {
                 Spacer(Modifier.height(16.dp))
-                Text(state.error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    state.error, 
+                    color = MaterialTheme.colorScheme.error, 
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
             }
 
-            if (state.isLoading) {
-                Spacer(Modifier.height(16.dp))
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(32.dp))
+
+            Button(
+                onClick = { onUpdate(name, email) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Brand500,
+                    contentColor = Color.White
+                ),
+                enabled = !state.isLoading && name.isNotBlank() && email.isNotBlank()
+            ) {
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Icon(Icons.Default.Save, null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Guardar Cambios", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
             }
+            
+            Spacer(Modifier.height(20.dp))
         }
     }
 }

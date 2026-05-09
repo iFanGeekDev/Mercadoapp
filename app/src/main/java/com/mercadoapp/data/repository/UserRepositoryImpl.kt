@@ -20,13 +20,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getProfile(): Result<User> = runCatching {
         val dto = apiService.getMe() 
-        User(dto.id, dto.name, dto.email, dto.avatarUrl)
+        User(dto.id, dto.email, dto.name, dto.avatarUrl)
     }
 
     override suspend fun updateProfile(name: String, email: String): Result<User> {
         return try {
             val dto = apiService.updateProfile(UpdateProfileRequestDto(name, email))
-            Result.success(User(dto.id, dto.name, dto.email, dto.avatarUrl))
+            Result.success(User(dto.id, dto.email, dto.name, dto.avatarUrl))
         } catch (e: HttpException) {
             Result.failure(Exception(parseError(e)))
         } catch (e: Exception) {
@@ -60,6 +60,6 @@ class UserRepositoryImpl @Inject constructor(
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("avatar", file.name, requestFile)
         val dto = apiService.uploadAvatar(body)
-        User(dto.id, dto.name, dto.email, dto.avatarUrl)
+        User(dto.id, dto.email, dto.name, dto.avatarUrl)
     }
 }
