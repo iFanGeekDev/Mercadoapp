@@ -9,7 +9,7 @@ import com.mercadoapp.data.local.entity.ProductEntity
 
 @Database(
     entities = [ProductEntity::class, CartItemEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class MercadoDatabase : RoomDatabase() {
