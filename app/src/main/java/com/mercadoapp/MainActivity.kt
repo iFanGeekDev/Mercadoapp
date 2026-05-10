@@ -24,6 +24,7 @@ import com.mercadoapp.ui.order.OrderHistoryRoute
 import com.mercadoapp.ui.profile.EditProfileRoute
 import com.mercadoapp.ui.profile.ChangePasswordRoute
 import com.mercadoapp.ui.favorites.FavoritesRoute
+import com.mercadoapp.ui.product_list.ProductListRoute
 import com.mercadoapp.ui.theme.MercadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -98,6 +99,9 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
         composable("home") {
             HomeRoute(
                 onProductClick = { id -> navController.navigate("detail/$id") },
+                onSearchClick  = { search, cat -> 
+                    navController.navigate("product_list?search=${search ?: ""}&category=${cat ?: "ALL"}")
+                },
                 onCartClick    = { navController.navigate("cart") },
                 onProfileClick = { navController.navigate("profile") }
             )
@@ -164,6 +168,26 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
 
         composable("favorites") {
             FavoritesRoute(
+                onBack = { navController.popBackStack() },
+                onProductClick = { id -> navController.navigate("detail/$id") }
+            )
+        }
+
+        composable(
+            route = "product_list?search={search}&category={category}",
+            arguments = listOf(
+                navArgument("search") { 
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("category") { 
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
+            ProductListRoute(
                 onBack = { navController.popBackStack() },
                 onProductClick = { id -> navController.navigate("detail/$id") }
             )

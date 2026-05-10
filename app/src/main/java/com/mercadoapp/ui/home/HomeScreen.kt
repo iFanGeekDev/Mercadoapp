@@ -33,6 +33,7 @@ import com.mercadoapp.ui.theme.*
 @Composable
 fun HomeRoute(
     onProductClick: (String) -> Unit,
+    onSearchClick: (String?, String?) -> Unit,
     onCartClick: () -> Unit,
     onProfileClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
@@ -47,6 +48,7 @@ fun HomeRoute(
         searchQuery = searchQuery,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategoryClick = viewModel::onCategorySelected,
+        onSearchClick = onSearchClick,
         onProductClick = onProductClick,
         onCartClick = onCartClick, 
         onProfileClick = onProfileClick
@@ -61,6 +63,7 @@ private fun HomeScreen(
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
     onCategoryClick: (String) -> Unit,
+    onSearchClick: (String?, String?) -> Unit,
     onProductClick: (String) -> Unit,
     onCartClick: () -> Unit,
     onProfileClick: () -> Unit
@@ -128,6 +131,12 @@ private fun HomeScreen(
                             }
                         }
                     },
+                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                        imeAction = androidx.compose.ui.text.input.ImeAction.Search
+                    ),
+                    keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+                        onSearch = { onSearchClick(searchQuery, null) }
+                    ),
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -196,8 +205,7 @@ private fun HomeScreen(
                                 item = item,
                                 modifier = Modifier.width(140.dp),
                                 onClick = {
-                                    onSearchQueryChanged(item.searchQuery ?: "")
-                                    item.category?.let { onCategoryClick(it) }
+                                    onSearchClick(item.searchQuery, item.category)
                                 }
                             )
                         }
@@ -331,12 +339,36 @@ private fun MostWantedCard(
                             CircleShape
                         )
                 )
+                
+                var isLoading by remember { mutableStateOf(true) }
+                var isError by remember { mutableStateOf(false) }
+
                 AsyncImage(
                     model = item.imageUrl,
                     contentDescription = item.title,
+                    onLoading = { isLoading = true; isError = false },
+                    onSuccess = { isLoading = false; isError = false },
+                    onError = { isLoading = false; isError = true },
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxHeight().padding(bottom = 8.dp)
                 )
+
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Brand500,
+                        strokeWidth = 2.dp
+                    )
+                }
+
+                if (isError) {
+                    Icon(
+                        Icons.Default.Warning,
+                        null,
+                        tint = TextSecondary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
             Text(
                 text = item.title,
