@@ -17,8 +17,8 @@ class ProductListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val searchQuery: String = savedStateHandle["search"] ?: ""
-    val category: String? = savedStateHandle["category"]?.let { if (it == "ALL") null else it }
+    val searchQuery: String = savedStateHandle.get<String>("search") ?: ""
+    val category: String? = savedStateHandle.get<String>("category")?.let { if (it == "ALL") null else it }
 
     val productsPaged: Flow<PagingData<Product>> = repository.getProductsPaged(
         category = category,
