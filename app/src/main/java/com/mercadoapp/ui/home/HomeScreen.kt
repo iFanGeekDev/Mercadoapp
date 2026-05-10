@@ -105,14 +105,6 @@ private fun HomeScreen(
             }
         }
     ) { padding ->
-
-        if (pagingItems.loadState.refresh is LoadState.Loading && searchQuery.isEmpty()) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Brand500)
-            }
-            return@Scaffold
-        }
-
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -214,7 +206,13 @@ private fun HomeScreen(
             }
 
             // Flash Deal
-            if (offers.isNotEmpty()) {
+            if (pagingItems.loadState.refresh is LoadState.Loading) {
+                item {
+                    Box(Modifier.fillMaxWidth().height(150.dp), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = Brand500)
+                    }
+                }
+            } else if (offers.isNotEmpty()) {
                 item {
                     Text("Oferta Relámpago", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
                     Spacer(Modifier.height(12.dp))
@@ -234,10 +232,18 @@ private fun HomeScreen(
                 Text("Para Ti", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
             }
             
-            items(count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }) { index ->
-                val product = pagingItems[index]
-                if (product != null && !product.isOffer) {
-                    ForYouCard(product = product, onClick = { onProductClick(product.id) }, modifier = Modifier.padding(horizontal = 24.dp))
+            if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
+                item {
+                    Box(Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) {
+                        Text("No se encontraron productos", color = TextSecondary)
+                    }
+                }
+            } else {
+                items(count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }) { index ->
+                    val product = pagingItems[index]
+                    if (product != null && !product.isOffer) {
+                        ForYouCard(product = product, onClick = { onProductClick(product.id) }, modifier = Modifier.padding(horizontal = 24.dp))
+                    }
                 }
             }
             
