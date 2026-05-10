@@ -306,14 +306,31 @@ private fun MostWantedCard(
         onClick = onClick,
         modifier = modifier.height(160.dp),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFD4F467))
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
+        colors = CardDefaults.cardColors(containerColor = Dark800)
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                // Subtle glow behind the image
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .background(
+                            Brush.radialGradient(
+                                listOf(Brand500.copy(alpha = 0.1f), Color.Transparent)
+                            ),
+                            CircleShape
+                        )
+                )
                 AsyncImage(
                     model = item.imageUrl,
                     contentDescription = item.title,
@@ -324,8 +341,8 @@ private fun MostWantedCard(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.labelLarge,
-                color = Color(0xFF1A1A1A),
-                fontWeight = FontWeight.ExtraBold,
+                color = TextPrimary,
+                fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
