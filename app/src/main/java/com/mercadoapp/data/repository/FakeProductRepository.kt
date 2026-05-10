@@ -95,10 +95,19 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
     )
 
     /** Used by HomeScreen via Paging 3 — returns a single page with all fake products */
-    override fun getProductsPaged(category: String?): Flow<PagingData<Product>> {
-        val filtered = if (category != null && category != "ALL") {
-            products.filter { it.category == category }
-        } else products
+    override fun getProductsPaged(category: String?, search: String?): Flow<PagingData<Product>> {
+        val filtered = products.filter { product ->
+            val matchesCategory = if (category != null && category != "ALL") {
+                product.category == category
+            } else true
+
+            val matchesSearch = if (!search.isNullOrBlank()) {
+                product.name.contains(search, ignoreCase = true) ||
+                        product.shortDescription.contains(search, ignoreCase = true)
+            } else true
+
+            matchesCategory && matchesSearch
+        }
         return flowOf(PagingData.from(filtered))
     }
 
