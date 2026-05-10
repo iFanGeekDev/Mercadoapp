@@ -164,6 +164,57 @@ private fun HomeScreen(
                 }
             }
 
+            // Shop our most wanted
+            item {
+                Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+                    Text(
+                        "Compra lo más buscado", 
+                        style = MaterialTheme.typography.titleLarge, 
+                        fontWeight = FontWeight.Bold, 
+                        color = Color.White
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    
+                    val gridItems = listOf(
+                        MostWantedItem("Grandes ofertas", "https://img.freepik.com/free-vector/shopping-basket-full-items-vector-illustration_1284-72418.jpg", "offer"),
+                        MostWantedItem("iPhone", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-card-40-iphone15pro-202309?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1693086290141", "iPhone", "PHONES"),
+                        MostWantedItem("MacBook", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-silver-config-202403?wid=840&hei=508&fmt=jpeg&qlt=90&.v=1708451848316", "MacBook", "LAPTOPS"),
+                        MostWantedItem("iPad", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ipad-card-40-ipad-202210?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1664402636515", "iPad", "TABLETS"),
+                        MostWantedItem("Videojuegos", "https://m.media-amazon.com/images/I/5105Sog6YGL._AC_SL1500_.jpg", "consola"),
+                        MostWantedItem("Android", "https://images.samsung.com/is/image/samsung/p6pim/pe/2401/gallery/pe-galaxy-s24-s928-sm-s928bztqpeo-539281788?$650_519_PNG$", "Samsung"),
+                        MostWantedItem("Laptops Windows", "https://images-na.ssl-images-amazon.com/images/I/81sh9kn8oHL._AC_SL1500_.jpg", "Windows", "LAPTOPS"),
+                        MostWantedItem("Airpods", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1632861342000", "Airpods", "AUDIO")
+                    )
+
+                    // 2x4 Grid using Rows and Columns for better control in LazyColumn
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        for (i in 0 until 4) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                val item1 = gridItems[i * 2]
+                                val item2 = gridItems[i * 2 + 1]
+                                
+                                MostWantedCard(
+                                    item = item1,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        onSearchQueryChanged(item1.searchQuery ?: "")
+                                        item1.category?.let { onCategoryClick(it) }
+                                    }
+                                )
+                                MostWantedCard(
+                                    item = item2,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        onSearchQueryChanged(item2.searchQuery ?: "")
+                                        item2.category?.let { onCategoryClick(it) }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
             // Flash Deal
             if (offers.isNotEmpty()) {
                 item {
@@ -244,6 +295,50 @@ private fun ForYouCard(product: Product, onClick: () -> Unit, modifier: Modifier
                 Text("$${"%.2f".format(minPrice)}", style = MaterialTheme.typography.titleMedium, color = Accent500, fontWeight = FontWeight.Bold)
             }
             Icon(Icons.Default.FavoriteBorder, null, tint = TextSecondary)
+        }
+    }
+}
+
+data class MostWantedItem(
+    val title: String,
+    val imageUrl: String,
+    val searchQuery: String? = null,
+    val category: String? = null
+)
+
+@Composable
+private fun MostWantedCard(
+    item: MostWantedItem,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier.height(160.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFD4F467))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                AsyncImage(
+                    model = item.imageUrl,
+                    contentDescription = item.title,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxHeight().padding(bottom = 8.dp)
+                )
+            }
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.labelLarge,
+                color = Color(0xFF1A1A1A),
+                fontWeight = FontWeight.ExtraBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
