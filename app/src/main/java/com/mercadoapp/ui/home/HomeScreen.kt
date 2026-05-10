@@ -340,35 +340,14 @@ private fun MostWantedCard(
                         )
                 )
                 
-                var isLoading by remember { mutableStateOf(true) }
-                var isError by remember { mutableStateOf(false) }
-
                 AsyncImage(
                     model = item.imageUrl,
                     contentDescription = item.title,
-                    onLoading = { isLoading = true; isError = false },
-                    onSuccess = { isLoading = false; isError = false },
-                    onError = { isLoading = false; isError = true },
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp))
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)),
+                    error = androidx.compose.ui.graphics.painter.ColorPainter(Dark700),
+                    placeholder = androidx.compose.ui.graphics.painter.ColorPainter(Dark800)
                 )
-
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Brand500,
-                        strokeWidth = 2.dp
-                    )
-                }
-
-                if (isError) {
-                    Icon(
-                        Icons.Default.Warning,
-                        null,
-                        tint = TextSecondary,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
             }
             Text(
                 text = item.title,
