@@ -176,14 +176,14 @@ private fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     
                     val gridItems = listOf(
-                        MostWantedItem("Grandes ofertas", "https://static.vecteezy.com/system/resources/previews/011/994/022/original/3d-render-online-shopping-bag-promotion-sale-buy-now-discount-on-transparent-background-png.png", "offer"),
-                        MostWantedItem("iPhone", "https://static.vecteezy.com/system/resources/previews/021/495/996/original/iphone-14-pro-max-transparent-background-free-png.png", "iPhone", "PHONES"),
-                        MostWantedItem("MacBook", "https://static.vecteezy.com/system/resources/previews/022/270/202/original/laptop-macbook-pro-transparent-background-free-png.png", "MacBook", "LAPTOPS"),
-                        MostWantedItem("iPad", "https://static.vecteezy.com/system/resources/previews/022/270/225/original/tablet-ipad-pro-transparent-background-free-png.png", "iPad", "TABLETS"),
-                        MostWantedItem("Videojuegos", "https://static.vecteezy.com/system/resources/previews/022/270/170/original/console-playstation-5-transparent-background-free-png.png", "consola"),
-                        MostWantedItem("Android", "https://static.vecteezy.com/system/resources/previews/021/633/276/original/samsung-galaxy-s23-ultra-transparent-background-free-png.png", "Samsung"),
-                        MostWantedItem("Laptops Windows", "https://static.vecteezy.com/system/resources/previews/022/270/215/original/laptop-dell-xps-transparent-background-free-png.png", "Windows", "LAPTOPS"),
-                        MostWantedItem("Airpods", "https://static.vecteezy.com/system/resources/previews/022/270/188/original/earphones-airpods-pro-transparent-background-free-png.png", "Airpods", "AUDIO")
+                        MostWantedItem("Grandes ofertas", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Shopping_cart_icon.png/512px-Shopping_cart_icon.png", "offer"),
+                        MostWantedItem("iPhone", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/IPhone_13_Pro_Vector.svg/512px-IPhone_13_Pro_Vector.svg.png", "iPhone", "PHONES"),
+                        MostWantedItem("MacBook", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/MacBook_Pro_16-inch_2021_Space_Gray_with_macOS_Monterey.png/512px-MacBook_Pro_16-inch_2021_Space_Gray_with_macOS_Monterey.png", "MacBook", "LAPTOPS"),
+                        MostWantedItem("iPad", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/IPad_Air_4th_Gen_Space_Gray.png/512px-IPad_Air_4th_Gen_Space_Gray.png", "iPad", "TABLETS"),
+                        MostWantedItem("Videojuegos", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/512px-PlayStation_5_and_DualSense_with_transparent_background.png", "consola"),
+                        MostWantedItem("Android", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Samsung_Galaxy_S23_Ultra_Cream.png/512px-Samsung_Galaxy_S23_Ultra_Cream.png", "Samsung"),
+                        MostWantedItem("Laptops Windows", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Dell_XPS_13_9310_Touch.png/512px-Dell_XPS_13_9310_Touch.png", "Windows", "LAPTOPS"),
+                        MostWantedItem("Airpods", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/AirPods_Pro.png/512px-AirPods_Pro.png", "Airpods", "AUDIO")
                     )
 
                     // Horizontal scrollable list
