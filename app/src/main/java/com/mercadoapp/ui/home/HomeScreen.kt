@@ -186,30 +186,20 @@ private fun HomeScreen(
                         MostWantedItem("Airpods", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1632861342000", "Airpods", "AUDIO")
                     )
 
-                    // 2x4 Grid using Rows and Columns for better control in LazyColumn
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        for (i in 0 until 4) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                val item1 = gridItems[i * 2]
-                                val item2 = gridItems[i * 2 + 1]
-                                
-                                MostWantedCard(
-                                    item = item1,
-                                    modifier = Modifier.weight(1f),
-                                    onClick = {
-                                        onSearchQueryChanged(item1.searchQuery ?: "")
-                                        item1.category?.let { onCategoryClick(it) }
-                                    }
-                                )
-                                MostWantedCard(
-                                    item = item2,
-                                    modifier = Modifier.weight(1f),
-                                    onClick = {
-                                        onSearchQueryChanged(item2.searchQuery ?: "")
-                                        item2.category?.let { onCategoryClick(it) }
-                                    }
-                                )
-                            }
+                    // Horizontal scrollable list
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(bottom = 8.dp)
+                    ) {
+                        items(gridItems) { item ->
+                            MostWantedCard(
+                                item = item,
+                                modifier = Modifier.width(140.dp),
+                                onClick = {
+                                    onSearchQueryChanged(item.searchQuery ?: "")
+                                    item.category?.let { onCategoryClick(it) }
+                                }
+                            )
                         }
                     }
                 }
