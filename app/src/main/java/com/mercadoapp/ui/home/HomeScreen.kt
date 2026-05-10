@@ -195,7 +195,7 @@ private fun HomeScreen(
                         items(gridItems) { item ->
                             MostWantedCard(
                                 item = item,
-                                modifier = Modifier.width(140.dp),
+                                modifier = Modifier.width(150.dp),
                                 onClick = {
                                     onSearchClick(item.searchQuery, item.category)
                                 }
@@ -357,7 +357,7 @@ private fun MostWantedCard(
             }
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelMedium.copy(fontSize = 12.sp),
                 color = TextPrimary,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
