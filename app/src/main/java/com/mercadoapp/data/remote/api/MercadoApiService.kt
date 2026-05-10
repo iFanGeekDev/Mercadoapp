@@ -24,7 +24,8 @@ interface MercadoApiService {
     suspend fun getProducts(
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 20,
-        @Query("category") category: String? = null
+        @Query("category") category: String? = null,
+        @Query("search") search: String? = null
     ): PagedProductsDto
 
     @GET("products/{id}")

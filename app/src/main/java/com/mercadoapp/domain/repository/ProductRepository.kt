@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
     /** Paged catalog — primary data source for HomeScreen */
-    fun getProductsPaged(category: String? = null): Flow<PagingData<Product>>
+    fun getProductsPaged(category: String? = null, search: String? = null): Flow<PagingData<Product>>
 
     /** Non-paged list for legacy/offline use */
     suspend fun getHomeFeed(): List<Product>

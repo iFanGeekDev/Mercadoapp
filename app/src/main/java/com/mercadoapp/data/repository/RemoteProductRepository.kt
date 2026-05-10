@@ -21,9 +21,9 @@ class RemoteProductRepository @Inject constructor(
     private val productDao: ProductDao
 ) : ProductRepository {
 
-    override fun getProductsPaged(category: String?): Flow<PagingData<Product>> = Pager(
+    override fun getProductsPaged(category: String?, search: String?): Flow<PagingData<Product>> = Pager(
         config = PagingConfig(pageSize = 20, enablePlaceholders = false),
-        pagingSourceFactory = { ProductPagingSource(api, category) }
+        pagingSourceFactory = { ProductPagingSource(api, category, search) }
     ).flow
 
     override suspend fun getHomeFeed(): List<Product> {

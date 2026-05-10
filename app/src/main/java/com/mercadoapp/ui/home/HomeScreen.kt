@@ -39,10 +39,13 @@ fun HomeRoute(
 ) {
     val pagingItems = viewModel.productsPaged.collectAsLazyPagingItems()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
     
     HomeScreen(
         pagingItems = pagingItems,
         selectedCategory = selectedCategory,
+        searchQuery = searchQuery,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategoryClick = viewModel::onCategorySelected,
         onProductClick = onProductClick,
         onCartClick = onCartClick, 
@@ -55,6 +58,8 @@ fun HomeRoute(
 private fun HomeScreen(
     pagingItems: LazyPagingItems<Product>,
     selectedCategory: String,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
     onCategoryClick: (String) -> Unit,
     onProductClick: (String) -> Unit,
     onCartClick: () -> Unit,
@@ -98,7 +103,7 @@ private fun HomeScreen(
         }
     ) { padding ->
 
-        if (pagingItems.loadState.refresh is LoadState.Loading) {
+        if (pagingItems.loadState.refresh is LoadState.Loading && searchQuery.isEmpty()) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Brand500)
             }
@@ -112,10 +117,17 @@ private fun HomeScreen(
             // Search Bar
             item {
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = searchQuery,
+                    onValueChange = onSearchQueryChanged,
                     placeholder = { Text("Buscar productos...", color = TextSecondary) },
                     leadingIcon = { Icon(Icons.Default.Search, null, tint = TextSecondary) },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { onSearchQueryChanged("") }) {
+                                Icon(Icons.Default.Close, null, tint = TextSecondary)
+                            }
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(

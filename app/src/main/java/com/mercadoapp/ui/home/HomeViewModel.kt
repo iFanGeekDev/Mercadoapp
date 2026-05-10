@@ -19,13 +19,28 @@ class HomeViewModel @Inject constructor(
     private val _selectedCategory = MutableStateFlow("ALL")
     val selectedCategory: StateFlow<String> = _selectedCategory.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
     /** Paged product stream for the full catalog */
     @OptIn(ExperimentalCoroutinesApi::class)
-    val productsPaged: Flow<PagingData<Product>> = _selectedCategory.flatMapLatest { category ->
-        repository.getProductsPaged(if (category == "ALL") null else category)
+    val productsPaged: Flow<PagingData<Product>> = combine(
+        _selectedCategory,
+        _searchQuery.debounce(500)
+    ) { category, query ->
+        category to query
+    }.flatMapLatest { (category, query) ->
+        repository.getProductsPaged(
+            category = if (category == "ALL") null else category,
+            search = if (query.isBlank()) null else query
+        )
     }.cachedIn(viewModelScope)
 
     fun onCategorySelected(category: String) {
         _selectedCategory.value = category
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
     }
 }
