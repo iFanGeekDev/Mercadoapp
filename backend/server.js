@@ -245,24 +245,29 @@ router.get('/products', async (req, res) => {
     const size = parseInt(req.query.size) || 20;
     const offset = (page - 1) * size;
 
-    // Obtener productos paginados con filtro opcional de categoría
+    // Obtener productos paginados con filtro opcional de categoría y búsqueda
     const category = req.query.category;
-    let productsRes;
-    let totalRes;
+    const search = req.query.search;
+    
+    let whereClause = 'WHERE 1=1';
+    let params = [];
+    let pIdx = 1;
 
     if (category && category !== 'ALL') {
-      productsRes = await db.query(
-        'SELECT * FROM products WHERE category = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
-        [category, size, offset]
-      );
-      totalRes = await db.query('SELECT COUNT(*) FROM products WHERE category = $1', [category]);
-    } else {
-      productsRes = await db.query(
-        'SELECT * FROM products ORDER BY created_at DESC LIMIT $1 OFFSET $2',
-        [size, offset]
-      );
-      totalRes = await db.query('SELECT COUNT(*) FROM products');
+      whereClause += ` AND category = $${pIdx++}`;
+      params.push(category);
     }
+
+    if (search) {
+      whereClause += ` AND name ILIKE $${pIdx++}`;
+      params.push(`%${search}%`);
+    }
+
+    const productsQuery = `SELECT * FROM products ${whereClause} ORDER BY created_at DESC LIMIT $${pIdx++} OFFSET $${pIdx++}`;
+    const productsRes = await db.query(productsQuery, [...params, size, offset]);
+
+    const totalQuery = `SELECT COUNT(*) FROM products ${whereClause}`;
+    const totalRes = await db.query(totalQuery, params);
 
     // Obtener todas las variantes de estos productos
     const productIds = productsRes.rows.map(p => p.id);
