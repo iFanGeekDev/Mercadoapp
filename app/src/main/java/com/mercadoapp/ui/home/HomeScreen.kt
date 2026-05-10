@@ -176,14 +176,14 @@ private fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     
                     val gridItems = listOf(
-                        MostWantedItem("Grandes ofertas", "https://img.freepik.com/free-vector/special-offer-modern-sale-banner-template_1017-20667.jpg", "offer"),
-                        MostWantedItem("iPhone", "https://www.apple.com/v/iphone/home/bu/images/overview/select/iphone_15_pro__dqll8m8swp6u_large.png", "iPhone", "PHONES"),
-                        MostWantedItem("MacBook", "https://www.apple.com/v/macbook-pro/aj/images/overview/design/design_macbook_pro_14_16__pnbw14u43pmu_large.png", "MacBook", "LAPTOPS"),
-                        MostWantedItem("iPad", "https://www.apple.com/v/ipad/home/ch/images/overview/select/ipad_pro__686884390038_large.png", "iPad", "TABLETS"),
-                        MostWantedItem("Videojuegos", "https://gmedia.playstation.com/is/image/SIERPC/playstation-5-digital-edition-console-image-block-01-en-21jul23", "consola"),
-                        MostWantedItem("Android", "https://images.samsung.com/is/image/samsung/p6pim/pe/2401/gallery/pe-galaxy-s24-s928-sm-s928bztqpeo-539281788?$650_519_PNG$", "Samsung"),
-                        MostWantedItem("Laptops Windows", "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9315/media-gallery/laptop-xps-13-9315-touch-blue-gallery-3.png", "Windows", "LAPTOPS"),
-                        MostWantedItem("Airpods", "https://www.apple.com/v/airpods/shared/overview/images/overview/airpods_pro_case__m03ahtun8t6u_large.png", "Airpods", "AUDIO")
+                        MostWantedItem("Grandes ofertas", "https://static.vecteezy.com/system/resources/previews/011/994/022/original/3d-render-online-shopping-bag-promotion-sale-buy-now-discount-on-transparent-background-png.png", "offer"),
+                        MostWantedItem("iPhone", "https://static.vecteezy.com/system/resources/previews/021/495/996/original/iphone-14-pro-max-transparent-background-free-png.png", "iPhone", "PHONES"),
+                        MostWantedItem("MacBook", "https://static.vecteezy.com/system/resources/previews/022/270/202/original/laptop-macbook-pro-transparent-background-free-png.png", "MacBook", "LAPTOPS"),
+                        MostWantedItem("iPad", "https://static.vecteezy.com/system/resources/previews/022/270/225/original/tablet-ipad-pro-transparent-background-free-png.png", "iPad", "TABLETS"),
+                        MostWantedItem("Videojuegos", "https://static.vecteezy.com/system/resources/previews/022/270/170/original/console-playstation-5-transparent-background-free-png.png", "consola"),
+                        MostWantedItem("Android", "https://static.vecteezy.com/system/resources/previews/021/633/276/original/samsung-galaxy-s23-ultra-transparent-background-free-png.png", "Samsung"),
+                        MostWantedItem("Laptops Windows", "https://static.vecteezy.com/system/resources/previews/022/270/215/original/laptop-dell-xps-transparent-background-free-png.png", "Windows", "LAPTOPS"),
+                        MostWantedItem("Airpods", "https://static.vecteezy.com/system/resources/previews/022/270/188/original/earphones-airpods-pro-transparent-background-free-png.png", "Airpods", "AUDIO")
                     )
 
                     // Horizontal scrollable list
