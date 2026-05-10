@@ -185,14 +185,14 @@ private fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     
                     val gridItems = listOf(
-                        MostWantedItem("Grandes ofertas", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Shopping_cart_icon.png/512px-Shopping_cart_icon.png", "offer"),
-                        MostWantedItem("iPhone", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/IPhone_13_Pro_Vector.svg/512px-IPhone_13_Pro_Vector.svg.png", "iPhone", "PHONES"),
-                        MostWantedItem("MacBook", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/MacBook_Pro_16-inch_2021_Space_Gray_with_macOS_Monterey.png/512px-MacBook_Pro_16-inch_2021_Space_Gray_with_macOS_Monterey.png", "MacBook", "LAPTOPS"),
-                        MostWantedItem("iPad", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/IPad_Air_4th_Gen_Space_Gray.png/512px-IPad_Air_4th_Gen_Space_Gray.png", "iPad", "TABLETS"),
-                        MostWantedItem("Videojuegos", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/512px-PlayStation_5_and_DualSense_with_transparent_background.png", "consola"),
-                        MostWantedItem("Android", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Samsung_Galaxy_S23_Ultra_Cream.png/512px-Samsung_Galaxy_S23_Ultra_Cream.png", "Samsung"),
-                        MostWantedItem("Laptops Windows", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Dell_XPS_13_9310_Touch.png/512px-Dell_XPS_13_9310_Touch.png", "Windows", "LAPTOPS"),
-                        MostWantedItem("Airpods", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/AirPods_Pro.png/512px-AirPods_Pro.png", "Airpods", "AUDIO")
+                        MostWantedItem("Grandes ofertas", "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600", "offer"),
+                        MostWantedItem("iPhone", "https://images.unsplash.com/photo-1696446701796-da61225697cc?w=600", "iPhone", "PHONES"),
+                        MostWantedItem("MacBook", "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600", "MacBook", "LAPTOPS"),
+                        MostWantedItem("iPad", "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600", "iPad", "TABLETS"),
+                        MostWantedItem("Videojuegos", "https://images.unsplash.com/photo-1605906302474-f60df68a619e?w=600", "consola"),
+                        MostWantedItem("Android", "https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=600", "Samsung"),
+                        MostWantedItem("Laptops Windows", "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600", "Windows", "LAPTOPS"),
+                        MostWantedItem("Airpods", "https://images.unsplash.com/photo-1588423770674-f2855ee4735a?w=600", "Airpods", "AUDIO")
                     )
 
                     // Horizontal scrollable list
@@ -349,8 +349,8 @@ private fun MostWantedCard(
                     onLoading = { isLoading = true; isError = false },
                     onSuccess = { isLoading = false; isError = false },
                     onError = { isLoading = false; isError = true },
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxHeight().padding(bottom = 8.dp)
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp))
                 )
 
                 if (isLoading) {
