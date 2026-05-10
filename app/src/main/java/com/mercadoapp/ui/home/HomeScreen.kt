@@ -176,14 +176,14 @@ private fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     
                     val gridItems = listOf(
-                        MostWantedItem("Grandes ofertas", "https://img.freepik.com/free-vector/shopping-basket-full-items-vector-illustration_1284-72418.jpg", "offer"),
-                        MostWantedItem("iPhone", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-card-40-iphone15pro-202309?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1693086290141", "iPhone", "PHONES"),
-                        MostWantedItem("MacBook", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-silver-config-202403?wid=840&hei=508&fmt=jpeg&qlt=90&.v=1708451848316", "MacBook", "LAPTOPS"),
-                        MostWantedItem("iPad", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ipad-card-40-ipad-202210?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1664402636515", "iPad", "TABLETS"),
-                        MostWantedItem("Videojuegos", "https://m.media-amazon.com/images/I/5105Sog6YGL._AC_SL1500_.jpg", "consola"),
+                        MostWantedItem("Grandes ofertas", "https://img.freepik.com/free-vector/special-offer-modern-sale-banner-template_1017-20667.jpg", "offer"),
+                        MostWantedItem("iPhone", "https://www.apple.com/v/iphone/home/bu/images/overview/select/iphone_15_pro__dqll8m8swp6u_large.png", "iPhone", "PHONES"),
+                        MostWantedItem("MacBook", "https://www.apple.com/v/macbook-pro/aj/images/overview/design/design_macbook_pro_14_16__pnbw14u43pmu_large.png", "MacBook", "LAPTOPS"),
+                        MostWantedItem("iPad", "https://www.apple.com/v/ipad/home/ch/images/overview/select/ipad_pro__686884390038_large.png", "iPad", "TABLETS"),
+                        MostWantedItem("Videojuegos", "https://gmedia.playstation.com/is/image/SIERPC/playstation-5-digital-edition-console-image-block-01-en-21jul23", "consola"),
                         MostWantedItem("Android", "https://images.samsung.com/is/image/samsung/p6pim/pe/2401/gallery/pe-galaxy-s24-s928-sm-s928bztqpeo-539281788?$650_519_PNG$", "Samsung"),
-                        MostWantedItem("Laptops Windows", "https://images-na.ssl-images-amazon.com/images/I/81sh9kn8oHL._AC_SL1500_.jpg", "Windows", "LAPTOPS"),
-                        MostWantedItem("Airpods", "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1632861342000", "Airpods", "AUDIO")
+                        MostWantedItem("Laptops Windows", "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/xps-notebooks/xps-13-9315/media-gallery/laptop-xps-13-9315-touch-blue-gallery-3.png", "Windows", "LAPTOPS"),
+                        MostWantedItem("Airpods", "https://www.apple.com/v/airpods/shared/overview/images/overview/airpods_pro_case__m03ahtun8t6u_large.png", "Airpods", "AUDIO")
                     )
 
                     // Horizontal scrollable list
