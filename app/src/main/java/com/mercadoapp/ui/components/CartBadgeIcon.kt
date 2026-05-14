@@ -23,30 +23,34 @@ fun CartBadgeIcon(
     badgeColor: Color = Color.Red,
     iconTint: Color = Color.White
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.TopEnd) {
+    Box(modifier = modifier.size(32.dp), contentAlignment = Alignment.Center) {
         Icon(
             imageVector = icon,
             contentDescription = "Cart",
             tint = iconTint,
-            modifier = Modifier.padding(end = 4.dp, top = 4.dp)
+            modifier = Modifier.size(22.dp)
         )
         
         AnimatedVisibility(
             visible = count > 0,
             enter = scaleIn() + fadeIn(),
-            exit = scaleOut() + fadeOut()
+            exit = scaleOut() + fadeOut(),
+            modifier = Modifier.align(Alignment.TopEnd)
         ) {
             Box(
                 modifier = Modifier
-                    .size(18.dp)
+                    .offset(x = (-2).dp, y = 2.dp)
+                    .size(16.dp)
                     .background(badgeColor, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = if (count > 99) "99+" else count.toString(),
                     color = Color.White,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 9.sp,
+                    lineHeight = 9.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
             }
         }
