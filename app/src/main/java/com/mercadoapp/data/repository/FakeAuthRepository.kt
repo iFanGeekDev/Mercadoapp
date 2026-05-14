@@ -43,6 +43,10 @@ class FakeAuthRepository @Inject constructor() : AuthRepository {
         _authState.value = AuthState.Unauthenticated
     }
 
+    override suspend fun updateUser(user: User) {
+        _authState.value = AuthState.Authenticated(user)
+    }
+
     private fun demoUser() = User(
         id = "demo-001",
         email = DEMO_EMAIL,
