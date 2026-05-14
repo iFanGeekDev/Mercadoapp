@@ -91,7 +91,7 @@ private fun ProductDetailScreen(
             if (options.selectedVariant != null) {
                 val variant = options.selectedVariant
                 Surface(color = Dark800, border = BorderStroke(1.dp, Dark700)) {
-                    Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -107,9 +107,9 @@ private fun ProductDetailScreen(
                             )
                         }
                         
-                        Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(12.dp))
                         
-                        Box(modifier = Modifier.fillMaxWidth().height(56.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(16.dp))) {
+                        Box(modifier = Modifier.fillMaxWidth().height(52.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(12.dp))) {
                             Button(
                                 onClick = { viewModel.addToCart() },
                                 enabled = variant.stock >= state.quantity && !state.cartAdded,

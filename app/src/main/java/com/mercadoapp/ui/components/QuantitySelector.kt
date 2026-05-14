@@ -27,9 +27,9 @@ fun QuantitySelector(
     Row(
         modifier = modifier
             .background(containerColor, RoundedCornerShape(12.dp))
-            .padding(horizontal = 4.dp, vertical = 4.dp),
+            .padding(horizontal = 2.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         IconButton(
             onClick = { if (quantity > 1) onQuantityChange(quantity - 1) },
