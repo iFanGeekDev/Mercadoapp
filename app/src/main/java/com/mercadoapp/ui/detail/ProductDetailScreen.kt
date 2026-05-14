@@ -1,6 +1,7 @@
 package com.mercadoapp.ui.detail
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -89,8 +90,8 @@ private fun ProductDetailScreen(
         bottomBar = {
             if (options.selectedVariant != null) {
                 val variant = options.selectedVariant
-                Surface(color = Dark800, shadowElevation = 16.dp, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)) {
-                    Column(modifier = Modifier.padding(24.dp)) {
+                Surface(color = Dark800, border = BorderStroke(1.dp, Dark700)) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
