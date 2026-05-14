@@ -132,7 +132,7 @@ private fun ProductDetailScreen(
 
         val product = state.product ?: return@Scaffold
 
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState())) {
             // Product Image Hero
             Box(modifier = Modifier.fillMaxWidth().height(360.dp).padding(horizontal = 24.dp)) {
                 AsyncImage(model = product.imageUrl, contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
@@ -165,7 +165,7 @@ private fun ProductDetailScreen(
                     SelectableChips(title = "Almacenamiento", options = options.storages, selected = state.selection.storageGb, toLabel = { "$it GB" }, onSelected = viewModel::onStorageChanged)
                     SelectableChips(title = "Color", options = options.colors, selected = state.selection.color, toLabel = { it }, onSelected = viewModel::onColorChanged)
 
-                    Spacer(Modifier.height(100.dp))
+                    Spacer(Modifier.height(32.dp))
                 }
             }
         }
