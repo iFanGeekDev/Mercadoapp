@@ -1,6 +1,7 @@
 package com.mercadoapp.data.repository;
 
 import com.mercadoapp.data.remote.api.MercadoApiService;
+import com.mercadoapp.domain.repository.AuthRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -26,20 +27,26 @@ import javax.inject.Provider;
 public final class UserRepositoryImpl_Factory implements Factory<UserRepositoryImpl> {
   private final Provider<MercadoApiService> apiServiceProvider;
 
-  public UserRepositoryImpl_Factory(Provider<MercadoApiService> apiServiceProvider) {
+  private final Provider<AuthRepository> authRepositoryProvider;
+
+  public UserRepositoryImpl_Factory(Provider<MercadoApiService> apiServiceProvider,
+      Provider<AuthRepository> authRepositoryProvider) {
     this.apiServiceProvider = apiServiceProvider;
+    this.authRepositoryProvider = authRepositoryProvider;
   }
 
   @Override
   public UserRepositoryImpl get() {
-    return newInstance(apiServiceProvider.get());
+    return newInstance(apiServiceProvider.get(), authRepositoryProvider.get());
   }
 
-  public static UserRepositoryImpl_Factory create(Provider<MercadoApiService> apiServiceProvider) {
-    return new UserRepositoryImpl_Factory(apiServiceProvider);
+  public static UserRepositoryImpl_Factory create(Provider<MercadoApiService> apiServiceProvider,
+      Provider<AuthRepository> authRepositoryProvider) {
+    return new UserRepositoryImpl_Factory(apiServiceProvider, authRepositoryProvider);
   }
 
-  public static UserRepositoryImpl newInstance(MercadoApiService apiService) {
-    return new UserRepositoryImpl(apiService);
+  public static UserRepositoryImpl newInstance(MercadoApiService apiService,
+      AuthRepository authRepository) {
+    return new UserRepositoryImpl(apiService, authRepository);
   }
 }

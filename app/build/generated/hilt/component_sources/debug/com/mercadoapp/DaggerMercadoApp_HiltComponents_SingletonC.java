@@ -16,9 +16,10 @@ import com.mercadoapp.data.remote.interceptor.AuthInterceptor;
 import com.mercadoapp.data.remote.interceptor.TokenRefreshInterceptor;
 import com.mercadoapp.data.repository.AuthRepositoryImpl;
 import com.mercadoapp.data.repository.CartRepositoryImpl;
-import com.mercadoapp.data.repository.FakeAddressRepository;
+import com.mercadoapp.data.repository.RemoteAddressRepository;
 import com.mercadoapp.data.repository.RemoteOrderRepository;
 import com.mercadoapp.data.repository.RemoteProductRepository;
+import com.mercadoapp.data.repository.UserRepositoryImpl;
 import com.mercadoapp.di.DatabaseModule_ProvideCartDaoFactory;
 import com.mercadoapp.di.DatabaseModule_ProvideMercadoDatabaseFactory;
 import com.mercadoapp.di.DatabaseModule_ProvideProductDaoFactory;
@@ -26,6 +27,7 @@ import com.mercadoapp.di.NetworkModule_ProvideJsonFactory;
 import com.mercadoapp.di.NetworkModule_ProvideMercadoApiServiceFactory;
 import com.mercadoapp.di.NetworkModule_ProvideOkHttpClientFactory;
 import com.mercadoapp.di.NetworkModule_ProvideRetrofitFactory;
+import com.mercadoapp.domain.repository.UserRepository;
 import com.mercadoapp.ui.address.AddressEditViewModel;
 import com.mercadoapp.ui.address.AddressEditViewModel_HiltModules;
 import com.mercadoapp.ui.address.AddressListViewModel;
@@ -40,10 +42,18 @@ import com.mercadoapp.ui.checkout.CheckoutViewModel;
 import com.mercadoapp.ui.checkout.CheckoutViewModel_HiltModules;
 import com.mercadoapp.ui.detail.ProductDetailViewModel;
 import com.mercadoapp.ui.detail.ProductDetailViewModel_HiltModules;
+import com.mercadoapp.ui.favorites.FavoritesViewModel;
+import com.mercadoapp.ui.favorites.FavoritesViewModel_HiltModules;
 import com.mercadoapp.ui.home.HomeViewModel;
 import com.mercadoapp.ui.home.HomeViewModel_HiltModules;
 import com.mercadoapp.ui.order.OrderHistoryViewModel;
 import com.mercadoapp.ui.order.OrderHistoryViewModel_HiltModules;
+import com.mercadoapp.ui.product_list.ProductListViewModel;
+import com.mercadoapp.ui.product_list.ProductListViewModel_HiltModules;
+import com.mercadoapp.ui.profile.ChangePasswordViewModel;
+import com.mercadoapp.ui.profile.ChangePasswordViewModel_HiltModules;
+import com.mercadoapp.ui.profile.EditProfileViewModel;
+import com.mercadoapp.ui.profile.EditProfileViewModel_HiltModules;
 import com.mercadoapp.ui.profile.ProfileViewModel;
 import com.mercadoapp.ui.profile.ProfileViewModel_HiltModules;
 import dagger.hilt.android.ActivityRetainedLifecycle;
@@ -411,7 +421,7 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(10).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressEditViewModel, AddressEditViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressListViewModel, AddressListViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_cart_CartViewModel, CartViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_checkout_CheckoutViewModel, CheckoutViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_LoginViewModel, LoginViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_order_OrderHistoryViewModel, OrderHistoryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_detail_ProductDetailViewModel, ProductDetailViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_RegisterViewModel, RegisterViewModel_HiltModules.KeyModule.provide()).build());
+      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(14).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressEditViewModel, AddressEditViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressListViewModel, AddressListViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_cart_CartViewModel, CartViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ChangePasswordViewModel, ChangePasswordViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_checkout_CheckoutViewModel, CheckoutViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_EditProfileViewModel, EditProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_favorites_FavoritesViewModel, FavoritesViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_LoginViewModel, LoginViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_order_OrderHistoryViewModel, OrderHistoryViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_detail_ProductDetailViewModel, ProductDetailViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_product_list_ProductListViewModel, ProductListViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_RegisterViewModel, RegisterViewModel_HiltModules.KeyModule.provide()).build());
     }
 
     @Override
@@ -439,53 +449,73 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_mercadoapp_ui_home_HomeViewModel = "com.mercadoapp.ui.home.HomeViewModel";
 
-      static String com_mercadoapp_ui_profile_ProfileViewModel = "com.mercadoapp.ui.profile.ProfileViewModel";
-
-      static String com_mercadoapp_ui_cart_CartViewModel = "com.mercadoapp.ui.cart.CartViewModel";
-
-      static String com_mercadoapp_ui_checkout_CheckoutViewModel = "com.mercadoapp.ui.checkout.CheckoutViewModel";
-
       static String com_mercadoapp_ui_auth_LoginViewModel = "com.mercadoapp.ui.auth.LoginViewModel";
 
-      static String com_mercadoapp_ui_address_AddressEditViewModel = "com.mercadoapp.ui.address.AddressEditViewModel";
+      static String com_mercadoapp_ui_profile_ChangePasswordViewModel = "com.mercadoapp.ui.profile.ChangePasswordViewModel";
 
-      static String com_mercadoapp_ui_order_OrderHistoryViewModel = "com.mercadoapp.ui.order.OrderHistoryViewModel";
+      static String com_mercadoapp_ui_profile_EditProfileViewModel = "com.mercadoapp.ui.profile.EditProfileViewModel";
 
-      static String com_mercadoapp_ui_address_AddressListViewModel = "com.mercadoapp.ui.address.AddressListViewModel";
+      static String com_mercadoapp_ui_auth_RegisterViewModel = "com.mercadoapp.ui.auth.RegisterViewModel";
 
       static String com_mercadoapp_ui_detail_ProductDetailViewModel = "com.mercadoapp.ui.detail.ProductDetailViewModel";
 
-      static String com_mercadoapp_ui_auth_RegisterViewModel = "com.mercadoapp.ui.auth.RegisterViewModel";
+      static String com_mercadoapp_ui_cart_CartViewModel = "com.mercadoapp.ui.cart.CartViewModel";
+
+      static String com_mercadoapp_ui_favorites_FavoritesViewModel = "com.mercadoapp.ui.favorites.FavoritesViewModel";
+
+      static String com_mercadoapp_ui_checkout_CheckoutViewModel = "com.mercadoapp.ui.checkout.CheckoutViewModel";
+
+      static String com_mercadoapp_ui_address_AddressListViewModel = "com.mercadoapp.ui.address.AddressListViewModel";
+
+      static String com_mercadoapp_ui_order_OrderHistoryViewModel = "com.mercadoapp.ui.order.OrderHistoryViewModel";
+
+      static String com_mercadoapp_ui_profile_ProfileViewModel = "com.mercadoapp.ui.profile.ProfileViewModel";
+
+      static String com_mercadoapp_ui_address_AddressEditViewModel = "com.mercadoapp.ui.address.AddressEditViewModel";
+
+      static String com_mercadoapp_ui_product_list_ProductListViewModel = "com.mercadoapp.ui.product_list.ProductListViewModel";
 
       @KeepFieldType
       HomeViewModel com_mercadoapp_ui_home_HomeViewModel2;
 
       @KeepFieldType
-      ProfileViewModel com_mercadoapp_ui_profile_ProfileViewModel2;
-
-      @KeepFieldType
-      CartViewModel com_mercadoapp_ui_cart_CartViewModel2;
-
-      @KeepFieldType
-      CheckoutViewModel com_mercadoapp_ui_checkout_CheckoutViewModel2;
-
-      @KeepFieldType
       LoginViewModel com_mercadoapp_ui_auth_LoginViewModel2;
 
       @KeepFieldType
-      AddressEditViewModel com_mercadoapp_ui_address_AddressEditViewModel2;
+      ChangePasswordViewModel com_mercadoapp_ui_profile_ChangePasswordViewModel2;
 
       @KeepFieldType
-      OrderHistoryViewModel com_mercadoapp_ui_order_OrderHistoryViewModel2;
+      EditProfileViewModel com_mercadoapp_ui_profile_EditProfileViewModel2;
 
       @KeepFieldType
-      AddressListViewModel com_mercadoapp_ui_address_AddressListViewModel2;
+      RegisterViewModel com_mercadoapp_ui_auth_RegisterViewModel2;
 
       @KeepFieldType
       ProductDetailViewModel com_mercadoapp_ui_detail_ProductDetailViewModel2;
 
       @KeepFieldType
-      RegisterViewModel com_mercadoapp_ui_auth_RegisterViewModel2;
+      CartViewModel com_mercadoapp_ui_cart_CartViewModel2;
+
+      @KeepFieldType
+      FavoritesViewModel com_mercadoapp_ui_favorites_FavoritesViewModel2;
+
+      @KeepFieldType
+      CheckoutViewModel com_mercadoapp_ui_checkout_CheckoutViewModel2;
+
+      @KeepFieldType
+      AddressListViewModel com_mercadoapp_ui_address_AddressListViewModel2;
+
+      @KeepFieldType
+      OrderHistoryViewModel com_mercadoapp_ui_order_OrderHistoryViewModel2;
+
+      @KeepFieldType
+      ProfileViewModel com_mercadoapp_ui_profile_ProfileViewModel2;
+
+      @KeepFieldType
+      AddressEditViewModel com_mercadoapp_ui_address_AddressEditViewModel2;
+
+      @KeepFieldType
+      ProductListViewModel com_mercadoapp_ui_product_list_ProductListViewModel2;
     }
   }
 
@@ -504,7 +534,13 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
 
     private Provider<CartViewModel> cartViewModelProvider;
 
+    private Provider<ChangePasswordViewModel> changePasswordViewModelProvider;
+
     private Provider<CheckoutViewModel> checkoutViewModelProvider;
+
+    private Provider<EditProfileViewModel> editProfileViewModelProvider;
+
+    private Provider<FavoritesViewModel> favoritesViewModelProvider;
 
     private Provider<HomeViewModel> homeViewModelProvider;
 
@@ -513,6 +549,8 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
     private Provider<OrderHistoryViewModel> orderHistoryViewModelProvider;
 
     private Provider<ProductDetailViewModel> productDetailViewModelProvider;
+
+    private Provider<ProductListViewModel> productListViewModelProvider;
 
     private Provider<ProfileViewModel> profileViewModelProvider;
 
@@ -534,18 +572,22 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
       this.addressEditViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
       this.addressListViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
       this.cartViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
-      this.checkoutViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
-      this.homeViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
-      this.loginViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
-      this.orderHistoryViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 6);
-      this.productDetailViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 7);
-      this.profileViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 8);
-      this.registerViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 9);
+      this.changePasswordViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
+      this.checkoutViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
+      this.editProfileViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
+      this.favoritesViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 6);
+      this.homeViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 7);
+      this.loginViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 8);
+      this.orderHistoryViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 9);
+      this.productDetailViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 10);
+      this.productListViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 11);
+      this.profileViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 12);
+      this.registerViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 13);
     }
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(10).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressEditViewModel, ((Provider) addressEditViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressListViewModel, ((Provider) addressListViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_cart_CartViewModel, ((Provider) cartViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_checkout_CheckoutViewModel, ((Provider) checkoutViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_LoginViewModel, ((Provider) loginViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_order_OrderHistoryViewModel, ((Provider) orderHistoryViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_detail_ProductDetailViewModel, ((Provider) productDetailViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_RegisterViewModel, ((Provider) registerViewModelProvider)).build());
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(14).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressEditViewModel, ((Provider) addressEditViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_address_AddressListViewModel, ((Provider) addressListViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_cart_CartViewModel, ((Provider) cartViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ChangePasswordViewModel, ((Provider) changePasswordViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_checkout_CheckoutViewModel, ((Provider) checkoutViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_EditProfileViewModel, ((Provider) editProfileViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_favorites_FavoritesViewModel, ((Provider) favoritesViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_LoginViewModel, ((Provider) loginViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_order_OrderHistoryViewModel, ((Provider) orderHistoryViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_detail_ProductDetailViewModel, ((Provider) productDetailViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_product_list_ProductListViewModel, ((Provider) productListViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_mercadoapp_ui_auth_RegisterViewModel, ((Provider) registerViewModelProvider)).build());
     }
 
     @Override
@@ -555,25 +597,66 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
+      static String com_mercadoapp_ui_profile_ChangePasswordViewModel = "com.mercadoapp.ui.profile.ChangePasswordViewModel";
+
+      static String com_mercadoapp_ui_profile_ProfileViewModel = "com.mercadoapp.ui.profile.ProfileViewModel";
+
+      static String com_mercadoapp_ui_cart_CartViewModel = "com.mercadoapp.ui.cart.CartViewModel";
+
+      static String com_mercadoapp_ui_favorites_FavoritesViewModel = "com.mercadoapp.ui.favorites.FavoritesViewModel";
+
+      static String com_mercadoapp_ui_auth_RegisterViewModel = "com.mercadoapp.ui.auth.RegisterViewModel";
+
+      static String com_mercadoapp_ui_auth_LoginViewModel = "com.mercadoapp.ui.auth.LoginViewModel";
+
+      static String com_mercadoapp_ui_checkout_CheckoutViewModel = "com.mercadoapp.ui.checkout.CheckoutViewModel";
+
+      static String com_mercadoapp_ui_profile_EditProfileViewModel = "com.mercadoapp.ui.profile.EditProfileViewModel";
+
+      static String com_mercadoapp_ui_home_HomeViewModel = "com.mercadoapp.ui.home.HomeViewModel";
+
+      static String com_mercadoapp_ui_product_list_ProductListViewModel = "com.mercadoapp.ui.product_list.ProductListViewModel";
+
+      static String com_mercadoapp_ui_order_OrderHistoryViewModel = "com.mercadoapp.ui.order.OrderHistoryViewModel";
+
       static String com_mercadoapp_ui_address_AddressEditViewModel = "com.mercadoapp.ui.address.AddressEditViewModel";
 
       static String com_mercadoapp_ui_address_AddressListViewModel = "com.mercadoapp.ui.address.AddressListViewModel";
 
-      static String com_mercadoapp_ui_order_OrderHistoryViewModel = "com.mercadoapp.ui.order.OrderHistoryViewModel";
-
-      static String com_mercadoapp_ui_auth_LoginViewModel = "com.mercadoapp.ui.auth.LoginViewModel";
-
-      static String com_mercadoapp_ui_cart_CartViewModel = "com.mercadoapp.ui.cart.CartViewModel";
-
-      static String com_mercadoapp_ui_profile_ProfileViewModel = "com.mercadoapp.ui.profile.ProfileViewModel";
-
-      static String com_mercadoapp_ui_checkout_CheckoutViewModel = "com.mercadoapp.ui.checkout.CheckoutViewModel";
-
       static String com_mercadoapp_ui_detail_ProductDetailViewModel = "com.mercadoapp.ui.detail.ProductDetailViewModel";
 
-      static String com_mercadoapp_ui_home_HomeViewModel = "com.mercadoapp.ui.home.HomeViewModel";
+      @KeepFieldType
+      ChangePasswordViewModel com_mercadoapp_ui_profile_ChangePasswordViewModel2;
 
-      static String com_mercadoapp_ui_auth_RegisterViewModel = "com.mercadoapp.ui.auth.RegisterViewModel";
+      @KeepFieldType
+      ProfileViewModel com_mercadoapp_ui_profile_ProfileViewModel2;
+
+      @KeepFieldType
+      CartViewModel com_mercadoapp_ui_cart_CartViewModel2;
+
+      @KeepFieldType
+      FavoritesViewModel com_mercadoapp_ui_favorites_FavoritesViewModel2;
+
+      @KeepFieldType
+      RegisterViewModel com_mercadoapp_ui_auth_RegisterViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_mercadoapp_ui_auth_LoginViewModel2;
+
+      @KeepFieldType
+      CheckoutViewModel com_mercadoapp_ui_checkout_CheckoutViewModel2;
+
+      @KeepFieldType
+      EditProfileViewModel com_mercadoapp_ui_profile_EditProfileViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_mercadoapp_ui_home_HomeViewModel2;
+
+      @KeepFieldType
+      ProductListViewModel com_mercadoapp_ui_product_list_ProductListViewModel2;
+
+      @KeepFieldType
+      OrderHistoryViewModel com_mercadoapp_ui_order_OrderHistoryViewModel2;
 
       @KeepFieldType
       AddressEditViewModel com_mercadoapp_ui_address_AddressEditViewModel2;
@@ -582,28 +665,7 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
       AddressListViewModel com_mercadoapp_ui_address_AddressListViewModel2;
 
       @KeepFieldType
-      OrderHistoryViewModel com_mercadoapp_ui_order_OrderHistoryViewModel2;
-
-      @KeepFieldType
-      LoginViewModel com_mercadoapp_ui_auth_LoginViewModel2;
-
-      @KeepFieldType
-      CartViewModel com_mercadoapp_ui_cart_CartViewModel2;
-
-      @KeepFieldType
-      ProfileViewModel com_mercadoapp_ui_profile_ProfileViewModel2;
-
-      @KeepFieldType
-      CheckoutViewModel com_mercadoapp_ui_checkout_CheckoutViewModel2;
-
-      @KeepFieldType
       ProductDetailViewModel com_mercadoapp_ui_detail_ProductDetailViewModel2;
-
-      @KeepFieldType
-      HomeViewModel com_mercadoapp_ui_home_HomeViewModel2;
-
-      @KeepFieldType
-      RegisterViewModel com_mercadoapp_ui_auth_RegisterViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -628,33 +690,45 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
       public T get() {
         switch (id) {
           case 0: // com.mercadoapp.ui.address.AddressEditViewModel 
-          return (T) new AddressEditViewModel(singletonCImpl.fakeAddressRepositoryProvider.get(), singletonCImpl.provideMercadoApiServiceProvider.get(), viewModelCImpl.savedStateHandle);
+          return (T) new AddressEditViewModel(singletonCImpl.remoteAddressRepositoryProvider.get(), singletonCImpl.provideMercadoApiServiceProvider.get(), viewModelCImpl.savedStateHandle);
 
           case 1: // com.mercadoapp.ui.address.AddressListViewModel 
-          return (T) new AddressListViewModel(singletonCImpl.fakeAddressRepositoryProvider.get());
+          return (T) new AddressListViewModel(singletonCImpl.remoteAddressRepositoryProvider.get());
 
           case 2: // com.mercadoapp.ui.cart.CartViewModel 
           return (T) new CartViewModel(singletonCImpl.cartRepositoryImplProvider.get());
 
-          case 3: // com.mercadoapp.ui.checkout.CheckoutViewModel 
-          return (T) new CheckoutViewModel(singletonCImpl.fakeAddressRepositoryProvider.get());
+          case 3: // com.mercadoapp.ui.profile.ChangePasswordViewModel 
+          return (T) new ChangePasswordViewModel(singletonCImpl.bindUserRepositoryProvider.get());
 
-          case 4: // com.mercadoapp.ui.home.HomeViewModel 
-          return (T) new HomeViewModel(singletonCImpl.remoteProductRepositoryProvider.get());
+          case 4: // com.mercadoapp.ui.checkout.CheckoutViewModel 
+          return (T) new CheckoutViewModel(singletonCImpl.remoteAddressRepositoryProvider.get());
 
-          case 5: // com.mercadoapp.ui.auth.LoginViewModel 
+          case 5: // com.mercadoapp.ui.profile.EditProfileViewModel 
+          return (T) new EditProfileViewModel(singletonCImpl.bindUserRepositoryProvider.get());
+
+          case 6: // com.mercadoapp.ui.favorites.FavoritesViewModel 
+          return (T) new FavoritesViewModel(singletonCImpl.remoteProductRepositoryProvider.get());
+
+          case 7: // com.mercadoapp.ui.home.HomeViewModel 
+          return (T) new HomeViewModel(singletonCImpl.remoteProductRepositoryProvider.get(), singletonCImpl.authRepositoryImplProvider.get());
+
+          case 8: // com.mercadoapp.ui.auth.LoginViewModel 
           return (T) new LoginViewModel(singletonCImpl.authRepositoryImplProvider.get());
 
-          case 6: // com.mercadoapp.ui.order.OrderHistoryViewModel 
+          case 9: // com.mercadoapp.ui.order.OrderHistoryViewModel 
           return (T) new OrderHistoryViewModel(singletonCImpl.remoteOrderRepositoryProvider.get());
 
-          case 7: // com.mercadoapp.ui.detail.ProductDetailViewModel 
+          case 10: // com.mercadoapp.ui.detail.ProductDetailViewModel 
           return (T) new ProductDetailViewModel(viewModelCImpl.savedStateHandle, singletonCImpl.remoteProductRepositoryProvider.get(), singletonCImpl.cartRepositoryImplProvider.get());
 
-          case 8: // com.mercadoapp.ui.profile.ProfileViewModel 
+          case 11: // com.mercadoapp.ui.product_list.ProductListViewModel 
+          return (T) new ProductListViewModel(singletonCImpl.remoteProductRepositoryProvider.get(), viewModelCImpl.savedStateHandle);
+
+          case 12: // com.mercadoapp.ui.profile.ProfileViewModel 
           return (T) new ProfileViewModel(singletonCImpl.authRepositoryImplProvider.get());
 
-          case 9: // com.mercadoapp.ui.auth.RegisterViewModel 
+          case 13: // com.mercadoapp.ui.auth.RegisterViewModel 
           return (T) new RegisterViewModel(singletonCImpl.authRepositoryImplProvider.get());
 
           default: throw new AssertionError(id);
@@ -749,11 +823,15 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
 
     private Provider<AuthRepositoryImpl> authRepositoryImplProvider;
 
-    private Provider<FakeAddressRepository> fakeAddressRepositoryProvider;
+    private Provider<RemoteAddressRepository> remoteAddressRepositoryProvider;
 
     private Provider<MercadoDatabase> provideMercadoDatabaseProvider;
 
     private Provider<CartRepositoryImpl> cartRepositoryImplProvider;
+
+    private Provider<UserRepositoryImpl> userRepositoryImplProvider;
+
+    private Provider<UserRepository> bindUserRepositoryProvider;
 
     private Provider<RemoteProductRepository> remoteProductRepositoryProvider;
 
@@ -789,11 +867,13 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
       this.provideRetrofitProvider = DoubleCheck.provider(new SwitchingProvider<Retrofit>(singletonCImpl, 2));
       this.provideMercadoApiServiceProvider = DoubleCheck.provider(new SwitchingProvider<MercadoApiService>(singletonCImpl, 1));
       this.authRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<AuthRepositoryImpl>(singletonCImpl, 0));
-      this.fakeAddressRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<FakeAddressRepository>(singletonCImpl, 6));
+      this.remoteAddressRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<RemoteAddressRepository>(singletonCImpl, 6));
       this.provideMercadoDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<MercadoDatabase>(singletonCImpl, 8));
       this.cartRepositoryImplProvider = DoubleCheck.provider(new SwitchingProvider<CartRepositoryImpl>(singletonCImpl, 7));
-      this.remoteProductRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<RemoteProductRepository>(singletonCImpl, 9));
-      this.remoteOrderRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<RemoteOrderRepository>(singletonCImpl, 10));
+      this.userRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 9);
+      this.bindUserRepositoryProvider = DoubleCheck.provider((Provider) userRepositoryImplProvider);
+      this.remoteProductRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<RemoteProductRepository>(singletonCImpl, 10));
+      this.remoteOrderRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<RemoteOrderRepository>(singletonCImpl, 11));
     }
 
     @Override
@@ -847,8 +927,8 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
           case 5: // kotlinx.serialization.json.Json 
           return (T) NetworkModule_ProvideJsonFactory.provideJson();
 
-          case 6: // com.mercadoapp.data.repository.FakeAddressRepository 
-          return (T) new FakeAddressRepository();
+          case 6: // com.mercadoapp.data.repository.RemoteAddressRepository 
+          return (T) new RemoteAddressRepository(singletonCImpl.provideMercadoApiServiceProvider.get());
 
           case 7: // com.mercadoapp.data.repository.CartRepositoryImpl 
           return (T) new CartRepositoryImpl(singletonCImpl.cartDao());
@@ -856,10 +936,13 @@ public final class DaggerMercadoApp_HiltComponents_SingletonC {
           case 8: // com.mercadoapp.data.local.db.MercadoDatabase 
           return (T) DatabaseModule_ProvideMercadoDatabaseFactory.provideMercadoDatabase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 9: // com.mercadoapp.data.repository.RemoteProductRepository 
+          case 9: // com.mercadoapp.data.repository.UserRepositoryImpl 
+          return (T) new UserRepositoryImpl(singletonCImpl.provideMercadoApiServiceProvider.get(), singletonCImpl.authRepositoryImplProvider.get());
+
+          case 10: // com.mercadoapp.data.repository.RemoteProductRepository 
           return (T) new RemoteProductRepository(singletonCImpl.provideMercadoApiServiceProvider.get(), singletonCImpl.productDao());
 
-          case 10: // com.mercadoapp.data.repository.RemoteOrderRepository 
+          case 11: // com.mercadoapp.data.repository.RemoteOrderRepository 
           return (T) new RemoteOrderRepository(singletonCImpl.provideMercadoApiServiceProvider.get());
 
           default: throw new AssertionError(id);

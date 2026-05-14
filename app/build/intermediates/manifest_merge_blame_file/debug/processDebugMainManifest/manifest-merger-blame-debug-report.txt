@@ -63,168 +63,169 @@
 39-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:11:9-69
 40        android:supportsRtl="true"
 40-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:9:9-35
-41        android:theme="@style/Theme.MercadoApp" >
-41-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:10:9-48
-42        <activity
-42-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:12:9-19:20
-43            android:name="com.mercadoapp.MainActivity"
-43-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:13:13-41
-44            android:exported="true" >
-44-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:14:13-36
-45            <intent-filter>
-45-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:15:13-18:29
-46                <action android:name="android.intent.action.MAIN" />
-46-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:16:17-69
-46-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:16:25-66
-47
-48                <category android:name="android.intent.category.LAUNCHER" />
-48-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:17:17-77
-48-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:17:27-74
-49            </intent-filter>
-50        </activity>
-51        <activity
-51-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:21:9-26:52
-52            android:name="com.chuckerteam.chucker.internal.ui.MainActivity"
-52-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:22:13-76
-53            android:label="@string/chucker_name"
-53-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:23:13-49
-54            android:launchMode="singleTask"
-54-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:24:13-44
-55            android:taskAffinity="com.chuckerteam.chucker.task"
-55-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:25:13-64
-56            android:theme="@style/Chucker.Theme" />
-56-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:26:13-49
-57        <activity
-57-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:27:9-30:52
-58            android:name="com.chuckerteam.chucker.internal.ui.transaction.TransactionActivity"
-58-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:28:13-95
-59            android:parentActivityName="com.chuckerteam.chucker.internal.ui.MainActivity"
-59-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:29:13-90
-60            android:theme="@style/Chucker.Theme" />
-60-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:30:13-49
-61
-62        <service
-62-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:32:9-35:72
-63            android:name="com.chuckerteam.chucker.internal.support.ClearDatabaseService"
-63-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:33:13-89
-64            android:exported="false"
-64-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:34:13-37
-65            android:permission="android.permission.BIND_JOB_SERVICE" />
-65-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:35:13-69
-66
-67        <receiver
-67-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:37:9-39:40
-68            android:name="com.chuckerteam.chucker.internal.support.ClearDatabaseJobIntentServiceReceiver"
-68-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:38:13-106
-69            android:exported="false" />
-69-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:39:13-37
-70
-71        <provider
-71-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:41:9-49:20
-72            android:name="com.chuckerteam.chucker.internal.support.ChuckerFileProvider"
-72-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:42:13-88
-73            android:authorities="com.mercadoapp.com.chuckerteam.chucker.provider"
-73-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:43:13-84
-74            android:exported="false"
-74-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:44:13-37
-75            android:grantUriPermissions="true" >
-75-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:45:13-47
-76            <meta-data
-76-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:46:13-48:66
-77                android:name="android.support.FILE_PROVIDER_PATHS"
-77-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:47:17-67
-78                android:resource="@xml/chucker_provider_paths" />
-78-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:48:17-63
-79        </provider>
-80
-81        <service
-81-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
-82            android:name="androidx.room.MultiInstanceInvalidationService"
-82-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
-83            android:directBootAware="true"
-83-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
-84            android:exported="false" />
-84-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
-85
-86        <activity
-86-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
-87            android:name="androidx.compose.ui.tooling.PreviewActivity"
-87-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
-88            android:exported="true" />
-88-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
-89
-90        <provider
-90-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-91            android:name="androidx.startup.InitializationProvider"
-91-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-92            android:authorities="com.mercadoapp.androidx-startup"
-92-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-93            android:exported="false" >
-93-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-94            <meta-data
-94-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-95                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-95-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-96                android:value="androidx.startup" />
-96-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-97            <meta-data
-97-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
-98                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-98-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
-99                android:value="androidx.startup" />
-99-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
-100            <meta-data
-100-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
-101                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-101-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
-102                android:value="androidx.startup" />
-102-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
-103        </provider>
-104
-105        <activity
-105-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:23:9-25:39
-106            android:name="androidx.activity.ComponentActivity"
-106-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:24:13-63
-107            android:exported="true" />
-107-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:25:13-36
-108
-109        <receiver
-109-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
-110            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-110-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
-111            android:directBootAware="false"
-111-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
-112            android:enabled="true"
-112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
-113            android:exported="true"
-113-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
-114            android:permission="android.permission.DUMP" >
-114-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
-115            <intent-filter>
-115-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
-116                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-116-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
-116-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
-117            </intent-filter>
-118            <intent-filter>
-118-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
-119                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-119-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
-119-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
-120            </intent-filter>
-121            <intent-filter>
-121-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
-122                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-122-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
-122-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
-123            </intent-filter>
-124            <intent-filter>
-124-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
-125                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-125-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
-125-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
-126            </intent-filter>
-127        </receiver>
-128    </application>
-129
-130</manifest>
+41        android:testOnly="true"
+42        android:theme="@style/Theme.MercadoApp" >
+42-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:10:9-48
+43        <activity
+43-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:12:9-19:20
+44            android:name="com.mercadoapp.MainActivity"
+44-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:13:13-41
+45            android:exported="true" >
+45-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:14:13-36
+46            <intent-filter>
+46-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:15:13-18:29
+47                <action android:name="android.intent.action.MAIN" />
+47-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:16:17-69
+47-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:16:25-66
+48
+49                <category android:name="android.intent.category.LAUNCHER" />
+49-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:17:17-77
+49-->C:\Users\Diego\Downloads\Mercadoapp\app\src\main\AndroidManifest.xml:17:27-74
+50            </intent-filter>
+51        </activity>
+52        <activity
+52-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:21:9-26:52
+53            android:name="com.chuckerteam.chucker.internal.ui.MainActivity"
+53-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:22:13-76
+54            android:label="@string/chucker_name"
+54-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:23:13-49
+55            android:launchMode="singleTask"
+55-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:24:13-44
+56            android:taskAffinity="com.chuckerteam.chucker.task"
+56-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:25:13-64
+57            android:theme="@style/Chucker.Theme" />
+57-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:26:13-49
+58        <activity
+58-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:27:9-30:52
+59            android:name="com.chuckerteam.chucker.internal.ui.transaction.TransactionActivity"
+59-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:28:13-95
+60            android:parentActivityName="com.chuckerteam.chucker.internal.ui.MainActivity"
+60-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:29:13-90
+61            android:theme="@style/Chucker.Theme" />
+61-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:30:13-49
+62
+63        <service
+63-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:32:9-35:72
+64            android:name="com.chuckerteam.chucker.internal.support.ClearDatabaseService"
+64-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:33:13-89
+65            android:exported="false"
+65-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:34:13-37
+66            android:permission="android.permission.BIND_JOB_SERVICE" />
+66-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:35:13-69
+67
+68        <receiver
+68-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:37:9-39:40
+69            android:name="com.chuckerteam.chucker.internal.support.ClearDatabaseJobIntentServiceReceiver"
+69-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:38:13-106
+70            android:exported="false" />
+70-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:39:13-37
+71
+72        <provider
+72-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:41:9-49:20
+73            android:name="com.chuckerteam.chucker.internal.support.ChuckerFileProvider"
+73-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:42:13-88
+74            android:authorities="com.mercadoapp.com.chuckerteam.chucker.provider"
+74-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:43:13-84
+75            android:exported="false"
+75-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:44:13-37
+76            android:grantUriPermissions="true" >
+76-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:45:13-47
+77            <meta-data
+77-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:46:13-48:66
+78                android:name="android.support.FILE_PROVIDER_PATHS"
+78-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:47:17-67
+79                android:resource="@xml/chucker_provider_paths" />
+79-->[com.github.chuckerteam.chucker:library:4.0.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\67157f58c03329d63ef2197ac69df9c7\transformed\library-4.0.0\AndroidManifest.xml:48:17-63
+80        </provider>
+81
+82        <service
+82-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+83            android:name="androidx.room.MultiInstanceInvalidationService"
+83-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+84            android:directBootAware="true"
+84-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+85            android:exported="false" />
+85-->[androidx.room:room-runtime:2.6.1] C:\Users\Diego\.gradle\caches\9.0.0\transforms\0bc4f2068e2fb1296f253d076eec3312\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+86
+87        <activity
+87-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+88            android:name="androidx.compose.ui.tooling.PreviewActivity"
+88-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+89            android:exported="true" />
+89-->[androidx.compose.ui:ui-tooling-android:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\50406089d03c279095cd863e81458c50\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+90
+91        <provider
+91-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+92            android:name="androidx.startup.InitializationProvider"
+92-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+93            android:authorities="com.mercadoapp.androidx-startup"
+93-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+94            android:exported="false" >
+94-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+95            <meta-data
+95-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+96                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+96-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+97                android:value="androidx.startup" />
+97-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\917b607f2f33369c87f48836397e3d18\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+98            <meta-data
+98-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+99                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+99-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+100                android:value="androidx.startup" />
+100-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\2b80165c0b02a4d9493e91a52c55cf7f\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+101            <meta-data
+101-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+102                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+102-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+103                android:value="androidx.startup" />
+103-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+104        </provider>
+105
+106        <activity
+106-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:23:9-25:39
+107            android:name="androidx.activity.ComponentActivity"
+107-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:24:13-63
+108            android:exported="true" />
+108-->[androidx.compose.ui:ui-test-manifest:1.7.7] C:\Users\Diego\.gradle\caches\9.0.0\transforms\84759ba1ee778713851c64e2c6710c4a\transformed\ui-test-manifest-1.7.7\AndroidManifest.xml:25:13-36
+109
+110        <receiver
+110-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+111            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+111-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+112            android:directBootAware="false"
+112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+113            android:enabled="true"
+113-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+114            android:exported="true"
+114-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+115            android:permission="android.permission.DUMP" >
+115-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+117                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+117-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+120                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+120-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+123                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+126                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+126-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+126-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Diego\.gradle\caches\9.0.0\transforms\4ebcc7fde54417fd2547bf7827825d55\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+127            </intent-filter>
+128        </receiver>
+129    </application>
+130
+131</manifest>

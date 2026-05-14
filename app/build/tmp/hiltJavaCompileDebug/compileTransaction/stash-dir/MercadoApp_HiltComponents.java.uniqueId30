@@ -10,8 +10,12 @@ import com.mercadoapp.ui.auth.RegisterViewModel_HiltModules;
 import com.mercadoapp.ui.cart.CartViewModel_HiltModules;
 import com.mercadoapp.ui.checkout.CheckoutViewModel_HiltModules;
 import com.mercadoapp.ui.detail.ProductDetailViewModel_HiltModules;
+import com.mercadoapp.ui.favorites.FavoritesViewModel_HiltModules;
 import com.mercadoapp.ui.home.HomeViewModel_HiltModules;
 import com.mercadoapp.ui.order.OrderHistoryViewModel_HiltModules;
+import com.mercadoapp.ui.product_list.ProductListViewModel_HiltModules;
+import com.mercadoapp.ui.profile.ChangePasswordViewModel_HiltModules;
+import com.mercadoapp.ui.profile.EditProfileViewModel_HiltModules;
 import com.mercadoapp.ui.profile.ProfileViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
@@ -169,7 +173,10 @@ public final class MercadoApp_HiltComponents {
           AddressEditViewModel_HiltModules.KeyModule.class,
           AddressListViewModel_HiltModules.KeyModule.class,
           CartViewModel_HiltModules.KeyModule.class,
+          ChangePasswordViewModel_HiltModules.KeyModule.class,
           CheckoutViewModel_HiltModules.KeyModule.class,
+          EditProfileViewModel_HiltModules.KeyModule.class,
+          FavoritesViewModel_HiltModules.KeyModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           HiltWrapper_SavedStateHandleModule.class,
           HomeViewModel_HiltModules.KeyModule.class,
@@ -178,6 +185,7 @@ public final class MercadoApp_HiltComponents {
           ViewModelCBuilderModule.class,
           OrderHistoryViewModel_HiltModules.KeyModule.class,
           ProductDetailViewModel_HiltModules.KeyModule.class,
+          ProductListViewModel_HiltModules.KeyModule.class,
           ProfileViewModel_HiltModules.KeyModule.class,
           RegisterViewModel_HiltModules.KeyModule.class
       }
@@ -218,12 +226,16 @@ public final class MercadoApp_HiltComponents {
           AddressEditViewModel_HiltModules.BindsModule.class,
           AddressListViewModel_HiltModules.BindsModule.class,
           CartViewModel_HiltModules.BindsModule.class,
+          ChangePasswordViewModel_HiltModules.BindsModule.class,
           CheckoutViewModel_HiltModules.BindsModule.class,
+          EditProfileViewModel_HiltModules.BindsModule.class,
+          FavoritesViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
           HomeViewModel_HiltModules.BindsModule.class,
           LoginViewModel_HiltModules.BindsModule.class,
           OrderHistoryViewModel_HiltModules.BindsModule.class,
           ProductDetailViewModel_HiltModules.BindsModule.class,
+          ProductListViewModel_HiltModules.BindsModule.class,
           ProfileViewModel_HiltModules.BindsModule.class,
           RegisterViewModel_HiltModules.BindsModule.class
       }

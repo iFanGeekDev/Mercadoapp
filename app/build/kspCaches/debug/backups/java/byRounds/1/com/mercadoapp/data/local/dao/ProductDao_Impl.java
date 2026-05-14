@@ -43,7 +43,7 @@ public final class ProductDao_Impl implements ProductDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `products` (`id`,`name`,`imageUrl`,`shortDescription`,`technicalSpecsJson`,`variantsJson`,`isOffer`,`isNewArrival`,`updatedAt`) VALUES (?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `products` (`id`,`name`,`imageUrl`,`shortDescription`,`technicalSpecsJson`,`variantsJson`,`isOffer`,`isNewArrival`,`category`,`updatedAt`) VALUES (?,?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -59,7 +59,8 @@ public final class ProductDao_Impl implements ProductDao {
         statement.bindLong(7, _tmp);
         final int _tmp_1 = entity.isNewArrival() ? 1 : 0;
         statement.bindLong(8, _tmp_1);
-        statement.bindLong(9, entity.getUpdatedAt());
+        statement.bindString(9, entity.getCategory());
+        statement.bindLong(10, entity.getUpdatedAt());
       }
     };
     this.__preparedStmtOfClearAll = new SharedSQLiteStatement(__db) {
@@ -132,6 +133,7 @@ public final class ProductDao_Impl implements ProductDao {
           final int _cursorIndexOfVariantsJson = CursorUtil.getColumnIndexOrThrow(_cursor, "variantsJson");
           final int _cursorIndexOfIsOffer = CursorUtil.getColumnIndexOrThrow(_cursor, "isOffer");
           final int _cursorIndexOfIsNewArrival = CursorUtil.getColumnIndexOrThrow(_cursor, "isNewArrival");
+          final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
           final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
           final List<ProductEntity> _result = new ArrayList<ProductEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -156,9 +158,11 @@ public final class ProductDao_Impl implements ProductDao {
             final int _tmp_1;
             _tmp_1 = _cursor.getInt(_cursorIndexOfIsNewArrival);
             _tmpIsNewArrival = _tmp_1 != 0;
+            final String _tmpCategory;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
             final long _tmpUpdatedAt;
             _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
-            _item = new ProductEntity(_tmpId,_tmpName,_tmpImageUrl,_tmpShortDescription,_tmpTechnicalSpecsJson,_tmpVariantsJson,_tmpIsOffer,_tmpIsNewArrival,_tmpUpdatedAt);
+            _item = new ProductEntity(_tmpId,_tmpName,_tmpImageUrl,_tmpShortDescription,_tmpTechnicalSpecsJson,_tmpVariantsJson,_tmpIsOffer,_tmpIsNewArrival,_tmpCategory,_tmpUpdatedAt);
             _result.add(_item);
           }
           return _result;
@@ -195,6 +199,7 @@ public final class ProductDao_Impl implements ProductDao {
           final int _cursorIndexOfVariantsJson = CursorUtil.getColumnIndexOrThrow(_cursor, "variantsJson");
           final int _cursorIndexOfIsOffer = CursorUtil.getColumnIndexOrThrow(_cursor, "isOffer");
           final int _cursorIndexOfIsNewArrival = CursorUtil.getColumnIndexOrThrow(_cursor, "isNewArrival");
+          final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
           final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
           final ProductEntity _result;
           if (_cursor.moveToFirst()) {
@@ -218,9 +223,11 @@ public final class ProductDao_Impl implements ProductDao {
             final int _tmp_1;
             _tmp_1 = _cursor.getInt(_cursorIndexOfIsNewArrival);
             _tmpIsNewArrival = _tmp_1 != 0;
+            final String _tmpCategory;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
             final long _tmpUpdatedAt;
             _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
-            _result = new ProductEntity(_tmpId,_tmpName,_tmpImageUrl,_tmpShortDescription,_tmpTechnicalSpecsJson,_tmpVariantsJson,_tmpIsOffer,_tmpIsNewArrival,_tmpUpdatedAt);
+            _result = new ProductEntity(_tmpId,_tmpName,_tmpImageUrl,_tmpShortDescription,_tmpTechnicalSpecsJson,_tmpVariantsJson,_tmpIsOffer,_tmpIsNewArrival,_tmpCategory,_tmpUpdatedAt);
           } else {
             _result = null;
           }

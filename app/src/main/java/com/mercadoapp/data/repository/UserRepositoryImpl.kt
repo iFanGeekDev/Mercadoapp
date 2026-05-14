@@ -4,6 +4,7 @@ import com.mercadoapp.data.remote.api.MercadoApiService
 import com.mercadoapp.data.remote.dto.ErrorResponseDto
 import com.mercadoapp.data.remote.dto.ChangePasswordRequestDto
 import com.mercadoapp.data.remote.dto.UpdateProfileRequestDto
+import com.mercadoapp.domain.model.User
 import com.mercadoapp.domain.repository.AuthRepository
 import com.mercadoapp.domain.repository.UserRepository
 import kotlinx.serialization.json.Json

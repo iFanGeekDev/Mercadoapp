@@ -37,13 +37,13 @@ public final class MercadoDatabase_Impl extends MercadoDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `products` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `technicalSpecsJson` TEXT NOT NULL, `variantsJson` TEXT NOT NULL, `isOffer` INTEGER NOT NULL, `isNewArrival` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `products` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `technicalSpecsJson` TEXT NOT NULL, `variantsJson` TEXT NOT NULL, `isOffer` INTEGER NOT NULL, `isNewArrival` INTEGER NOT NULL, `category` TEXT NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `cart_items` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productId` TEXT NOT NULL, `productName` TEXT NOT NULL, `productImageUrl` TEXT NOT NULL, `condition` TEXT NOT NULL, `processor` TEXT NOT NULL, `ramGb` INTEGER NOT NULL, `storageGb` INTEGER NOT NULL, `color` TEXT NOT NULL, `price` REAL NOT NULL, `quantity` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '45edfda28c6c4b03d6974bbb5dbfc8df')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64679a8cc1208e00eddd4c366a8c5d74')");
       }
 
       @Override
@@ -93,7 +93,7 @@ public final class MercadoDatabase_Impl extends MercadoDatabase {
       @NonNull
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsProducts = new HashMap<String, TableInfo.Column>(9);
+        final HashMap<String, TableInfo.Column> _columnsProducts = new HashMap<String, TableInfo.Column>(10);
         _columnsProducts.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("name", new TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("imageUrl", new TableInfo.Column("imageUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -102,6 +102,7 @@ public final class MercadoDatabase_Impl extends MercadoDatabase {
         _columnsProducts.put("variantsJson", new TableInfo.Column("variantsJson", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("isOffer", new TableInfo.Column("isOffer", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("isNewArrival", new TableInfo.Column("isNewArrival", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("category", new TableInfo.Column("category", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysProducts = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesProducts = new HashSet<TableInfo.Index>(0);
@@ -135,7 +136,7 @@ public final class MercadoDatabase_Impl extends MercadoDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "45edfda28c6c4b03d6974bbb5dbfc8df", "93427dabff0b2ec568ba2154a34b364f");
+    }, "64679a8cc1208e00eddd4c366a8c5d74", "9a592c025bd86ca8c3d9239e4bc9eb99");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
