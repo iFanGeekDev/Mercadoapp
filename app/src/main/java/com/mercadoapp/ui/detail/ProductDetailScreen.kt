@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.mercadoapp.ui.components.CartBadgeIcon
+import com.mercadoapp.ui.components.QuantitySelector
 import com.mercadoapp.ui.components.SelectableChips
 import com.mercadoapp.ui.theme.*
 
@@ -33,13 +35,22 @@ fun ProductDetailRoute(
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ProductDetailScreen(state = state, onBack = onBack, onCartClick = onCartClick, viewModel = viewModel)
+    val cartCount by viewModel.cartCount.collectAsState()
+    
+    ProductDetailScreen(
+        state = state, 
+        cartCount = cartCount,
+        onBack = onBack, 
+        onCartClick = onCartClick, 
+        viewModel = viewModel
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProductDetailScreen(
     state: ProductDetailUiState,
+    cartCount: Int,
     onBack: () -> Unit,
     onCartClick: () -> Unit,
     viewModel: ProductDetailViewModel
@@ -70,7 +81,7 @@ private fun ProductDetailScreen(
                         )
                     }
                     IconButton(onClick = onCartClick, modifier = Modifier.background(Dark800, CircleShape)) {
-                        Icon(Icons.Default.ShoppingCart, null, tint = Color.White)
+                        CartBadgeIcon(icon = Icons.Default.ShoppingCart, count = cartCount)
                     }
                 }
             }
@@ -79,19 +90,28 @@ private fun ProductDetailScreen(
             if (options.selectedVariant != null) {
                 val variant = options.selectedVariant
                 Surface(color = Dark800, shadowElevation = 16.dp, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(24.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text("Precio Total", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
-                            Text("$${"%.2f".format(variant.price)}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, color = Color.White)
+                    Column(modifier = Modifier.padding(24.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text("Precio Total", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                                Text("$${"%.2f".format(variant.price * state.quantity)}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, color = Color.White)
+                            }
+                            QuantitySelector(
+                                quantity = state.quantity,
+                                onQuantityChange = { viewModel.onQuantityChanged(it) }
+                            )
                         }
-                        Box(modifier = Modifier.width(180.dp).height(56.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(16.dp))) {
+                        
+                        Spacer(Modifier.height(16.dp))
+                        
+                        Box(modifier = Modifier.fillMaxWidth().height(56.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(16.dp))) {
                             Button(
                                 onClick = { viewModel.addToCart() },
-                                enabled = variant.stock > 0 && !state.cartAdded,
+                                enabled = variant.stock >= state.quantity && !state.cartAdded,
                                 modifier = Modifier.fillMaxSize(),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, disabledContainerColor = Color.Transparent),
                                 contentPadding = PaddingValues(0.dp)

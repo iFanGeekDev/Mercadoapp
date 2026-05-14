@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.domain.repository.AuthRepository
+import com.mercadoapp.domain.repository.CartRepository
 import com.mercadoapp.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,8 +17,13 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: ProductRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
+
+    val cartCount: StateFlow<Int> = cartRepository.cartItems
+        .map { items -> items.sumOf { it.quantity } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     val authState: StateFlow<AuthState> = authRepository.authState
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState.Loading)

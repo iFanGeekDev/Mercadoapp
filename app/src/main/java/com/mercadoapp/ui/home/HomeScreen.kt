@@ -26,6 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import com.mercadoapp.ui.components.CartBadgeIcon
 import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.model.User
 import com.mercadoapp.domain.model.Product
@@ -43,6 +44,7 @@ fun HomeRoute(
     val pagingItems = viewModel.productsPaged.collectAsLazyPagingItems()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val cartCount by viewModel.cartCount.collectAsState()
     
     val authState by viewModel.authState.collectAsState()
     val user = (authState as? AuthState.Authenticated)?.user
@@ -52,6 +54,7 @@ fun HomeRoute(
         selectedCategory = selectedCategory,
         searchQuery = searchQuery,
         user = user,
+        cartCount = cartCount,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategoryClick = viewModel::onCategorySelected,
         onSearchClick = onSearchClick,
@@ -68,6 +71,7 @@ private fun HomeScreen(
     selectedCategory: String,
     searchQuery: String,
     user: User?,
+    cartCount: Int,
     onSearchQueryChanged: (String) -> Unit,
     onCategoryClick: (String) -> Unit,
     onSearchClick: (String?, String?) -> Unit,
@@ -116,7 +120,7 @@ private fun HomeScreen(
                     modifier = Modifier.size(44.dp).background(Dark800, CircleShape).clickable { onCartClick() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.ShoppingCart, null, tint = Color.White, modifier = Modifier.size(20.dp))
+                    CartBadgeIcon(icon = Icons.Default.ShoppingCart, count = cartCount)
                 }
             }
         }

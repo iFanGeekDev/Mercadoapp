@@ -169,7 +169,8 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
         composable("favorites") {
             FavoritesRoute(
                 onBack = { navController.popBackStack() },
-                onProductClick = { id -> navController.navigate("detail/$id") }
+                onProductClick = { id -> navController.navigate("detail/$id") },
+                onCartClick = { navController.navigate("cart") }
             )
         }
 
@@ -189,7 +190,8 @@ private fun MercadoAppContent(authRepository: AuthRepository) {
         ) {
             ProductListRoute(
                 onBack = { navController.popBackStack() },
-                onProductClick = { id -> navController.navigate("detail/$id") }
+                onProductClick = { id -> navController.navigate("detail/$id") },
+                onCartClick = { navController.navigate("cart") }
             )
         }
 

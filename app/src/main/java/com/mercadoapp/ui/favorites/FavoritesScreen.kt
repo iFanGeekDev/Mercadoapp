@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.mercadoapp.ui.components.CartBadgeIcon
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.ui.theme.*
 
@@ -32,13 +34,18 @@ import com.mercadoapp.ui.theme.*
 fun FavoritesRoute(
     onBack: () -> Unit,
     onProductClick: (String) -> Unit,
+    onCartClick: () -> Unit,
     viewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val cartCount by viewModel.cartCount.collectAsState()
+    
     FavoritesScreen(
-        state = state,
-        onBack = onBack,
+        state = state, 
+        cartCount = cartCount,
+        onBack = onBack, 
         onProductClick = onProductClick,
+        onCartClick = onCartClick,
         onRemoveFavorite = { viewModel.removeFavorite(it) }
     )
 }
@@ -47,8 +54,10 @@ fun FavoritesRoute(
 @Composable
 private fun FavoritesScreen(
     state: FavoritesUiState,
+    cartCount: Int,
     onBack: () -> Unit,
     onProductClick: (String) -> Unit,
+    onCartClick: () -> Unit,
     onRemoveFavorite: (String) -> Unit
 ) {
     Scaffold(
@@ -62,9 +71,16 @@ private fun FavoritesScreen(
                         Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                     }
                 },
+                actions = {
+                    IconButton(onClick = onCartClick) {
+                        CartBadgeIcon(icon = Icons.Default.ShoppingCart, count = cartCount)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Dark900,
-                    titleContentColor = Color.White
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White,
+                    actionIconContentColor = Color.White
                 )
             )
         }

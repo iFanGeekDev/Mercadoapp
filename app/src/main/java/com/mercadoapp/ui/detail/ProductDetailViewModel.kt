@@ -14,8 +14,11 @@ import com.mercadoapp.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +33,10 @@ class ProductDetailViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ProductDetailUiState(isLoading = true))
     val state: StateFlow<ProductDetailUiState> = _state.asStateFlow()
+
+    val cartCount: StateFlow<Int> = cartRepository.cartItems
+        .map { items -> items.sumOf { it.quantity } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     init { 
         loadProduct()
@@ -61,6 +68,12 @@ class ProductDetailViewModel @Inject constructor(
     fun onStorageChanged(value: Int)         = updateSelection("storage", value)
     fun onColorChanged(value: String)        = updateSelection("color", value)
 
+    fun onQuantityChanged(newQuantity: Int) {
+        if (newQuantity in 1..99) {
+            _state.value = _state.value.copy(quantity = newQuantity)
+        }
+    }
+
     fun addToCart() {
         val current = _state.value
         val product = current.product ?: return
@@ -70,11 +83,12 @@ class ProductDetailViewModel @Inject constructor(
                 productId = product.id,
                 productName = product.name,
                 productImageUrl = product.imageUrl,
-                variant = variant
+                variant = variant,
+                quantity = current.quantity
             )
             _state.value = current.copy(cartAdded = true)
             delay(2_000)
-            _state.value = _state.value.copy(cartAdded = false)
+            _state.value = _state.value.copy(cartAdded = false, quantity = 1)
         }
     }
 
@@ -211,7 +225,8 @@ data class ProductDetailUiState(
     val selection: ProductSelection = ProductSelection(),
     val optionsState: ProductOptionsState? = null,
     val cartAdded: Boolean = false,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val quantity: Int = 1
 )
 
 val EmptyOptions = ProductOptionsState(

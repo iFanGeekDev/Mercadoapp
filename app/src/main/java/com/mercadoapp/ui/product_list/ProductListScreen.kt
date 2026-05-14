@@ -6,8 +6,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import com.mercadoapp.ui.components.CartBadgeIcon
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.ui.theme.*
 
@@ -29,9 +33,11 @@ import com.mercadoapp.ui.theme.*
 fun ProductListRoute(
     onBack: () -> Unit,
     onProductClick: (String) -> Unit,
+    onCartClick: () -> Unit,
     viewModel: ProductListViewModel = hiltViewModel()
 ) {
     val pagingItems = viewModel.productsPaged.collectAsLazyPagingItems()
+    val cartCount by viewModel.cartCount.collectAsState()
     val title = if (viewModel.searchQuery.isNotBlank()) viewModel.searchQuery else viewModel.category ?: "Productos"
 
     Scaffold(
@@ -43,10 +49,16 @@ fun ProductListRoute(
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
                 },
+                actions = {
+                    IconButton(onClick = onCartClick) {
+                        CartBadgeIcon(icon = Icons.Default.ShoppingCart, count = cartCount)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Dark900,
                     titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    navigationIconContentColor = Color.White,
+                    actionIconContentColor = Color.White
                 )
             )
         },
