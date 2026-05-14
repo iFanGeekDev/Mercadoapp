@@ -122,8 +122,12 @@ private fun ProfileScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         if (user.avatarUrl != null) {
-                            AsyncImage(model = user.avatarUrl, contentDescription = null,
-                                contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                            AsyncImage(
+                                model = "${user.avatarUrl}?t=${System.currentTimeMillis()}",
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
                         } else {
                             Text(user.name.first().uppercaseChar().toString(),
                                 color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 36.sp)

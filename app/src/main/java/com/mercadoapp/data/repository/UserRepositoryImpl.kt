@@ -4,7 +4,7 @@ import com.mercadoapp.data.remote.api.MercadoApiService
 import com.mercadoapp.data.remote.dto.ErrorResponseDto
 import com.mercadoapp.data.remote.dto.ChangePasswordRequestDto
 import com.mercadoapp.data.remote.dto.UpdateProfileRequestDto
-import com.mercadoapp.domain.model.User
+import com.mercadoapp.domain.repository.AuthRepository
 import com.mercadoapp.domain.repository.UserRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -15,18 +15,23 @@ import java.io.File
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val apiService: MercadoApiService
+    private val apiService: MercadoApiService,
+    private val authRepository: AuthRepository
 ) : UserRepository {
 
     override suspend fun getProfile(): Result<User> = runCatching {
         val dto = apiService.getMe() 
-        User(dto.id, dto.email, dto.name, dto.avatarUrl)
+        val user = User(dto.id, dto.email, dto.name, dto.avatarUrl)
+        authRepository.updateUser(user)
+        user
     }
 
     override suspend fun updateProfile(name: String, email: String): Result<User> {
         return try {
             val dto = apiService.updateProfile(UpdateProfileRequestDto(name, email))
-            Result.success(User(dto.id, dto.email, dto.name, dto.avatarUrl))
+            val user = User(dto.id, dto.email, dto.name, dto.avatarUrl)
+            authRepository.updateUser(user)
+            Result.success(user)
         } catch (e: HttpException) {
             Result.failure(Exception(parseError(e)))
         } catch (e: Exception) {
@@ -60,6 +65,8 @@ class UserRepositoryImpl @Inject constructor(
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("avatar", file.name, requestFile)
         val dto = apiService.uploadAvatar(body)
-        User(dto.id, dto.email, dto.name, dto.avatarUrl)
+        val user = User(dto.id, dto.email, dto.name, dto.avatarUrl)
+        authRepository.updateUser(user)
+        user
     }
 }

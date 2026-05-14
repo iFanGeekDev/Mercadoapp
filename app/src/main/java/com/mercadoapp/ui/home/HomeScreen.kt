@@ -26,6 +26,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import com.mercadoapp.domain.model.AuthState
+import com.mercadoapp.domain.model.User
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.ui.theme.*
 
@@ -42,10 +44,14 @@ fun HomeRoute(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     
+    val authState by viewModel.authState.collectAsState()
+    val user = (authState as? AuthState.Authenticated)?.user
+    
     HomeScreen(
         pagingItems = pagingItems,
         selectedCategory = selectedCategory,
         searchQuery = searchQuery,
+        user = user,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategoryClick = viewModel::onCategorySelected,
         onSearchClick = onSearchClick,
@@ -61,6 +67,7 @@ private fun HomeScreen(
     pagingItems: LazyPagingItems<Product>,
     selectedCategory: String,
     searchQuery: String,
+    user: User?,
     onSearchQueryChanged: (String) -> Unit,
     onCategoryClick: (String) -> Unit,
     onSearchClick: (String?, String?) -> Unit,
@@ -88,12 +95,21 @@ private fun HomeScreen(
                         modifier = Modifier.size(44.dp).background(Brush.linearGradient(listOf(Brand500, Accent500)), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Default.Person, null, tint = Color.White)
+                        if (user?.avatarUrl != null) {
+                            AsyncImage(
+                                model = "${user.avatarUrl}?t=${System.currentTimeMillis()}",
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize().clip(CircleShape)
+                            )
+                        } else {
+                            Icon(Icons.Default.Person, null, tint = Color.White)
+                        }
                     }
                     Spacer(Modifier.width(12.dp))
                     Column {
                         Text("Hola,", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
-                        Text("Explorer", style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
+                        Text(user?.name ?: "Explorer", style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
                 Box(

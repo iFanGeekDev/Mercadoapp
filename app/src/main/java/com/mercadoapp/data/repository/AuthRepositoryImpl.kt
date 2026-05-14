@@ -10,6 +10,8 @@ import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.model.User
 import com.mercadoapp.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
@@ -22,16 +24,32 @@ class AuthRepositoryImpl @Inject constructor(
     private val authDataStore: AuthDataStore
 ) : AuthRepository {
 
-    override val authState: Flow<AuthState> = authDataStore.accessToken.map { token ->
-        if (token.isNullOrBlank()) AuthState.Unauthenticated
-        else {
-            try {
-                val user = api.getMe().toDomain()
-                AuthState.Authenticated(user)
-            } catch (e: Exception) {
-                AuthState.Unauthenticated
+    private val manualUserUpdate = MutableStateFlow<User?>(null)
+
+    override val authState: Flow<AuthState> = combine(
+        authDataStore.accessToken,
+        manualUserUpdate
+    ) { token, manualUser ->
+        if (token.isNullOrBlank()) {
+            manualUserUpdate.value = null
+            AuthState.Unauthenticated
+        } else {
+            if (manualUser != null) {
+                AuthState.Authenticated(manualUser)
+            } else {
+                try {
+                    val user = api.getMe().toDomain()
+                    manualUserUpdate.value = user
+                    AuthState.Authenticated(user)
+                } catch (e: Exception) {
+                    AuthState.Unauthenticated
+                }
             }
         }
+    }
+
+    override suspend fun updateUser(user: User) {
+        manualUserUpdate.value = user
     }
 
     override suspend fun login(email: String, password: String): Result<User> {

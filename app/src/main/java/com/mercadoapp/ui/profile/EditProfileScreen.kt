@@ -103,7 +103,7 @@ private fun EditProfileScreen(
                 ) {
                     if (state.user?.avatarUrl != null) {
                         AsyncImage(
-                            model = state.user.avatarUrl,
+                            model = "${state.user.avatarUrl}?t=${System.currentTimeMillis()}",
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
