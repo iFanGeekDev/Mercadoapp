@@ -12,6 +12,7 @@ import com.mercadoapp.data.remote.paging.ProductPagingSource
 import com.mercadoapp.domain.model.Product
 import com.mercadoapp.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 

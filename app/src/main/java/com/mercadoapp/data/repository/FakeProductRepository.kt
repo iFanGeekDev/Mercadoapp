@@ -122,6 +122,7 @@ class FakeProductRepository @Inject constructor() : ProductRepository {
     }
 
     override suspend fun getFavorites(): List<Product> = emptyList()
+    override fun observeFavorites(): Flow<List<Product>> = flowOf(emptyList())
     override suspend fun toggleFavorite(productId: String, isFavorite: Boolean) {}
     override suspend fun isProductFavorite(productId: String): Boolean = false
 }
