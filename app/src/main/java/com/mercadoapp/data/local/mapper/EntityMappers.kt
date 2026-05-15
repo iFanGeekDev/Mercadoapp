@@ -42,6 +42,7 @@ fun Product.toEntity(): ProductEntity = ProductEntity(
     ),
     isOffer = isOffer,
     isNewArrival = isNewArrival,
+    isFavorite = isFavorite,
     category = category
 )
 
@@ -72,6 +73,7 @@ fun ProductEntity.toDomain(): Product {
         },
         isOffer = isOffer,
         isNewArrival = isNewArrival,
+        isFavorite = isFavorite,
         category = category
     )
 }

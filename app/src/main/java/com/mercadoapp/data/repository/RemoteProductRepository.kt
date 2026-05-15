@@ -58,6 +58,12 @@ class RemoteProductRepository @Inject constructor(
         }
     }
 
+    override fun observeFavorites(): Flow<List<Product>> {
+        return productDao.observeFavorites().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
     override suspend fun getFavorites(): List<Product> {
         return try {
             api.getFavorites().map { it.toDomain() }
@@ -68,6 +74,9 @@ class RemoteProductRepository @Inject constructor(
 
     override suspend fun toggleFavorite(productId: String, isFavorite: Boolean) {
         try {
+            // Optimistic update in local DB
+            productDao.updateFavorite(productId, isFavorite)
+            
             if (isFavorite) {
                 api.addFavorite(mapOf("product_id" to productId))
             } else {
@@ -75,15 +84,12 @@ class RemoteProductRepository @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            // Rollback on error
+            productDao.updateFavorite(productId, !isFavorite)
         }
     }
 
     override suspend fun isProductFavorite(productId: String): Boolean {
-        return try {
-            val favorites = api.getFavorites()
-            favorites.any { it.id == productId }
-        } catch (e: Exception) {
-            false
-        }
+        return productDao.getById(productId)?.isFavorite ?: false
     }
 }

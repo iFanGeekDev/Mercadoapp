@@ -74,15 +74,21 @@ private fun AddressEditScreen(
         bottomBar = {
             Surface(color = Dark800, shadowElevation = 16.dp, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)) {
                 Box(modifier = Modifier.fillMaxWidth().padding(24.dp).height(56.dp).background(Brush.horizontalGradient(listOf(Brand600, Brand400)), RoundedCornerShape(16.dp))) {
+                    val isFormValid = state.alias.isNotBlank() && state.street.isNotBlank() && 
+                                     state.departamento.isNotBlank() && state.provincia.isNotBlank() && 
+                                     state.distrito.isNotBlank()
                     Button(
                         onClick = onSave,
-                        enabled = !state.isLoading,
+                        enabled = !state.isLoading && isFormValid,
                         modifier = Modifier.fillMaxSize(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, disabledContainerColor = Color.Transparent),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent, 
+                            disabledContainerColor = Color.Transparent
+                        ),
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         if (state.isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                        else Text("GUARDAR DIRECCIÓN", fontWeight = FontWeight.Bold, color = Color.White)
+                        else Text("GUARDAR DIRECCIÓN", fontWeight = FontWeight.Bold, color = if (isFormValid) Color.White else Color.White.copy(alpha = 0.5f))
                     }
                 }
             }
@@ -93,22 +99,22 @@ private fun AddressEditScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
-                value = state.alias, onValueChange = onAliasChanged, label = { Text("Nombre de dirección (Ej. Casa)") },
+                value = state.alias, onValueChange = onAliasChanged, label = { Text("Nombre de dirección (Ej. Casa) *") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
             )
             OutlinedTextField(
-                value = state.street, onValueChange = onStreetChanged, label = { Text("Dirección (Calle, Urb, Nro)") },
+                value = state.street, onValueChange = onStreetChanged, label = { Text("Dirección (Calle, Urb, Nro) *") },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp), colors = addressFieldColors(), singleLine = true
             )
             UbigeoDropdown(
-                label = "Departamento",
+                label = "Departamento *",
                 options = state.departments,
                 selectedName = state.departamento,
                 onOptionSelected = onDepartamentoSelected,
                 modifier = Modifier.fillMaxWidth()
             )
             UbigeoDropdown(
-                label = "Provincia",
+                label = "Provincia *",
                 options = state.provinces,
                 selectedName = state.provincia,
                 onOptionSelected = onProvinciaSelected,
@@ -116,7 +122,7 @@ private fun AddressEditScreen(
                 enabled = state.provinces.isNotEmpty()
             )
             UbigeoDropdown(
-                label = "Distrito",
+                label = "Distrito *",
                 options = state.districts,
                 selectedName = state.distrito,
                 onOptionSelected = onDistritoSelected,

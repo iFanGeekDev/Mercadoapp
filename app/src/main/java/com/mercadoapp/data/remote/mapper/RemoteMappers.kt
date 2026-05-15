@@ -29,6 +29,7 @@ fun ProductDto.toDomain(): Product = Product(
     variants = variants.map { it.toDomain() },
     isOffer = isOffer,
     isNewArrival = isNewArrival,
+    isFavorite = isFavorite,
     category = category
 )
 

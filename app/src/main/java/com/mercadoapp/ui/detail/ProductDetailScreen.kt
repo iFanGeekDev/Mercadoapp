@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.mercadoapp.ui.components.CartBadgeIcon
 import com.mercadoapp.ui.components.QuantitySelector
 import com.mercadoapp.ui.components.SelectableChips
@@ -78,7 +79,7 @@ private fun ProductDetailScreen(
                         Icon(
                             if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = "Favorito",
-                            tint = if (state.isFavorite) Color.Red else Color.White
+                            tint = if (state.isFavorite) Brand500 else Color.White
                         )
                     }
                     IconButton(onClick = onCartClick, modifier = Modifier.background(Dark800, CircleShape)) {
@@ -136,7 +137,18 @@ private fun ProductDetailScreen(
         Column(modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState())) {
             // Product Image Hero
             Box(modifier = Modifier.fillMaxWidth().height(360.dp).padding(horizontal = 24.dp)) {
-                AsyncImage(model = product.imageUrl, contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
+                SubcomposeAsyncImage(
+                    model = product.imageUrl, 
+                    contentDescription = null, 
+                    contentScale = ContentScale.Fit, 
+                    modifier = Modifier.fillMaxSize(),
+                    loading = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = Brand500) } },
+                    error = {
+                        Box(Modifier.fillMaxSize().background(Dark800), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.BrokenImage, null, tint = TextSecondary, modifier = Modifier.size(64.dp))
+                        }
+                    }
+                )
             }
 
             // Product Details Card

@@ -111,12 +111,18 @@ class AddressEditViewModel @Inject constructor(
     fun onIsDefaultChanged(value: Boolean) { _state.update { it.copy(isDefault = value) } }
 
     fun saveAddress() {
+        val currentState = _state.value
+        if (currentState.alias.isBlank() || currentState.street.isBlank() || 
+            currentState.departamento.isBlank() || currentState.provincia.isBlank() || 
+            currentState.distrito.isBlank()) {
+            return
+        }
+
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val currentState = _state.value
             val address = Address(
                 id = currentState.id,
-                alias = currentState.alias.ifEmpty { "Casa" },
+                alias = currentState.alias,
                 street = currentState.street,
                 distrito = currentState.distrito,
                 provincia = currentState.provincia,

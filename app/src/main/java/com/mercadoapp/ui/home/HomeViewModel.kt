@@ -20,6 +20,10 @@ class HomeViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val cartRepository: CartRepository
 ) : ViewModel() {
+    
+    val favoriteIds: StateFlow<Set<String>> = repository.observeFavorites()
+        .map { list -> list.map { it.id }.toSet() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
 
     val cartCount: StateFlow<Int> = cartRepository.cartItems
         .map { items -> items.sumOf { it.quantity } }
@@ -54,5 +58,12 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
+    }
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            val isCurrentlyFavorite = favoriteIds.value.contains(product.id)
+            repository.toggleFavorite(product.id, !isCurrentlyFavorite)
+        }
     }
 }

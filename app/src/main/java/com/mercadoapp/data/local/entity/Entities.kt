@@ -15,6 +15,7 @@ data class ProductEntity(
     val variantsJson: String,
     val isOffer: Boolean,
     val isNewArrival: Boolean,
+    val isFavorite: Boolean = false,
     val category: String = "PHONES",
     val updatedAt: Long = System.currentTimeMillis()
 )

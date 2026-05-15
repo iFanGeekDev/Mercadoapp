@@ -22,6 +22,10 @@ class ProductListViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    
+    val favoriteIds: StateFlow<Set<String>> = repository.observeFavorites()
+        .map { list -> list.map { it.id }.toSet() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
 
     val cartCount: StateFlow<Int> = cartRepository.cartItems
         .map { items -> items.sumOf { it.quantity } }
@@ -34,4 +38,11 @@ class ProductListViewModel @Inject constructor(
         category = category,
         search = searchQuery.ifBlank { null }
     ).cachedIn(viewModelScope)
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            val isCurrentlyFavorite = favoriteIds.value.contains(product.id)
+            repository.toggleFavorite(product.id, !isCurrentlyFavorite)
+        }
+    }
 }

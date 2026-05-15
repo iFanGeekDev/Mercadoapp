@@ -9,6 +9,7 @@ data class Product(
     val variants: List<ProductVariant>,
     val isOffer: Boolean = false,
     val isNewArrival: Boolean = false,
+    val isFavorite: Boolean = false,
     val category: String = "PHONES"
 )
 

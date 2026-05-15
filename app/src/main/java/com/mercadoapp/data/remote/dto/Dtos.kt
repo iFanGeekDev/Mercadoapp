@@ -13,6 +13,7 @@ data class ProductDto(
     val variants: List<ProductVariantDto>,
     @SerialName("is_offer") val isOffer: Boolean = false,
     @SerialName("is_new_arrival") val isNewArrival: Boolean = false,
+    @SerialName("is_favorite") val isFavorite: Boolean = false,
     val category: String = "PHONES"
 )
 

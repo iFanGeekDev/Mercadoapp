@@ -26,6 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.mercadoapp.ui.components.CartBadgeIcon
 import com.mercadoapp.domain.model.AuthState
 import com.mercadoapp.domain.model.User
@@ -49,16 +50,20 @@ fun HomeRoute(
     val authState by viewModel.authState.collectAsState()
     val user = (authState as? AuthState.Authenticated)?.user
     
+    val favoriteIds by viewModel.favoriteIds.collectAsState()
+    
     HomeScreen(
         pagingItems = pagingItems,
         selectedCategory = selectedCategory,
         searchQuery = searchQuery,
         user = user,
         cartCount = cartCount,
+        favoriteIds = favoriteIds,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onCategoryClick = viewModel::onCategorySelected,
         onSearchClick = onSearchClick,
         onProductClick = onProductClick,
+        onFavoriteClick = viewModel::toggleFavorite,
         onCartClick = onCartClick, 
         onProfileClick = onProfileClick
     )
@@ -72,10 +77,12 @@ private fun HomeScreen(
     searchQuery: String,
     user: User?,
     cartCount: Int,
+    favoriteIds: Set<String>,
     onSearchQueryChanged: (String) -> Unit,
     onCategoryClick: (String) -> Unit,
     onSearchClick: (String?, String?) -> Unit,
     onProductClick: (String) -> Unit,
+    onFavoriteClick: (Product) -> Unit,
     onCartClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -241,15 +248,21 @@ private fun HomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(offers) { product ->
-                            FlashDealCard(product, onClick = { onProductClick(product.id) })
+                            FlashDealCard(
+                                product = product, 
+                                isFavorite = favoriteIds.contains(product.id),
+                                onClick = { onProductClick(product.id) },
+                                onFavoriteClick = { onFavoriteClick(product) }
+                            )
                         }
                     }
                 }
             }
 
-            // For You Section
+            // Results Section
             item {
-                Text("Para Ti", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
+                val sectionTitle = if (searchQuery.isNotBlank() || selectedCategory != "ALL") "Resultados" else "Para Ti"
+                Text(sectionTitle, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 24.dp))
             }
             
             if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
@@ -261,8 +274,14 @@ private fun HomeScreen(
             } else {
                 items(count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }) { index ->
                     val product = pagingItems[index]
-                    if (product != null && !product.isOffer) {
-                        ForYouCard(product = product, onClick = { onProductClick(product.id) }, modifier = Modifier.padding(horizontal = 24.dp))
+                    if (product != null) {
+                        ForYouCard(
+                            product = product, 
+                            isFavorite = favoriteIds.contains(product.id),
+                            onClick = { onProductClick(product.id) }, 
+                            onFavoriteClick = { onFavoriteClick(product) },
+                            modifier = Modifier.padding(horizontal = 24.dp)
+                        )
                     }
                 }
             }
@@ -273,7 +292,7 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun FlashDealCard(product: Product, onClick: () -> Unit) {
+private fun FlashDealCard(product: Product, isFavorite: Boolean, onClick: () -> Unit, onFavoriteClick: () -> Unit) {
     val minPrice = product.variants.minOfOrNull { it.price } ?: 0.0
     Card(
         onClick = onClick,
@@ -282,12 +301,28 @@ private fun FlashDealCard(product: Product, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Dark800)
     ) {
         Box(Modifier.fillMaxSize()) {
-            AsyncImage(model = product.imageUrl, contentDescription = product.name, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().align(Alignment.CenterEnd).offset(x = 40.dp))
+            SubcomposeAsyncImage(
+                model = product.imageUrl, 
+                contentDescription = product.name, 
+                contentScale = ContentScale.Crop, 
+                modifier = Modifier.fillMaxSize().align(Alignment.CenterEnd).offset(x = 40.dp),
+                loading = { Box(Modifier.fillMaxSize().background(Dark800)) },
+                error = {
+                    Box(Modifier.fillMaxSize().background(Dark800), contentAlignment = Alignment.Center) {
+                        Icon(Icons.Default.BrokenImage, null, tint = TextSecondary, modifier = Modifier.size(40.dp))
+                    }
+                }
+            )
             Box(modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(listOf(Dark900, Dark900.copy(alpha = 0.8f), Color.Transparent))))
             
             Column(modifier = Modifier.padding(20.dp).fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Surface(color = Brand500, shape = RoundedCornerShape(6.dp)) {
-                    Text("CYBER DAYS", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
+                    Surface(color = Brand500, shape = RoundedCornerShape(6.dp)) {
+                        Text("CYBER DAYS", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                    }
+                    IconButton(onClick = onFavoriteClick, modifier = Modifier.size(32.dp).background(Dark900.copy(alpha = 0.5f), CircleShape)) {
+                        Icon(if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder, null, tint = if (isFavorite) Brand500 else Color.White, modifier = Modifier.size(18.dp))
+                    }
                 }
                 Spacer(Modifier.height(12.dp))
                 Text(product.name, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1)
@@ -299,7 +334,7 @@ private fun FlashDealCard(product: Product, onClick: () -> Unit) {
 }
 
 @Composable
-private fun ForYouCard(product: Product, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun ForYouCard(product: Product, isFavorite: Boolean, onClick: () -> Unit, onFavoriteClick: () -> Unit, modifier: Modifier = Modifier) {
     val minPrice = product.variants.minOfOrNull { it.price } ?: 0.0
     Card(
         onClick = onClick,
@@ -309,7 +344,18 @@ private fun ForYouCard(product: Product, onClick: () -> Unit, modifier: Modifier
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(80.dp).background(Dark700, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp))) {
-                AsyncImage(model = product.imageUrl, contentDescription = product.name, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                SubcomposeAsyncImage(
+                    model = product.imageUrl, 
+                    contentDescription = product.name, 
+                    contentScale = ContentScale.Crop, 
+                    modifier = Modifier.fillMaxSize(),
+                    loading = { Box(Modifier.fillMaxSize().background(Dark800)) },
+                    error = {
+                        Box(Modifier.fillMaxSize().background(Dark800), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.BrokenImage, null, tint = TextSecondary)
+                        }
+                    }
+                )
             }
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -318,7 +364,9 @@ private fun ForYouCard(product: Product, onClick: () -> Unit, modifier: Modifier
                 Spacer(Modifier.height(8.dp))
                 Text("$${"%.2f".format(minPrice)}", style = MaterialTheme.typography.titleMedium, color = Accent500, fontWeight = FontWeight.Bold)
             }
-            Icon(Icons.Default.FavoriteBorder, null, tint = TextSecondary)
+            IconButton(onClick = onFavoriteClick) {
+                Icon(if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder, null, tint = if (isFavorite) Brand500 else TextSecondary)
+            }
         }
     }
 }
