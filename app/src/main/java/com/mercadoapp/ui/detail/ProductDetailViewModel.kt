@@ -94,9 +94,10 @@ class ProductDetailViewModel @Inject constructor(
 
     fun toggleFavorite() = viewModelScope.launch {
         val current = _state.value
+        val product = current.product ?: return@launch
         val newStatus = !current.isFavorite
         _state.value = current.copy(isFavorite = newStatus)
-        repository.toggleFavorite(productId, newStatus)
+        repository.toggleFavorite(product, newStatus)
     }
 
     private fun updateSelection(anchorField: String, value: Any) {

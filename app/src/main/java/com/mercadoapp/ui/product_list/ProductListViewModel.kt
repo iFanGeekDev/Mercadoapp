@@ -43,7 +43,7 @@ class ProductListViewModel @Inject constructor(
     fun toggleFavorite(product: Product) {
         viewModelScope.launch {
             val isCurrentlyFavorite = favoriteIds.value.contains(product.id)
-            repository.toggleFavorite(product.id, !isCurrentlyFavorite)
+            repository.toggleFavorite(product, !isCurrentlyFavorite)
         }
     }
 }

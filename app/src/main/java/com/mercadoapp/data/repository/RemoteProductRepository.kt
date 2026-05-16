@@ -73,20 +73,21 @@ class RemoteProductRepository @Inject constructor(
         }
     }
 
-    override suspend fun toggleFavorite(productId: String, isFavorite: Boolean) {
+    override suspend fun toggleFavorite(product: Product, isFavorite: Boolean) {
         try {
             // Optimistic update in local DB
-            productDao.updateFavorite(productId, isFavorite)
+            // We use upsert to ensure the product exists in the DB so it can be observed as a favorite
+            productDao.upsertAll(listOf(product.toEntity().copy(isFavorite = isFavorite)))
             
             if (isFavorite) {
-                api.addFavorite(mapOf("product_id" to productId))
+                api.addFavorite(mapOf("product_id" to product.id))
             } else {
-                api.removeFavorite(productId)
+                api.removeFavorite(product.id)
             }
         } catch (e: Exception) {
             e.printStackTrace()
             // Rollback on error
-            productDao.updateFavorite(productId, !isFavorite)
+            productDao.updateFavorite(product.id, !isFavorite)
         }
     }
 

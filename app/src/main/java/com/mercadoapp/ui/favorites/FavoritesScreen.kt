@@ -58,7 +58,7 @@ private fun FavoritesScreen(
     onBack: () -> Unit,
     onProductClick: (String) -> Unit,
     onCartClick: () -> Unit,
-    onRemoveFavorite: (String) -> Unit
+    onRemoveFavorite: (Product) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
@@ -107,7 +107,7 @@ private fun FavoritesScreen(
                     FavoriteProductCard(
                         product = product,
                         onClick = { onProductClick(product.id) },
-                        onRemove = { onRemoveFavorite(product.id) }
+                        onRemove = { onRemoveFavorite(product) }
                     )
                 }
             }

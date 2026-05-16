@@ -51,14 +51,14 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
-    fun removeFavorite(productId: String) {
+    fun removeFavorite(product: Product) {
         viewModelScope.launch {
             try {
-                repository.toggleFavorite(productId, false)
+                repository.toggleFavorite(product, false)
                 // Optimistic update
                 _state.update { currentState ->
                     currentState.copy(
-                        products = currentState.products.filter { it.id != productId }
+                        products = currentState.products.filter { it.id != product.id }
                     )
                 }
             } catch (e: Exception) {
